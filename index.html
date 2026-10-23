@@ -33,7 +33,7 @@
     button { color: inherit; }
     button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid rgba(93,117,94,.45); outline-offset: 3px; }
     .app-shell { min-height: 100vh; display: grid; grid-template-columns: 236px minmax(0,1fr); max-width: 1600px; margin: 0 auto; }
-    .sidebar { position: sticky; top: 0; height: 100vh; padding: 34px 20px 24px 30px; border-right: 1px solid var(--line); display: flex; flex-direction: column; background: rgba(245,242,233,.72); }
+    .sidebar { position: sticky; top: 0; height: 100vh; padding: 34px 20px 24px 30px; border-right: 1px solid var(--line); display: flex; flex-direction: column; overflow-y:auto; background: rgba(245,242,233,.72); }
     .nav-label, .eyebrow { color: var(--muted); text-transform: uppercase; font-size: 10px; font-weight: 700; letter-spacing: .14em; }
     .nav-label { margin: 0 0 12px 12px; }
     .nav-list { display: grid; gap: 5px; }
@@ -42,6 +42,9 @@
     .nav-item.active { background: var(--sage-wash); color: var(--sage-dark); font-weight: 650; }
     .nav-icon { width: 20px; text-align: center; font-size: 16px; line-height: 1; }
     .nav-count { margin-left: auto; font-size: 11px; color: var(--muted); }
+    .sidebar-admin-tools { margin:20px 0 0; padding-top:14px; border-top:1px solid var(--line); }
+    .sidebar-admin-tools .nav-label { margin-bottom:8px; }
+    .sidebar-admin-tools .nav-item { min-height:44px; height:auto; white-space:normal; line-height:1.3; }
     .sidebar-bottom { margin-top: auto; }
     .side-actions { display:flex; gap:8px; margin-top: 17px; }
     .text-button { border: 0; background: transparent; padding: 5px 0; color: var(--muted); font-size: 11px; cursor: pointer; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 3px; }
@@ -337,7 +340,7 @@
       .dashboard-grid { grid-template-columns:1fr; }
       .right-column { grid-template-columns:1fr; }
       .focus-panel { min-height:175px; }
-      .mobile-nav { display:grid; grid-template-columns:repeat(5,1fr); position:fixed; z-index:5; bottom:0; left:0; right:0; padding:8px max(14px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left)); background:rgba(255,253,248,.96); border-top:1px solid var(--line); backdrop-filter:blur(10px); }
+      .mobile-nav { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); position:fixed; z-index:5; bottom:0; left:0; right:0; padding:8px max(14px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left)); background:rgba(255,253,248,.96); border-top:1px solid var(--line); backdrop-filter:blur(10px); }
       .mobile-nav .nav-item { min-height:49px; flex-direction:column; gap:3px; justify-content:center; padding:4px; font-size:10px; }
       .mobile-nav .nav-icon { font-size:16px; }
       .mobile-nav .nav-count { display:none; }
@@ -494,7 +497,7 @@
       .mobile-nav .nav-item.active { background:#ededee; }
       .page-heading { margin-bottom:22px; }
     }
-    @media (max-width:700px) { .mobile-nav.has-admin-tab { grid-template-columns:repeat(6,minmax(0,1fr)); } }
+    @media (max-width:700px) { .mobile-nav.has-admin-tab { grid-template-columns:repeat(7,minmax(0,1fr)); } }
     @media (max-width:520px) {
       .account-card { grid-template-columns:1fr; }
       .account-card-actions { justify-content:stretch; }
@@ -578,7 +581,107 @@
       .task-row .task-edit-button { grid-column:3; min-width:34px; }
       .task-row > .delete-task { grid-column:4; }
     }
-  </style>
+.calendar-demo {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(14px, 3vw, 38px);
+  --ink: #24302e;
+  --muted: #697572;
+  --line: #dce2dd;
+  --surface: #fffefa;
+  --accent: #527b69;
+  --sans: "Aptos", "Segoe UI", sans-serif;
+  --serif: "Georgia", "Times New Roman", serif;
+}
+
+.calendar { --calendar-accent-soft: #e7f0e9; --calendar-danger: #a43e37; color: var(--ink, #24302e); font: 15px/1.45 var(--sans, "Aptos", "Segoe UI", sans-serif); }
+.calendar * { box-sizing: border-box; }
+.calendar :where(button, input) { font: inherit; }
+.calendar :where(button) { color: inherit; }
+.calendar [hidden] { display: none !important; }
+.calendar-toolbar { display: flex; align-items: center; gap: 10px; padding: 8px 0 18px; }
+.calendar-period { flex: 1; margin: 0; font: 500 clamp(1.45rem, 3vw, 2.2rem)/1.15 var(--serif); letter-spacing: -.025em; }
+.calendar-nav, .calendar-mode, .calendar-create, .calendar-today { min-height: 42px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; }
+.calendar-nav { width: 42px; border-radius: 12px; font-size: 1.25rem; }
+.calendar-today, .calendar-mode, .calendar-create { padding: 0 14px; border-radius: 11px; }
+.calendar-mode[aria-pressed="true"] { background: var(--calendar-accent-soft); border-color: #b6cbbd; color: #315744; }
+.calendar-create { background: var(--accent); color: #fff; border-color: var(--accent); }
+.calendar-toolbar button:hover { filter: brightness(.97); }
+.calendar button:focus-visible, .calendar input:focus-visible { outline: 3px solid #91b7a0; outline-offset: 2px; }
+.calendar-view-toggle { display: flex; gap: 5px; }
+.calendar-grid { border-top: 1px solid var(--line); border-left: 1px solid var(--line); background: var(--surface); }
+.calendar-grid-row { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.calendar-weekday { padding: 10px 8px; color: var(--muted, #697572); font-size: .76rem; font-weight: 700; letter-spacing: .07em; text-align: center; text-transform: uppercase; }
+.calendar-day { min-width: 0; min-height: 128px; padding: 8px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+.calendar-day.is-outside { background: #f7f8f5; color: #8b9691; }
+.calendar-day.is-today .calendar-day-number { background: var(--accent); color: #fff; }
+.calendar-day-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+.calendar-day-label { display: none; }
+.calendar-day-number { display: inline-grid; width: 30px; height: 30px; place-items: center; border: 0; border-radius: 50%; background: transparent; cursor: pointer; font-weight: 650; }
+.calendar-day-number:hover { background: var(--calendar-accent-soft); }
+.calendar-day-add { border: 0; background: transparent; color: var(--muted, #697572); font-size: 1.1rem; cursor: pointer; opacity: .6; }
+.calendar-event-list { display: grid; gap: 4px; }
+.calendar .calendar-event { display: block; width: 100%; min-width: 0; padding: 4px 7px; overflow: hidden; border: 0; border-left: 3px solid var(--accent, #527b69); border-radius: 4px; background: var(--calendar-accent-soft); color: #294536; cursor: pointer; text-align: left; text-overflow: ellipsis; white-space: nowrap; font-size: .78rem; }
+.calendar-event.is-continuation { border-left-style: dashed; }
+.calendar-event-time { display: inline-block; margin-right: 4px; font-size: .75rem; font-weight: 700; }
+.calendar-event-end { opacity: .82; }
+.calendar-more { justify-self: start; padding: 2px 5px; border: 0; border-radius: 5px; background: transparent; color: var(--muted); cursor: pointer; text-align: left; font-size: .75rem; }
+.calendar-more:hover { background: var(--calendar-accent-soft); color: var(--ink); }
+.calendar-week .calendar-day { min-height: 390px; }
+.calendar-week .calendar-event { white-space: normal; }
+.calendar-empty { padding: 26px; color: var(--muted); text-align: center; }
+.calendar-dialog { width: min(520px, calc(100vw - 28px)); max-height: min(90vh, 760px); padding: 0; overflow: auto; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); color: var(--ink); box-shadow: 0 24px 80px #1e30222b; }
+.calendar-dialog::backdrop { background: #17251f66; }
+.calendar-dialog-form { padding: 24px; }
+.calendar-dialog-title { margin: 0 0 20px; font: 500 1.65rem/1.2 var(--serif); }
+.calendar-field { display: grid; gap: 6px; margin: 0 0 14px; font-weight: 650; }
+.calendar-field input[type="text"], .calendar-field input[type="date"], .calendar-field input[type="time"] { width: 100%; min-height: 44px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--ink); }
+.calendar-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.calendar-all-day { display: flex; align-items: center; gap: 10px; margin: 4px 0 16px; font-weight: 600; }
+.calendar-all-day input { width: 20px; height: 20px; accent-color: var(--accent); }
+.calendar-error { min-height: 1.4em; margin: 0 0 8px; color: var(--calendar-danger); font-size: .9rem; }
+.calendar-dialog-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+.calendar-dialog-actions button { min-height: 42px; padding: 0 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; }
+.calendar-dialog-actions [data-action="save"] { border-color: var(--accent); background: var(--accent); color: #fff; }
+.calendar-dialog-actions [data-action="delete"] { margin-right: auto; color: var(--calendar-danger); }
+.calendar-live { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+@media (max-width: 700px) {
+  .calendar-toolbar { flex-wrap: wrap; gap: 7px; padding-bottom: 12px; }
+  .calendar-period { flex-basis: 100%; order: -1; margin-bottom: 5px; }
+  .calendar-toolbar .calendar-create { margin-left: auto; }
+  .calendar-day { min-height: 88px; padding: 4px; }
+  .calendar-weekday { padding: 7px 2px; font-size: .62rem; letter-spacing: 0; }
+  .calendar-day-number { width: 100%; min-height: 44px; height: 44px; font-size: .84rem; }
+  .calendar-day-add { display: none; }
+  .calendar-event { padding: 3px 4px; font-size: .68rem; }
+  .calendar-grid:not(.calendar-week) .calendar-event-time { display: none; }
+  .calendar-week .calendar-day { min-height: 270px; padding: 4px; }
+  .calendar-week .calendar-grid-row { grid-template-columns: minmax(0, 1fr); }
+  .calendar-week .calendar-header-row { display: none; }
+  .calendar-week .calendar-day { display: grid; grid-template-columns: minmax(144px, .36fr) minmax(0, 1fr); align-items: start; gap: 8px; min-height: 72px; padding: 8px; }
+  .calendar-week .calendar-day-label { display: inline; margin-right: auto; color: var(--muted, #697572); font-size: .78rem; font-weight: 650; text-transform: capitalize; }
+  .calendar-week .calendar-day-head { justify-content: flex-start; gap: 4px; margin: 0; }
+  .calendar-week .calendar-day-number { order: 2; flex: 0 0 44px; width: 44px; }
+  .calendar-week .calendar-day-add { display: inline-grid; width: 44px; height: 44px; place-items: center; margin-left: auto; border-radius: 8px; }
+  .calendar-week .calendar-event-list { min-width: 0; }
+  .calendar-week .calendar-event { font-size: .76rem; }
+  .calendar-week .calendar-event-time { display: inline-block; }
+  .calendar-more { padding: 1px; font-size: .65rem; }
+}
+@media (max-width: 390px) {
+  .calendar-day { min-height: 74px; }
+  .calendar-event { font-size: .61rem; }
+  .calendar-toolbar button { min-height: 40px; }
+  .calendar-toolbar .calendar-today, .calendar-toolbar .calendar-mode, .calendar-toolbar .calendar-create { padding: 0 9px; font-size: .87rem; }
+  .calendar-dialog-form { padding: 18px; }
+  .calendar-row { grid-template-columns: 1fr; gap: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .calendar-event, .calendar button { transition: background-color .14s ease, filter .14s ease, transform .14s ease; }
+  .calendar button:active { transform: translateY(1px); }
+}
+
+    </style>
 </head>
 <body>
   <section class="auth-screen" id="auth-screen" aria-label="Accès à Organisation">
@@ -636,8 +739,14 @@
         <button class="nav-item" data-view="habits"><span class="nav-icon" aria-hidden="true">◌</span><span>Habitudes</span></button>
         <button class="nav-item" data-view="calculator"><span class="nav-icon" aria-hidden="true">＋</span><span>Calculatrice</span></button>
         <button class="nav-item" data-view="timer"><span class="nav-icon" aria-hidden="true">◷</span><span>Minuteur</span></button>
+        <button class="nav-item" data-view="calendar"><span class="nav-icon" aria-hidden="true">▦</span><span>Calendrier</span></button>
         <button class="nav-item admin-only" data-view="admin" hidden><span class="nav-icon" aria-hidden="true">✓</span><span>Comptes à valider</span><span class="nav-count" id="nav-admin-pending-count">0</span></button>
       </nav>
+      <section class="sidebar-admin-tools admin-only" aria-labelledby="sidebar-admin-tools-title" hidden>
+        <p class="nav-label" id="sidebar-admin-tools-title">Administration</p>
+        <button class="nav-item" id="admin-copies-button" data-view="import-conflicts" type="button" hidden><span class="nav-icon" aria-hidden="true">▤</span><span>Copies importées à examiner</span></button>
+        <button class="nav-item" id="import-local-button" type="button" hidden><span class="nav-icon" aria-hidden="true">↥</span><span>Importer des données locales</span></button>
+      </section>
       <div class="sidebar-bottom">
         <div class="side-actions"><button class="text-button" id="reset-button">Réinitialiser</button></div>
       </div>
@@ -647,7 +756,7 @@
       <div class="topline">
         <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Ouvrir le menu" aria-controls="main-sidebar" aria-expanded="false"><span class="hamburger" aria-hidden="true"><i></i><i></i><i></i></span></button>
         <div class="today-stamp"><span class="sun-mark" aria-hidden="true">☼</span><span class="date-label" id="date-label"></span></div>
-        <div class="account-actions"><span class="sync-status" id="sync-status" role="status"></span><div class="account-menu-wrap"><button class="account-menu-toggle" id="account-menu-toggle" type="button" aria-controls="account-menu" aria-haspopup="menu" aria-expanded="false"><span class="account-menu-username" id="account-menu-username"></span><span class="account-menu-chevron" aria-hidden="true"></span></button><div class="account-menu" id="account-menu" role="menu" aria-label="Menu du compte" hidden><button class="account-menu-item" id="manage-account-button" type="button" role="menuitem">Gérer mon compte</button><hr class="account-menu-divider"><button class="account-menu-item logout" id="logout-button" type="button" role="menuitem">Se déconnecter</button></div></div><div class="profile-export-control"><button class="text-button" id="export-local-profile-button" type="button" hidden>Exporter le profil local</button><p class="profile-privacy">Fichier JSON non chiffr&eacute; contenant des donn&eacute;es personnelles; &agrave; conserver dans un endroit priv&eacute;.</p></div><button class="text-button import-conflicts-access" type="button" data-view="import-conflicts" hidden>Copies importées à examiner</button><button class="text-button" id="import-local-button" type="button" hidden>Importer des données locales</button></div>
+        <div class="account-actions"><span class="sync-status" id="sync-status" role="status"></span><div class="account-menu-wrap"><button class="account-menu-toggle" id="account-menu-toggle" type="button" aria-controls="account-menu" aria-haspopup="menu" aria-expanded="false"><span class="account-menu-username" id="account-menu-username"></span><span class="account-menu-chevron" aria-hidden="true"></span></button><div class="account-menu" id="account-menu" role="menu" aria-label="Menu du compte" hidden><button class="account-menu-item" id="manage-account-button" type="button" role="menuitem">Gérer mon compte</button><button class="account-menu-item" id="account-backups-button" type="button" data-view="import-conflicts" role="menuitem" hidden>Mes sauvegardes</button><hr class="account-menu-divider"><button class="account-menu-item logout" id="logout-button" type="button" role="menuitem">Se déconnecter</button></div></div><div class="profile-export-control"><button class="text-button" id="export-local-profile-button" type="button" hidden>Exporter le profil local</button><p class="profile-privacy">Fichier JSON non chiffr&eacute; contenant des donn&eacute;es personnelles; &agrave; conserver dans un endroit priv&eacute;.</p></div></div>
       </div>
       <aside id="app-update-notice" hidden role="status" aria-live="polite">
         <p id="app-update-message"></p>
@@ -707,16 +816,20 @@
           </div>
         </section>
       </section>
-      <section class="section-view section-layout admin-page" id="admin-view" aria-labelledby="admin-accounts-title" hidden>
+      <section class="section-view section-layout calendar-page" id="calendar-view" aria-labelledby="calendar-title">
+        <header class="page-heading"><div><p class="eyebrow">Organisation</p><h1 id="calendar-title">Calendrier.</h1><p class="heading-sub">Prenez une vue d’ensemble, mois par mois ou semaine par semaine.</p></div></header>
+        <div class="calendar-demo" id="calendar-root"></div>
+      </section>      <section class="section-view section-layout admin-page" id="admin-view" aria-labelledby="admin-accounts-title" hidden>
         <header class="page-heading"><div><p class="eyebrow">Administration</p><h1 id="admin-accounts-title">Comptes à valider.</h1><p class="heading-sub">Les demandes et les accès approuvés sont gérés ici.</p></div><button class="secondary-button" type="button" id="refresh-access-list">Actualiser</button></header>
         <p class="auth-error" id="admin-access-error" role="alert"></p>
         <section class="panel admin-access-panel" aria-labelledby="pending-accounts-title"><div class="panel-header"><h2 class="panel-title" id="pending-accounts-title">Demandes en attente</h2><span class="panel-note" id="pending-accounts-summary"></span></div><div class="account-card-list" id="pending-account-list" aria-live="polite"></div></section>
         <section class="panel admin-access-panel" aria-labelledby="other-accounts-title"><div class="panel-header"><h2 class="panel-title" id="other-accounts-title">Autres accès</h2><span class="panel-note" id="other-accounts-summary"></span></div><div class="account-card-list" id="other-account-list" aria-live="polite"></div></section>
       </section>
       <section class="section-view section-layout import-conflicts-page" id="import-conflicts-view" aria-labelledby="import-conflicts-title">
-        <header class="page-heading"><div><p class="eyebrow">Archives de données</p><h1 id="import-conflicts-title">Copies importées à examiner.</h1><p class="heading-sub">Les copies archivées sont conservées dans le cloud. Comparez-les avec la version en ligne et restaurez une copie si nécessaire.</p></div></header>
-        <p class="panel-note import-conflicts-summary" id="import-conflicts-summary" role="status">Les versions en ligne restent actives. Les copies importées archivées peuvent être consultées et restaurées depuis n’importe quel appareil.</p>
-        <div class="import-conflicts-list" id="import-conflicts-list" aria-live="polite"></div>
+        <header class="page-heading"><div><p class="eyebrow">Archives personnelles</p><h1 id="import-conflicts-title">Mes sauvegardes.</h1><p class="heading-sub">Consultez les sauvegardes associées à votre compte et restaurez une copie si nécessaire.</p></div></header>
+        <p class="panel-note import-conflicts-summary" id="import-conflicts-summary" role="status">Les sauvegardes restent associées au compte connecté.</p>
+        <section class="local-recovery-backups" aria-labelledby="local-recovery-backups-title"><h2 id="local-recovery-backups-title">Copies conservées sur cet appareil</h2><p class="panel-note" id="local-recovery-backups-summary"></p><div class="import-conflicts-list" id="local-recovery-backups-list" aria-live="polite"></div></section>
+        <section class="cloud-conflict-backups" aria-labelledby="cloud-conflict-backups-title"><h2 id="cloud-conflict-backups-title">Copies archivées dans le compte</h2><div class="import-conflicts-list" id="import-conflicts-list" aria-live="polite"></div></section>
       </section>
     </main>
   </div>
@@ -728,6 +841,7 @@
     <button class="nav-item" data-view="habits"><span class="nav-icon" aria-hidden="true">◌</span><span>Habitudes</span></button>
     <button class="nav-item" data-view="calculator"><span class="nav-icon" aria-hidden="true">＋</span><span>Calculatrice</span></button>
     <button class="nav-item" data-view="timer"><span class="nav-icon" aria-hidden="true">◷</span><span>Minuteur</span></button>
+    <button class="nav-item" data-view="calendar"><span class="nav-icon" aria-hidden="true">▦</span><span>Calendrier</span></button>
     <button class="nav-item admin-only" data-view="admin" hidden aria-label="Comptes à valider"><span class="nav-icon" aria-hidden="true">✓</span><span>Comptes</span><span class="nav-count" id="mobile-admin-pending-count">0</span></button>
   </nav>
 
@@ -831,8 +945,8 @@
   </dialog>
   <dialog id="pending-dialog" aria-labelledby="pending-title">
     <div class="dialog-form">
-      <div class="dialog-heading"><div><p class="eyebrow">Copie de secours</p><h2 id="pending-title">Une copie attend sur cet appareil</h2></div></div>
-      <p class="panel-note">Une modification précédente n’a pas été synchronisée. Avant la fusion, sa copie complète sera archivée sur cet appareil. Pour les tâches, habitudes ou notes ayant le même identifiant ou le même jour, la version en ligne est prioritaire; les suppressions locales ne sont pas répercutées.</p>
+      <div class="dialog-heading"><div><p class="eyebrow">Deux versions différentes</p><h2 id="pending-title">Une copie locale diffère de la version en ligne</h2></div></div>
+      <p class="panel-note" id="pending-description">La copie complète sera archivée sur cet appareil avant votre choix. « Fusionner la copie locale » ajoute les éléments locaux absents; en cas de conflit, la version en ligne reste active et la valeur locale est archivée. Les suppressions locales ne sont pas appliquées. Pour la calculatrice et le minuteur, l’état en ligne peut rester prioritaire : un minuteur local en cours ne reprendra pas forcément avec le même temps restant. « Continuer avec la version en ligne » garde le cloud actif et conserve la copie locale dans l’archive de cet appareil, importable plus tard.</p>
       <p class="auth-error" id="pending-error" role="alert"></p>
       <div class="dialog-actions"><button class="secondary-button" type="button" id="keep-online-copy">Continuer avec la version en ligne</button><button class="primary-button" type="button" id="merge-pending-copy">Fusionner la copie locale</button></div>
     </div>
@@ -874,11 +988,14 @@
       const LEGACY_PBKDF2_ITERATIONS = 310000;
       const CLOUD_CACHE_PREFIX = 'organisation-cloud-cache-v1:';
       const CLOUD_PENDING_PREFIX = 'organisation-cloud-pending-v1:';
+      const CLOUD_PENDING_V2_PREFIX = 'organisation-cloud-pending-v2:';
+      const CLOUD_PENDING_ACK_PREFIX = 'organisation-cloud-pending-ack-v1:';
+      const MAX_PENDING_ACK_MARKERS = 64;
       const CLOUD_RECOVERY_PREFIX = 'organisation-cloud-recovery-v1:';
       const IMPORT_DISMISSED_PREFIX = 'organisation-import-dismissed-v1:';
       const MAX_IMPORT_FILE_BYTES = 512 * 1024;
       const MAX_CLOUD_STATE_BYTES = 768 * 1024;
-      const APP_BUILD_ID = 202610230005;
+      const APP_BUILD_ID = 202610240001;
       const APP_UPDATE_CHECK_INTERVAL_MS = 10 * 60 * 1000;
       const APP_UPDATE_CHECK_COOLDOWN_MS = 45 * 1000;
       const priorityLabels = { high: 'Prioritaire', medium: 'Important', low: 'À mon rythme' };
@@ -914,12 +1031,307 @@
         return date.getFullYear() === year && date.getMonth() === month-1 && date.getDate() === day;
       }
       const widgetTypes = ['focus','tasks','habits','notes'];
+      const MAX_CALENDAR_EVENTS = 1000;
+      function normalizeCalendarEvent(raw) {
+        if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+        const id = typeof raw.id === 'string' && raw.id.length > 0 && raw.id.length <= 160 ? raw.id : '';
+        const title = typeof raw.title === 'string' ? raw.title.trim() : '';
+        const { allDay, startDate, endDate } = raw;
+        if (!id || !title || title.length > 160 || typeof allDay !== 'boolean' || !isValidLocalDate(startDate) || !isValidLocalDate(endDate)) return null;
+        if (allDay) {
+          if (endDate < startDate || ![undefined,null,''].includes(raw.startTime) || ![undefined,null,''].includes(raw.endTime)) return null;
+          return { id, title, allDay:true, startDate, endDate, startTime:null, endTime:null };
+        }
+        const startTime = raw.startTime; const endTime = raw.endTime;
+        if (typeof startTime !== 'string' || !/^([01]\d|2[0-3]):[0-5]\d$/.test(startTime)
+          || typeof endTime !== 'string' || !/^([01]\d|2[0-3]):[0-5]\d$/.test(endTime)) return null;
+        if (endDate < startDate || (endDate === startDate && endTime <= startTime)) return null;
+        return { id, title, allDay:false, startDate, endDate, startTime, endTime };
+      }
+      function normalizeCalendarEvents(raw) {
+        if (!Array.isArray(raw)) return [];
+        const seen = new Set(); const events = [];
+        for (const item of raw.slice(0, MAX_CALENDAR_EVENTS)) {
+          const event = normalizeCalendarEvent(item);
+          if (!event || seen.has(event.id)) continue;
+          seen.add(event.id); events.push(event);
+        }
+        return events;
+      }
+      function sanitizeCalendarEvents(raw) {
+        if (!Array.isArray(raw) || raw.length > MAX_CALENDAR_EVENTS) throw new Error('import_invalid');
+        const allowed = ['id','title','allDay','startDate','endDate','startTime','endTime'];
+        const seen = new Set();
+        return raw.map(item => {
+          assertAllowedKeys(item, allowed);
+          const event = normalizeCalendarEvent(item);
+          if (!event || seen.has(event.id)) throw new Error('import_invalid');
+          seen.add(event.id); return event;
+        });
+      }
       const sampleTaskIds = new Set(['t-1','t-2','t-3']);
       const sampleHabitIds = new Set(['h-1','h-2','h-3']);
       const makeInitialCalculator = () => ({ entry:'0', stored:null, operator:null, waiting:false, expression:'', error:false });
       const makeInitialStopwatch = () => ({ elapsed:0, running:false, startedAt:null, laps:[] });
       const makeInitialTimer = () => ({ durationMs:300000, remainingMs:300000, running:false, deadline:null, completed:false });
-      const makeInitialState = () => ({ tasks: [], habits: [], notes: {}, widgets: [], calculator:makeInitialCalculator(), stopwatch:makeInitialStopwatch(), timer:makeInitialTimer(), importConflicts:[], importFingerprints:[] });
+(function (global) {
+  'use strict';
+
+  const DAY = 86400000;
+  const pad = n => String(n).padStart(2, '0');
+  function dateKey(date) { return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`; }
+  function parseDate(key) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(key || ''));
+    if (!m) return null;
+    const y = Number(m[1]), month = Number(m[2]), day = Number(m[3]);
+    const value = new Date(y, month - 1, day);
+    return value.getFullYear() === y && value.getMonth() === month - 1 && value.getDate() === day ? value : null;
+  }
+  // Date-only arithmetic uses a UTC ordinal; no local midnight is added across DST.
+  function ordinal(key) {
+    const d = parseDate(key);
+    return d ? Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / DAY) : NaN;
+  }
+  function fromOrdinal(n) {
+    const d = new Date(n * DAY);
+    return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
+  }
+  function shiftDate(key, amount) { const n = ordinal(key); return Number.isFinite(n) ? fromOrdinal(n + amount) : ''; }
+  function shiftMonth(key, amount) {
+    const d = parseDate(key);
+    if (!d) return '';
+    const moved = new Date(d.getFullYear(), d.getMonth() + amount, 1);
+    return dateKey(moved);
+  }
+  function startOfWeek(key) { const d = parseDate(key); return d ? shiftDate(key, -((d.getDay() + 6) % 7)) : ''; }
+  function weekRange(key) { const start = startOfWeek(key); return start ? [start, shiftDate(start, 6)] : []; }
+  function validateEvent(event) {
+    const title = String(event.title || '').trim();
+    if (!title) return 'Ajoutez un titre.';
+    if (!parseDate(event.startDate) || !parseDate(event.endDate)) return 'Choisissez des dates valides.';
+    if (ordinal(event.endDate) < ordinal(event.startDate)) return 'La date de fin doit suivre la date de début.';
+    if (event.allDay) return '';
+    if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(event.startTime || '') || !/^([01]\d|2[0-3]):[0-5]\d$/.test(event.endTime || '')) return 'Choisissez des heures valides.';
+    const start = ordinal(event.startDate) * 1440 + Number(event.startTime.slice(0, 2)) * 60 + Number(event.startTime.slice(3));
+    const end = ordinal(event.endDate) * 1440 + Number(event.endTime.slice(0, 2)) * 60 + Number(event.endTime.slice(3));
+    return end > start ? '' : 'La fin doit être postérieure au début.';
+  }
+  function monthWeeks(monthDate) {
+    const first = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1);
+    const start = shiftDate(dateKey(first), -((first.getDay() + 6) % 7));
+    return Array.from({ length: 42 }, (_, i) => shiftDate(start, i));
+  }
+  function eventTouchesDate(event, key) {
+    const day = ordinal(key), startDay = ordinal(event.startDate), endDay = ordinal(event.endDate);
+    if (![day, startDay, endDay].every(Number.isFinite)) return false;
+    if (event.allDay) return startDay <= day && endDay >= day;
+    const minutes = value => Number(value.slice(0, 2)) * 60 + Number(value.slice(3));
+    const start = startDay * 1440 + minutes(event.startTime || '00:00');
+    const end = endDay * 1440 + minutes(event.endTime || '00:00');
+    return start < (day + 1) * 1440 && end > day * 1440;
+  }
+  function formatPeriod(date, mode) {
+    const fmt = new Intl.DateTimeFormat('fr-FR', mode === 'week' ? { day: 'numeric', month: 'long', year: 'numeric' } : { month: 'long', year: 'numeric' });
+    if (mode !== 'week') return fmt.format(date).replace(/^./, c => c.toLocaleUpperCase('fr-FR'));
+    const end = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 6);
+    return `${fmt.format(date)} – ${new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(end)}`;
+  }
+  function createCalendarUI({ root, state, saveState, onStateChange } = {}) {
+    if (!root || !state || typeof saveState !== 'function') throw new TypeError('root, state et saveState sont requis.');
+    if (!Array.isArray(state.calendarEvents)) state.calendarEvents = [];
+    let mode = 'month', cursor = new Date(); cursor.setHours(12, 0, 0, 0);
+    let editingId = null, returnFocus = null, returnFocusDate = null, idSequence = 0, saving = false;
+    root.innerHTML = '<section class="calendar" aria-label="Calendrier" tabindex="-1"><div class="calendar-toolbar"><button type="button" class="calendar-nav" data-action="previous" aria-label="Période précédente">‹</button><button type="button" class="calendar-nav" data-action="next" aria-label="Période suivante">›</button><button type="button" class="calendar-today" data-action="today">Aujourd’hui</button><h2 class="calendar-period" aria-live="polite"></h2><div class="calendar-view-toggle" aria-label="Affichage"><button type="button" class="calendar-mode" data-mode="month" aria-pressed="true">Mois</button><button type="button" class="calendar-mode" data-mode="week" aria-pressed="false">Semaine</button></div><button type="button" class="calendar-create" data-action="create">+ Événement</button></div><div class="calendar-grid" role="grid" aria-label="Événements du calendrier"></div><p class="calendar-live" aria-live="polite" role="status"></p><dialog id="calendar-dialog" class="calendar-dialog" aria-labelledby="calendar-dialog-title"><form class="calendar-dialog-form"><h3 class="calendar-dialog-title" id="calendar-dialog-title">Nouvel événement</h3><label class="calendar-field">Titre<input name="title" type="text" maxlength="160" required autocomplete="off"></label><label class="calendar-all-day"><input name="allDay" type="checkbox"> Toute la journée</label><div class="calendar-row"><label class="calendar-field">Date de début<input name="startDate" type="date" required></label><label class="calendar-field calendar-time-field">Heure de début<input name="startTime" type="time" value="09:00" required></label></div><div class="calendar-row"><label class="calendar-field">Date de fin<input name="endDate" type="date" required></label><label class="calendar-field calendar-time-field">Heure de fin<input name="endTime" type="time" value="10:00" required></label></div><p class="calendar-error" aria-live="assertive"></p><div class="calendar-dialog-actions"><button type="button" data-action="delete" hidden>Supprimer</button><button type="button" data-action="cancel">Annuler</button><button type="submit" data-action="save">Enregistrer</button></div></form></dialog></section>';
+    const section = root.querySelector('.calendar'), grid = root.querySelector('.calendar-grid');
+    const dialog = root.querySelector('dialog'), form = dialog.querySelector('form');
+    const byName = name => form.elements.namedItem(name);
+    const live = root.querySelector('.calendar-live');
+    const weekdays = ['Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.', 'Dim.'];
+    function createId() {
+      if (global.crypto && typeof global.crypto.randomUUID === 'function') return global.crypto.randomUUID();
+      idSequence += 1; return `calendar-${Date.now().toString(36)}-${idSequence.toString(36)}`;
+    }
+    function render() {
+      const focusDate = dateKey(cursor);
+      const periodDate = mode === 'week' ? parseDate(weekRange(focusDate)[0]) : cursor;
+      root.querySelector('.calendar-period').textContent = formatPeriod(periodDate, mode);
+      root.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
+      grid.className = `calendar-grid${mode === 'week' ? ' calendar-week' : ''}`;
+      grid.replaceChildren();
+      const headerRow = document.createElement('div'); headerRow.className = 'calendar-grid-row calendar-header-row'; headerRow.setAttribute('role', 'row');
+      weekdays.forEach(day => { const el = document.createElement('div'); el.className = 'calendar-weekday'; el.setAttribute('role', 'columnheader'); el.textContent = day; headerRow.append(el); });
+      grid.append(headerRow);
+      const dates = mode === 'month' ? monthWeeks(cursor) : Array.from({ length: 7 }, (_, i) => shiftDate(startOfWeek(focusDate), i));
+      const eventList = state.calendarEvents.filter(e => e && parseDate(e.startDate) && parseDate(e.endDate));
+      for (let rowIndex = 0; rowIndex < dates.length; rowIndex += 7) {
+        const row = document.createElement('div'); row.className = 'calendar-grid-row'; row.setAttribute('role', 'row');
+        dates.slice(rowIndex, rowIndex + 7).forEach(key => {
+        const d = parseDate(key), cell = document.createElement('div');
+        cell.className = 'calendar-day'; cell.setAttribute('role', 'gridcell'); cell.setAttribute('aria-label', new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full' }).format(d)); cell.dataset.date = key;
+        if (mode === 'month' && d.getMonth() !== cursor.getMonth()) cell.classList.add('is-outside');
+        if (key === dateKey(new Date())) cell.classList.add('is-today');
+        const head = document.createElement('div'); head.className = 'calendar-day-head';
+        const label = document.createElement('span'); label.className = 'calendar-day-label'; label.textContent = `${new Intl.DateTimeFormat('fr-FR', { weekday: 'short' }).format(d)} ${d.getDate()}`;
+        const number = document.createElement('button'); number.type = 'button'; number.className = 'calendar-day-number'; number.dataset.action = 'day'; number.dataset.date = key; number.textContent = String(d.getDate()); number.setAttribute('aria-label', `Créer un événement le ${new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full' }).format(d)}`);
+        const add = document.createElement('button'); add.type = 'button'; add.className = 'calendar-day-add'; add.dataset.action = 'day'; add.dataset.date = key; add.setAttribute('aria-label', `Ajouter un événement le ${new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full' }).format(d)}`); add.textContent = '+';
+        head.append(label, number, add); cell.append(head);
+        const list = document.createElement('div'); list.className = 'calendar-event-list';
+        const visible = eventList.filter(e => eventTouchesDate(e, key)).sort((a, b) => Number(b.allDay) - Number(a.allDay) || (a.startTime || '').localeCompare(b.startTime || '') || String(a.title || '').localeCompare(String(b.title || ''), 'fr'));
+        const limit = mode === 'month' ? 3 : visible.length;
+        visible.slice(0, limit).forEach(e => {
+          const chip = document.createElement('button'); chip.type = 'button'; chip.className = 'calendar-event'; chip.dataset.action = 'edit'; chip.dataset.id = e.id;
+          if (key !== e.startDate) chip.classList.add('is-continuation');
+          const safeTitle = String(e.title || 'Événement');
+          chip.setAttribute('aria-label', `${safeTitle}, ${e.allDay ? `toute la journée du ${e.startDate}${e.endDate !== e.startDate ? ` au ${e.endDate}` : ''}` : `de ${e.startDate} à ${e.endDate} (${e.startTime}–${e.endTime})`}`);
+          if (!e.allDay && key === e.startDate) { const time = document.createElement('span'); time.className = 'calendar-event-time'; time.textContent = e.endDate === e.startDate ? `${e.startTime}–${e.endTime}` : e.startTime; chip.append(time); }
+          const endsHere = !e.allDay && e.endDate !== e.startDate && (e.endTime === '00:00' ? shiftDate(e.endDate, -1) === key : e.endDate === key);
+          if (endsHere) { const endTime = document.createElement('span'); endTime.className = 'calendar-event-time calendar-event-end'; endTime.textContent = `Fin ${e.endTime === '00:00' ? 'à minuit' : e.endTime}`; chip.append(endTime); }
+          const title = document.createElement('span'); title.textContent = `${key !== e.startDate ? '↳ ' : ''}${safeTitle}`; chip.append(title); list.append(chip);
+        });
+        if (visible.length > limit) {
+          const more = document.createElement('button'); more.type = 'button'; more.className = 'calendar-more'; more.dataset.action = 'more'; more.dataset.date = key;
+          more.setAttribute('aria-label', `Afficher les ${visible.length - limit} autres événements de la semaine du ${key}`);
+          more.textContent = `+ ${visible.length - limit} autres`; list.append(more);
+        }
+        cell.append(list); row.append(cell);
+        });
+        grid.append(row);
+      }
+    }
+    function setAllDayState() {
+      const allDay = byName('allDay').checked;
+      byName('endDate').disabled = false;
+      byName('startTime').disabled = allDay;
+      byName('endTime').disabled = allDay;
+      root.querySelectorAll('.calendar-time-field').forEach(el => { el.hidden = allDay; });
+    }
+    function openDialog(event, date) {
+      returnFocus = document.activeElement; returnFocusDate = event ? event.startDate : date || dateKey(cursor); editingId = event ? event.id : null;
+      form.reset(); root.querySelector('.calendar-error').textContent = '';
+      root.querySelector('.calendar-dialog-title').textContent = event ? 'Modifier l’événement' : 'Nouvel événement';
+      form.querySelector('[data-action="delete"]').hidden = !event;
+      byName('title').value = event ? event.title : '';
+      byName('allDay').checked = event ? Boolean(event.allDay) : false;
+      byName('startDate').value = event ? event.startDate : date || dateKey(cursor);
+      byName('endDate').value = event ? event.endDate : date || dateKey(cursor);
+      byName('startTime').value = event && event.startTime || '09:00';
+      byName('endTime').value = event && event.endTime || '10:00';
+      setAllDayState();
+      if (typeof dialog.showModal === 'function') dialog.showModal(); else dialog.setAttribute('open', '');
+      byName('title').focus();
+    }
+    function restoreDialogFocus() {
+      const fallback = returnFocus && returnFocus.isConnected ? returnFocus
+        : returnFocusDate ? grid.querySelector(`[data-action="day"][data-date="${returnFocusDate}"]`) : null;
+      if (returnFocus || returnFocusDate) (fallback || section).focus();
+      returnFocus = null; returnFocusDate = null;
+    }
+    function closeDialog() { if (dialog.open && typeof dialog.close === 'function') dialog.close(); else { dialog.removeAttribute('open'); restoreDialogFocus(); } }
+    async function commit(nextEvents, message, { eventId = null, date = null, closeOnSuccess = false } = {}) {
+      if (saving) return false;
+      saving = true;
+      const stateAtStart = state;
+      const previousEvents = state.calendarEvents;
+      const controls = [...form.querySelectorAll('button, input')];
+      const disabledBeforeSave = controls.map(control => control.disabled);
+      controls.forEach(control => { control.disabled = true; });
+      try {
+        state.calendarEvents = nextEvents;
+        try { await saveState(); }
+        catch (error) {
+          if (state === stateAtStart && state.calendarEvents === nextEvents) {
+            state.calendarEvents = previousEvents;
+            render();
+            root.querySelector('.calendar-error').textContent = 'Enregistrement impossible. Vérifiez votre connexion puis réessayez.';
+            live.textContent = 'L’événement n’a pas été enregistré; le formulaire reste ouvert.';
+          }
+          return false;
+        }
+        if (state !== stateAtStart) return false;
+        if (closeOnSuccess) closeDialog();
+        if (typeof onStateChange === 'function') onStateChange(state);
+        render(); live.textContent = message;
+        const focusTarget = eventId ? grid.querySelector(`[data-action="edit"][data-id="${eventId}"]`) : null;
+        const dateTarget = date ? grid.querySelector(`[data-action="day"][data-date="${date}"]`) : null;
+        (focusTarget || dateTarget || section).focus();
+        return true;
+      } finally {
+        saving = false;
+        controls.forEach((control, index) => { control.disabled = disabledBeforeSave[index]; });
+      }
+    }
+    section.addEventListener('click', async ev => {
+      const button = ev.target.closest('button'); if (!button || !section.contains(button)) return;
+      const action = button.dataset.action;
+      if (action === 'previous' || action === 'next') {
+        const delta = action === 'previous' ? -1 : 1;
+        if (mode === 'month') { cursor = parseDate(shiftMonth(dateKey(cursor), delta)); cursor.setHours(12, 0, 0, 0); }
+        else cursor = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() + delta * 7, 12);
+        render();
+      } else if (action === 'today') { cursor = new Date(); cursor.setHours(12, 0, 0, 0); render(); }
+      else if (button.dataset.mode) { mode = button.dataset.mode; render(); }
+      else if (action === 'create' || action === 'day') openDialog(null, button.dataset.date);
+      else if (action === 'edit') { const found = state.calendarEvents.find(e => e.id === button.dataset.id); if (found) openDialog(found); }
+      else if (action === 'more') { const date = parseDate(button.dataset.date); if (date) { cursor = date; cursor.setHours(12, 0, 0, 0); mode = 'week'; render(); root.querySelector('[data-mode="week"]')?.focus(); } }
+    });
+    section.addEventListener('keydown', ev => {
+      const control = ev.target.closest('.calendar-day-number, .calendar-day-add');
+      if (!control || !section.contains(control)) return;
+      const offsets = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
+      const offset = offsets[ev.key];
+      if (!offset) return;
+      ev.preventDefault();
+      const nextDate = shiftDate(control.dataset.date, offset);
+      if (!nextDate) return;
+      const displayed = grid.querySelector(`[data-action="day"][data-date="${nextDate}"]`);
+      if (displayed) displayed.focus();
+      else {
+        const next = parseDate(nextDate); next.setHours(12, 0, 0, 0); cursor = next; render();
+        grid.querySelector(`[data-action="day"][data-date="${nextDate}"]`)?.focus();
+      }
+    });
+    byName('allDay').addEventListener('change', setAllDayState);
+    form.addEventListener('submit', async ev => {
+      ev.preventDefault();
+      const next = { id: editingId || createId(), title: byName('title').value.trim(), allDay: byName('allDay').checked, startDate: byName('startDate').value, endDate: byName('endDate').value, startTime: byName('allDay').checked ? '' : byName('startTime').value, endTime: byName('allDay').checked ? '' : byName('endTime').value };
+      const error = validateEvent(next); if (error) { root.querySelector('.calendar-error').textContent = error; return; }
+      const exists = state.calendarEvents.some(e => e.id === editingId);
+      const list = exists ? state.calendarEvents.map(e => e.id === editingId ? next : e) : [...state.calendarEvents, next];
+      await commit(list, exists ? 'Événement modifié.' : 'Événement ajouté.', { eventId: next.id, date: next.startDate, closeOnSuccess: true });
+    });
+    form.querySelector('[data-action="delete"]').addEventListener('click', async () => {
+      if (!editingId) return;
+      const removed = state.calendarEvents.find(e => e.id === editingId);
+      const saved = await commit(state.calendarEvents.filter(e => e.id !== editingId), 'Événement supprimé.', { date: removed?.startDate || null, closeOnSuccess: true });
+      if (saved) editingId = null;
+    });
+    form.querySelector('[data-action="cancel"]').addEventListener('click', closeDialog);
+    dialog.addEventListener('close', restoreDialogFocus);
+    dialog.addEventListener('cancel', ev => { if (saving) ev.preventDefault(); });
+    render();
+    return {
+      render,
+      setMode(value) { if (value === 'month' || value === 'week') { mode = value; render(); } },
+      setDate(value) { const next = parseDate(value); if (next) { next.setHours(12, 0, 0, 0); cursor = next; render(); } },
+      setState(nextState) {
+        if (!nextState || typeof nextState !== 'object') return;
+        const wasOpen = dialog.open;
+        if (wasOpen) { returnFocus = null; returnFocusDate = null; editingId = null; dialog.close(); }
+        state = nextState;
+        if (!Array.isArray(state.calendarEvents)) state.calendarEvents = [];
+        render();
+        if (wasOpen) section.focus();
+      },
+      destroy() { root.replaceChildren(); }
+    };
+  }
+
+  const api = { createCalendarUI, dateKey, parseDate, ordinal, shiftDate, shiftMonth, startOfWeek, weekRange, formatPeriod, monthWeeks, eventTouchesDate, validateEvent };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  global.createCalendarUI = createCalendarUI;
+})(typeof globalThis !== 'undefined' ? globalThis : window);
+
+      const makeInitialState = () => ({ tasks: [], habits: [], notes: {}, calendarEvents:[], widgets: [], calculator:makeInitialCalculator(), stopwatch:makeInitialStopwatch(), timer:makeInitialTimer(), importConflicts:[], importFingerprints:[] });
       let activeUser = null;
       let syncMode = 'local';
       let supabaseClient = null;
@@ -936,6 +1348,13 @@
       let adminAccessRows = [];
       let authContextEpoch = 0;
       let pendingCloudState = null;
+      let pendingCloudSnapshotText = null;
+      let pendingCloudOwnerId = null;
+      let pendingCloudEpoch = null;
+      let pendingCloudStorageKey = null;
+      let pendingCloudArchiveKey = null;
+      const pendingInstanceNonce = crypto.randomUUID();
+      const pendingSnapshotWrites = new Map();
       let pendingImportState = null;
       let pendingImportName = '';
       let pendingImportFingerprint = null;
@@ -949,6 +1368,8 @@
       const calculator = makeInitialCalculator();
       const timer = makeInitialTimer();
       let timerInterval = null;
+      let calendarUI = null;
+      let calendarBoundState = null;
 
       function loadState(sourceUser = activeUser, sourceState = undefined, saveLocally = true) {
         try {
@@ -963,6 +1384,7 @@
             const migrated = { ...makeInitialState(), ...saved };
             migrated.importConflicts = Array.isArray(saved.importConflicts) ? saved.importConflicts : [];
             migrated.importFingerprints = Array.isArray(saved.importFingerprints) ? saved.importFingerprints.filter(value => typeof value === 'string' && /^[0-9a-f]{64}$/.test(value)) : [];
+            migrated.calendarEvents = normalizeCalendarEvents(saved.calendarEvents);
             // Remove only the exact sample records shipped by older versions; keep every user-created item.
             migrated.tasks = migrated.tasks.filter(task => !sampleTaskIds.has(task?.id)).map(task => {
               const knownTaskFields = ['id','title','priority','due','done','time','estimatedMinutes','subtasks'];
@@ -1021,9 +1443,17 @@
           if (!activeUser) return;
           if (syncMode === 'cloud' && supabaseClient) {
             if (!cloudAccessApproved) return;
-            localStorage.setItem(`${CLOUD_CACHE_PREFIX}${activeUser.id}`, JSON.stringify(state));
-            localStorage.setItem(`${CLOUD_PENDING_PREFIX}${activeUser.id}`, JSON.stringify(state));
+            const ownerId = activeUser.id; const epoch = authContextEpoch;
+            const snapshotText = JSON.stringify(state);
+            localStorage.setItem(`${CLOUD_CACHE_PREFIX}${ownerId}`, snapshotText);
             cloudDirty = true;
+            queuePendingSnapshotWrite(ownerId, epoch, snapshotText).catch(cause => {
+              if (isCurrentCloudContext(ownerId, epoch)) {
+                setSyncStatus('Copie locale non enregistrée');
+                showToast('La sauvegarde locale ne peut pas être vérifiée. La synchronisation attendra que la copie puisse être conservée.');
+                console.error('Écriture de la copie locale en attente impossible.', cause);
+              }
+            });
             scheduleCloudSave();
             setSyncStatus(cloudBlocked ? 'Conflit à résoudre' : 'Enregistrement…');
             return;
@@ -1035,7 +1465,138 @@
         }
         catch (error) { showToast('Enregistrement local indisponible sur ce navigateur.'); }
       }
+      async function saveCalendarState() {
+        if (!activeUser) throw new Error('session_missing');
+        const snapshotText = JSON.stringify(state);
+        if (syncMode === 'cloud' && supabaseClient) {
+          if (!cloudAccessApproved) throw new Error('access_not_approved');
+          const ownerId = activeUser.id; const epoch = authContextEpoch;
+          const cacheKey = `${CLOUD_CACHE_PREFIX}${ownerId}`;
+          localStorage.setItem(cacheKey, snapshotText);
+          if (localStorage.getItem(cacheKey) !== snapshotText) throw new Error('cloud_cache_not_verified');
+          cloudDirty = true;
+          await queuePendingSnapshotWrite(ownerId, epoch, snapshotText);
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) throw new Error('auth_context_stale');
+          scheduleCloudSave();
+          setSyncStatus(cloudBlocked ? 'Conflit à résoudre' : 'Enregistrement…');
+          return;
+        }
+        if (location.protocol !== 'file:') throw new Error('local_storage_unavailable');
+        const localId = activeUser.localId || activeUser.id;
+        const key = `le-fil-data-v1:${localId}`;
+        localStorage.setItem(key, snapshotText);
+        if (localStorage.getItem(key) !== snapshotText) throw new Error('local_state_not_verified');
+        setSyncStatus('Sur cet appareil');
+      }
+      function bindCalendarState() {
+        if (!calendarUI) {
+          calendarUI = globalThis.createCalendarUI({ root:document.getElementById('calendar-root'), state, saveState:saveCalendarState });
+          calendarBoundState = state;
+        } else if (calendarBoundState !== state) {
+          calendarBoundState = state;
+          calendarUI.setState(state);
+        }
+      }
       function persistCalculator() { state.calculator = { ...calculator }; saveState(); }
+      async function fingerprintPendingText(snapshotText) {
+        const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(snapshotText));
+        return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2,'0')).join('');
+      }
+      function pendingAckKey(ownerId, digest) { return `${CLOUD_PENDING_ACK_PREFIX}${ownerId}:${digest}`; }
+      function pendingAckMatches(ownerId, digest) {
+        const value = localStorage.getItem(pendingAckKey(ownerId, digest));
+        if (value === digest) return true;
+        if (typeof value !== 'string' || !value.startsWith(`${digest}:`)) return false;
+        const timestamp = value.slice(digest.length + 1);
+        return /^\d+$/.test(timestamp) && Number.isSafeInteger(Number(timestamp));
+      }
+      function isOwnedPendingKey(ownerId, key) {
+        return key === `${CLOUD_PENDING_PREFIX}${ownerId}` || key.startsWith(`${CLOUD_PENDING_V2_PREFIX}${ownerId}:`);
+      }
+      function queuePendingSnapshotWrite(ownerId, epoch, snapshotText) {
+        const previous = pendingSnapshotWrites.get(ownerId) || Promise.resolve();
+        const operation = previous.catch(() => null).then(async () => {
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return false;
+          const digest = await fingerprintPendingText(snapshotText);
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return false;
+          const key = `${CLOUD_PENDING_V2_PREFIX}${ownerId}:${pendingInstanceNonce}`;
+          const existing = localStorage.getItem(key);
+          if (existing !== snapshotText) localStorage.setItem(key, snapshotText);
+          if (localStorage.getItem(key) !== snapshotText) throw new Error('pending_snapshot_not_verified');
+          return { key, raw:snapshotText, digest };
+        });
+        pendingSnapshotWrites.set(ownerId, operation);
+        return operation;
+      }
+      function pendingSnapshotKeys(ownerId) {
+        const legacyKey = `${CLOUD_PENDING_PREFIX}${ownerId}`;
+        const v2Prefix = `${CLOUD_PENDING_V2_PREFIX}${ownerId}:`;
+        const keys = Array.from({ length:localStorage.length }, (_, index) => localStorage.key(index)).filter(key => key && (key === legacyKey || key.startsWith(v2Prefix)));
+        return [...new Set(keys)];
+      }
+      function pendingSnapshotCandidates(ownerId) {
+        return pendingSnapshotKeys(ownerId).map(key => ({ key, raw:localStorage.getItem(key) })).filter(item => item.raw !== null);
+      }
+      async function hasUnacknowledgedPendingSnapshots(ownerId, epoch=authContextEpoch) {
+        if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return true;
+        for (const candidate of pendingSnapshotCandidates(ownerId)) {
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return true;
+          try {
+            const digest = await fingerprintPendingText(candidate.raw);
+            if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved || !pendingAckMatches(ownerId, digest)) return true;
+          } catch { return true; }
+        }
+        return false;
+      }
+      async function prunePendingAckMarkers(ownerId, epoch=authContextEpoch) {
+        if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return false;
+        const activeDigests = new Set();
+        for (const candidate of pendingSnapshotCandidates(ownerId)) {
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return false;
+          const digest = await fingerprintPendingText(candidate.raw);
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return false;
+          if (localStorage.getItem(candidate.key) === candidate.raw) activeDigests.add(digest);
+        }
+        const prefix = `${CLOUD_PENDING_ACK_PREFIX}${ownerId}:`;
+        const markers = Array.from({ length:localStorage.length }, (_, index) => localStorage.key(index))
+          .filter(key => key?.startsWith(prefix))
+          .map(key => {
+            const digest = key.slice(prefix.length); const value = localStorage.getItem(key);
+            const timestamp = value === digest ? 0 : Number(value?.split(':')[1]);
+            return { key, digest, timestamp:Number.isFinite(timestamp) ? timestamp : 0 };
+          })
+          .filter(item => /^[0-9a-f]{64}$/.test(item.digest) && pendingAckMatches(ownerId, item.digest));
+        const target = Math.max(MAX_PENDING_ACK_MARKERS, activeDigests.size);
+        let excess = markers.length - target;
+        if (excess <= 0) return true;
+        for (const marker of markers.sort((left,right) => left.timestamp - right.timestamp)) {
+          if (activeDigests.has(marker.digest)) continue;
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return false;
+          localStorage.removeItem(marker.key);
+          if (localStorage.getItem(marker.key) === null) excess--;
+          if (excess <= 0) break;
+        }
+        return excess <= 0;
+      }
+      async function archiveAndAcknowledgePendingSnapshot(ownerId, epoch, key, snapshotText, reason='equal', verifiedArchiveKey=null) {
+        if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved || !isOwnedPendingKey(ownerId, key)) return false;
+        const digest = await fingerprintPendingText(snapshotText);
+        if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return false;
+        const ackKey = pendingAckKey(ownerId, digest);
+        if (pendingAckMatches(ownerId, digest)) return true;
+        let archiveKey = verifiedArchiveKey;
+        const recoveryPrefix = `${CLOUD_RECOVERY_PREFIX}${ownerId}:`;
+        if (!archiveKey || !archiveKey.startsWith(recoveryPrefix) || localStorage.getItem(archiveKey) !== snapshotText) {
+          archiveKey = archivePendingCloudSnapshot(ownerId, snapshotText, reason);
+        }
+        if (localStorage.getItem(archiveKey) !== snapshotText) throw new Error('pending_archive_not_verified');
+        if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return false;
+        localStorage.setItem(ackKey, `${digest}:${Date.now()}`);
+        if (!pendingAckMatches(ownerId, digest)) throw new Error('pending_ack_not_verified');
+        try { await prunePendingAckMarkers(ownerId, epoch); }
+        catch (cause) { console.warn('Le registre des acquittements ne peut pas encore être compacté.', cause); }
+        return true;
+      }
       function escapeHTML(value) {
         return String(value).replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[char]);
       }
@@ -1127,7 +1688,8 @@
         const greeting = state.tasks.length === 0 ? 'Ajoutez les encarts qui vous seront utiles, quand vous le souhaitez.' : remaining === 0 ? 'Vous avez fait votre part. Le reste peut attendre.' : `Il vous reste ${remaining} petite${remaining > 1 ? 's' : ''} chose${remaining > 1 ? 's' : ''} à votre rythme.`;
         const daySummary = document.getElementById('day-summary'); if (daySummary) daySummary.textContent = greeting;
         renderAccountUsername();
-        document.getElementById('import-local-button').hidden = syncMode !== 'cloud' || !readLocalDataSources().length;
+        document.getElementById('import-local-button').hidden = !hasConfirmedCloudAdmin() || !readLocalDataSources().length;
+        updateBackupAccessControls();
       }
       function renderNote() {
         const note = document.getElementById('daily-note'); if (note) note.value = state.notes[todayISO()] || '';
@@ -1181,6 +1743,7 @@
         saveState(); render(); document.getElementById('habit-dialog').close(); document.getElementById('habit-form').reset(); showToast('Le rituel a été ajouté.');
       }
       function render() {
+        if (calendarUI && calendarBoundState !== state) bindCalendarState();
         renderWidgets(); renderDate(); renderProgress(); renderHabits(); renderTaskList('today-task-list','today'); renderTaskList('all-task-list','all'); renderNote();
       }
       function clearWorkspacePresentation() {
@@ -1316,8 +1879,9 @@
         persistCalculator(); renderCalculator();
       }
       function changeView(view) {
+        if (view === 'calendar') bindCalendarState();
         if (view === 'admin' && (!cloudAccessApproved || !cloudIsAdmin || syncMode !== 'cloud')) return;
-        if (view === 'import-conflicts' && (!cloudAccessApproved || syncMode !== 'cloud')) return;
+        if (view === 'import-conflicts' && !canAccessOwnBackups()) return;
         document.querySelectorAll('.section-view').forEach(section => section.classList.toggle('active', section.id === `${view}-view`));
         document.querySelectorAll('.nav-item[data-view]').forEach(button => {
           const active = button.dataset.view === view;
@@ -1454,7 +2018,10 @@
         const timerPreset = event.target.closest('[data-timer-preset]');
         if (timerPreset) chooseTimerPreset(timerPreset.dataset.timerPreset);
         const nav = event.target.closest('[data-view]');
-        if (nav) changeView(nav.dataset.view);
+        if (nav) {
+          if (nav.id === 'account-backups-button') setAccountMenuOpen(false);
+          changeView(nav.dataset.view);
+        }
         const link = event.target.closest('[data-view-link]');
         if (link) changeView(link.dataset.viewLink);
         const add = event.target.closest('.add-task-trigger');
@@ -1486,6 +2053,18 @@
         if (removeHabit) { state.habits = state.habits.filter(item => item.id !== removeHabit.dataset.id); saveState(); render(); showToast('Le rituel a été supprimé.'); }
         if (event.target.closest('[data-add-habit]')) document.getElementById('habit-dialog').showModal();
       });
+      function visibleSidebarButtons() {
+        return [...document.querySelectorAll('#main-sidebar button:not([disabled])')]
+          .filter(button => !button.hidden && !button.closest('[hidden]') && (typeof button.getClientRects !== 'function' || button.getClientRects().length > 0));
+      }
+      function handleMobileSidebarTab(event) {
+        if (event.key !== 'Tab' || !window.matchMedia('(max-width:700px)').matches || !document.body.classList.contains('sidebar-open')) return false;
+        const focusable = visibleSidebarButtons();
+        if (!focusable.length) return false;
+        if (event.shiftKey && document.activeElement === focusable[0]) { event.preventDefault(); focusable.at(-1).focus(); return true; }
+        if (!event.shiftKey && document.activeElement === focusable.at(-1)) { event.preventDefault(); focusable[0].focus(); return true; }
+        return false;
+      }
       function handleSidebarEscape(event) {
         if (event.key !== 'Escape' || document.querySelector('dialog[open]')) return false;
         if (document.getElementById('sidebar-toggle').getAttribute('aria-expanded') !== 'true') return false;
@@ -1495,11 +2074,7 @@
       document.addEventListener('keydown', event => {
         if (!workspaceIsUsable()) return;
         if (handleSidebarEscape(event)) return;
-        if (event.key === 'Tab' && window.matchMedia('(max-width:700px)').matches && document.body.classList.contains('sidebar-open')) {
-          const focusable = [...document.querySelectorAll('#main-sidebar button:not([disabled])')];
-          if (event.shiftKey && document.activeElement === focusable[0]) { event.preventDefault(); focusable.at(-1)?.focus(); }
-          else if (!event.shiftKey && document.activeElement === focusable.at(-1)) { event.preventDefault(); focusable[0]?.focus(); }
-        }
+        handleMobileSidebarTab(event);
         const calculatorView = document.getElementById('calculator-view');
         if (!calculatorView.classList.contains('active') || document.querySelector('dialog[open]') || event.target.matches('input,textarea,select,[contenteditable="true"]')) return;
         if (event.key === 'Enter' && event.target.closest('[data-calc]')) return;
@@ -1640,7 +2215,8 @@
           if (syncMode === 'cloud' && activeUser?.id) {
             const ownerRecoveryPrefix = `${CLOUD_RECOVERY_PREFIX}${activeUser.id}:`;
             keys.filter(key => key.startsWith(ownerRecoveryPrefix) && meaningful(key)).forEach(key => {
-              sources.push({ id:key, name:'Copie cloud non synchronisée', admin:false, recoveryKey:key });
+              const alreadyOnline = key.startsWith(`${ownerRecoveryPrefix}equal-`);
+              sources.push({ id:key, name:alreadyOnline ? 'Copie de secours déjà synchronisée' : 'Copie cloud non synchronisée', admin:false, recoveryKey:key, autoPrompt:!alreadyOnline });
             });
           }
           if (meaningful(LEGACY_STORAGE_KEY)) {
@@ -1649,6 +2225,25 @@
           }
         } catch (error) { console.warn('Lecture des données locales impossible.', error); }
         return sources;
+      }
+      function readOwnRecoveryBackups(ownerId=activeUser?.id, epoch=authContextEpoch) {
+        if (!canAccessOwnBackups(ownerId, epoch)) return [];
+        const prefix = `${CLOUD_RECOVERY_PREFIX}${ownerId}:`;
+        const keys = Array.from({ length:localStorage.length }, (_, index) => localStorage.key(index)).filter(key => key?.startsWith(prefix));
+        const archives = keys.map(key => {
+          const raw = localStorage.getItem(key);
+          try {
+            const saved = JSON.parse(raw);
+            if (!saved || !Array.isArray(saved.tasks) || !Array.isArray(saved.habits)) return null;
+            const match = key.match(/:([a-z]+)-(\d{13})-[a-f0-9]+$/i);
+            return { key, raw, kind:'archive', reason:match?.[1] || 'secours', createdAt:match ? Number(match[2]) : null };
+          } catch { return null; }
+        }).filter(Boolean);
+        const pending = pendingSnapshotCandidates(ownerId).filter(candidate => {
+          try { const saved = JSON.parse(candidate.raw); return Boolean(saved && Array.isArray(saved.tasks) && Array.isArray(saved.habits)); }
+          catch { return false; }
+        }).map(candidate => ({ ...candidate, kind:'pending', reason:candidate.key.startsWith(`${CLOUD_PENDING_V2_PREFIX}${ownerId}:`) ? 'en attente cloud' : 'ancienne copie en attente', createdAt:null }));
+        return [...archives, ...pending];
       }
       function localProfileState(profile) {
         if (profile.recoveryKey) {
@@ -1692,6 +2287,14 @@
         return normalized;
       }
       function stableJson(value) { return JSON.stringify(canonicalJsonValue(value)); }
+      function sameCloudState(left, right) {
+        const normalizedLeft = loadState(activeUser, left, false);
+        const normalizedRight = loadState(activeUser, right, false);
+        if (normalizedLeft.timer?.running && normalizedRight.timer?.running && normalizedLeft.timer.deadline === normalizedRight.timer.deadline && normalizedLeft.timer.durationMs === normalizedRight.timer.durationMs) {
+          normalizedLeft.timer.remainingMs = normalizedRight.timer.remainingMs;
+        }
+        return sameValue(normalizedLeft, normalizedRight);
+      }
       async function fingerprintState(value) {
         const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(stableJson(value)));
         return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2,'0')).join('');
@@ -1737,6 +2340,17 @@
           if (!(date in result.notes)) result.notes[date] = localValue;
           else if (!sameValue(localValue, result.notes[date])) await archive('note', date, localValue, result.notes[date]);
         }
+        result.calendarEvents = normalizeCalendarEvents(result.calendarEvents);
+        const cloudEventsById = new Map(result.calendarEvents.map((event,index) => [event.id,index]));
+        for (const localEvent of normalizeCalendarEvents(localState.calendarEvents)) {
+          if (!cloudEventsById.has(localEvent.id)) {
+            cloudEventsById.set(localEvent.id, result.calendarEvents.length);
+            result.calendarEvents.push(structuredClone(localEvent));
+          } else {
+            const cloudEvent = result.calendarEvents[cloudEventsById.get(localEvent.id)];
+            if (!sameValue(localEvent, cloudEvent)) await archive('calendar-event', localEvent.id, structuredClone(localEvent), structuredClone(cloudEvent));
+          }
+        }
         result.widgets = Array.isArray(result.widgets) ? result.widgets : [];
         for (const localWidget of localState.widgets || []) {
           const current = result.widgets.find(widget => widget.type === localWidget.type);
@@ -1770,8 +2384,9 @@
         return value;
       }
       function sanitizeTransferState(raw) {
-        assertAllowedKeys(raw, ['tasks','habits','notes','widgets','calculator','stopwatch','timer']);
+        assertAllowedKeys(raw, ['tasks','habits','notes','calendarEvents','widgets','calculator','stopwatch','timer']);
         for (const field of ['tasks','habits','widgets']) if (raw[field] !== undefined && !Array.isArray(raw[field])) throw new Error('import_invalid');
+        if (raw.calendarEvents !== undefined && !Array.isArray(raw.calendarEvents)) throw new Error('import_invalid');
         if (raw.notes !== undefined && (!raw.notes || typeof raw.notes !== 'object' || Array.isArray(raw.notes))) throw new Error('import_invalid');
         const tasks = (Array.isArray(raw.tasks) ? raw.tasks : []).map(item => {
           assertAllowedKeys(item, ['id','title','priority','due','done','time','estimatedMinutes','subtasks']);
@@ -1813,6 +2428,7 @@
           if (!widgetTypes.includes(item.type) && item.type !== 'stopwatch') throw new Error('import_invalid');
           return { id:`widget-${item.type}`, type:item.type };
         });
+        const calendarEvents = sanitizeCalendarEvents(raw.calendarEvents || []);
         if (new Set(tasks.map(item => item.id)).size !== tasks.length || new Set(habits.map(item => item.id)).size !== habits.length || new Set(widgets.map(item => item.type)).size !== widgets.length) throw new Error('import_invalid');
         const base = makeInitialState();
         const calculator = raw.calculator || base.calculator;
@@ -1833,8 +2449,8 @@
         if (!Number.isFinite(timer.durationMs) || timer.durationMs < 1000 || timer.durationMs > 59999000
           || !Number.isFinite(timer.remainingMs) || timer.remainingMs < 0 || timer.remainingMs > timer.durationMs
           || typeof timer.running !== 'boolean' || !(timer.deadline === null || Number.isFinite(timer.deadline)) || typeof timer.completed !== 'boolean') throw new Error('import_invalid');
-        const normalized = loadState({ id:'transfer-validation', admin:false }, { tasks, habits, notes, widgets, calculator, stopwatch, timer }, false);
-        return { tasks:normalized.tasks, habits:normalized.habits, notes:normalized.notes, widgets:normalized.widgets, calculator:normalized.calculator, stopwatch:normalized.stopwatch, timer:normalized.timer };
+        const normalized = loadState({ id:'transfer-validation', admin:false }, { tasks, habits, notes, calendarEvents, widgets, calculator, stopwatch, timer }, false);
+        return { tasks:normalized.tasks, habits:normalized.habits, notes:normalized.notes, calendarEvents:normalized.calendarEvents, widgets:normalized.widgets, calculator:normalized.calculator, stopwatch:normalized.stopwatch, timer:normalized.timer };
       }
       function transferableState(raw) {
         const stateData = raw || makeInitialState();
@@ -1846,6 +2462,7 @@
           })),
           habits:(stateData.habits || []).map(({id,name,detail,done}) => ({id,name,detail,done})),
           notes:stateData.notes || {},
+          calendarEvents:stateData.calendarEvents || [],
           widgets:(stateData.widgets || []).map(({id,type}) => ({id,type})),
           calculator:stateData.calculator || makeInitialCalculator(),
           stopwatch:stateData.stopwatch || makeInitialStopwatch(),
@@ -1865,17 +2482,37 @@
         document.getElementById('profile-import-source-name').textContent = sourceName;
         document.getElementById('profile-import-destination-name').textContent = activeUser?.name || 'Compte connecté';
         document.getElementById('cloud-destination-name').textContent = activeUser?.name || 'Compte connecté';
-        document.getElementById('profile-import-summary').textContent = `${stateData.tasks.length} tâche(s), ${stateData.habits.length} habitude(s), ${Object.keys(stateData.notes).length} note(s), ${stateData.widgets.length} encart(s). Les copies en conflit seront conservées dans les archives.`;
+        document.getElementById('profile-import-summary').textContent = `${stateData.tasks.length} tâche(s), ${stateData.habits.length} habitude(s), ${Object.keys(stateData.notes).length} note(s), ${(stateData.calendarEvents || []).length} événement(s), ${stateData.widgets.length} encart(s). Les copies en conflit seront conservées dans les archives.`;
         preview.hidden = false;
       }
       function renderImportConflicts() {
         const list = document.getElementById('import-conflicts-list');
+        const localList = document.getElementById('local-recovery-backups-list');
+        const summary = document.getElementById('import-conflicts-summary');
+        const localSummary = document.getElementById('local-recovery-backups-summary');
+        list.replaceChildren(); localList.replaceChildren();
+        const ownerId = activeUser?.id;
+        const epoch = authContextEpoch;
+        if (!canAccessOwnBackups(ownerId, epoch)) {
+          summary.textContent = 'Connectez-vous au compte concerné pour consulter ses sauvegardes.';
+          localSummary.textContent = 'Ces copies restent conservées sur cet appareil.';
+          return;
+        }
         const records = Array.isArray(state.importConflicts) ? state.importConflicts : [];
-        list.replaceChildren();
+        const localBackups = readOwnRecoveryBackups(ownerId, epoch);
         const unresolved = records.filter(item => !item.resolved).length;
-        document.getElementById('import-conflicts-summary').textContent = records.length
-          ? `${records.length} copie(s) conservée(s); ${unresolved} à examiner. Les archives ne sont pas supprimées.`
-          : 'Aucune copie en conflit pour le moment.';
+        summary.textContent = `${records.length} copie(s) archivée(s) dans le compte; ${unresolved} à examiner. Les archives ne sont pas supprimées.`;
+        localSummary.textContent = localBackups.length
+          ? `${localBackups.length} copie(s) de secours conservée(s) sur cet appareil. Elles restent disponibles ici.`
+          : 'Aucune copie de secours conservée sur cet appareil.';
+        for (const backup of localBackups.slice().reverse()) {
+          const card = document.createElement('article'); card.className = 'import-conflict-card';
+          const title = document.createElement('h3'); title.textContent = `Copie de secours · ${backup.reason}`; card.append(title);
+          const source = document.createElement('p'); source.className = 'panel-note'; source.textContent = backup.createdAt ? formatAccessDate(new Date(backup.createdAt).toISOString()) : 'Date indisponible'; card.append(source);
+          const actions = document.createElement('div'); actions.className = 'import-conflict-actions';
+          const exportButton = document.createElement('button'); exportButton.type = 'button'; exportButton.className = 'secondary-button'; exportButton.dataset.recoveryExport = backup.key; exportButton.textContent = 'Télécharger cette sauvegarde'; actions.append(exportButton);
+          card.append(actions); localList.append(card);
+        }
         for (const item of records.slice().reverse()) {
           const restorationArchive = String(item.kind || '').startsWith('restauration-');
           const card = document.createElement('article'); card.className = 'import-conflict-card';
@@ -1909,18 +2546,23 @@
         return syncMode === 'cloud' ? Boolean(activeUser && cloudAccessApproved) : Boolean(location.protocol === 'file:' && activeUser);
       }
       function guardWorkspaceInteraction(event) {
-        const target = event.target.closest?.('.app-shell,.mobile-nav,#task-dialog,#habit-dialog,#widget-dialog,#import-dialog,#pending-dialog,#access-admin-confirm-dialog,#conflict-restore-dialog');
+        const target = event.target.closest?.('.app-shell,.mobile-nav,#task-dialog,#habit-dialog,#widget-dialog,#calendar-dialog,#import-dialog,#pending-dialog,#access-admin-confirm-dialog,#conflict-restore-dialog');
         if (!target || workspaceIsUsable()) return;
         event.preventDefault(); event.stopImmediatePropagation();
       }
       ['click','input','change','submit','keydown'].forEach(type => document.addEventListener(type, guardWorkspaceInteraction, true));
       function setAdminNavigation(visible) {
+        visible = Boolean(visible && syncMode === 'cloud' && cloudAccessApproved && cloudIsAdmin && activeUser?.id && supabaseClient);
         const adminView = document.getElementById('admin-view');
         if (!visible && adminView.classList.contains('active')) changeView('today');
         document.querySelectorAll('.admin-only').forEach(button => { button.hidden = !visible; });
         document.querySelector('.mobile-nav').classList.toggle('has-admin-tab', Boolean(visible));
         adminView.hidden = !visible;
         if (!visible) {
+          const importDialog = document.getElementById('import-dialog');
+          const importWasOpen = importDialog.open;
+          if (importDialog.open) importDialog.close();
+          pendingImportState = null; pendingImportName = ''; pendingImportFingerprint = null;
           adminAccessRows = [];
           document.getElementById('pending-account-list').replaceChildren();
           document.getElementById('other-account-list').replaceChildren();
@@ -1929,17 +2571,33 @@
           document.getElementById('nav-admin-pending-count').textContent = '0';
           document.getElementById('mobile-admin-pending-count').textContent = '0';
           document.getElementById('admin-access-error').textContent = '';
+          if (importWasOpen && syncMode === 'cloud' && cloudAccessApproved && activeUser) showApp();
         }
+      }
+      function hasConfirmedCloudAdmin(ownerId=activeUser?.id, epoch=authContextEpoch) {
+        return Boolean(ownerId && epoch === authContextEpoch && activeUser?.id === ownerId && syncMode === 'cloud' && cloudAccessApproved && cloudIsAdmin && supabaseClient);
+      }
+      function canAccessOwnBackups(ownerId=activeUser?.id, epoch=authContextEpoch) {
+        return Boolean(ownerId && cloudAccessApproved && isCurrentCloudContext(ownerId, epoch));
+      }
+      async function confirmCloudAdminAccess(ownerId=activeUser?.id, epoch=authContextEpoch) {
+        if (!hasConfirmedCloudAdmin(ownerId, epoch)) return false;
+        const access = await resolveCloudAccess({ id:ownerId, email:activeUser.email, user_metadata:{ display_name:activeUser.name } }, epoch);
+        if (!access || !isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return false;
+        cloudAccessStatus = access.status;
+        cloudIsAdmin = access.isAdmin;
+        setAdminNavigation(cloudIsAdmin);
+        return access.status === 'approved' && access.isAdmin && hasConfirmedCloudAdmin(ownerId, epoch);
       }
       function showAccessStatus(status, { requestSent=false, canRefresh=Boolean(activeUser), message='' } = {}) {
         authContextEpoch++;
         clearInterval(cloudAccessRefreshTimer); cloudAccessRefreshTimer = null;
-        clearTimeout(cloudSaveTimer); cloudSaveTimer = null; cloudDirty = false; pendingCloudState = null;
+        clearTimeout(cloudSaveTimer); cloudSaveTimer = null; cloudDirty = false; pendingCloudState = null; pendingCloudSnapshotText = null; pendingCloudOwnerId = null; pendingCloudEpoch = null; pendingCloudStorageKey = null; pendingCloudArchiveKey = null;
         cloudAccessApproved = false; cloudIsAdmin = false; setAdminNavigation(false);
         clearInterval(timerInterval); timerInterval = null;
         state = makeInitialState(); Object.assign(calculator, makeInitialCalculator()); Object.assign(timer, makeInitialTimer());
         clearWorkspacePresentation();
-        ['import-dialog','pending-dialog','task-dialog','habit-dialog','widget-dialog','access-admin-confirm-dialog','password-recovery-dialog','account-management-dialog'].forEach(id => { const dialog=document.getElementById(id); if (dialog.open) dialog.close(); });
+        ['import-dialog','pending-dialog','task-dialog','habit-dialog','widget-dialog','calendar-dialog','access-admin-confirm-dialog','password-recovery-dialog','account-management-dialog'].forEach(id => { const dialog=document.getElementById(id); if (dialog?.open) dialog.close(); });
         clearTransientCredentials();
         pendingAccessAction = null;
         document.querySelector('.app-shell').hidden = true;
@@ -2124,14 +2782,14 @@
       function showLogin() {
         authContextEpoch++;
         clearInterval(cloudAccessRefreshTimer); cloudAccessRefreshTimer = null;
-        clearTimeout(cloudSaveTimer); cloudSaveTimer = null; cloudDirty = false; pendingCloudState = null;
+        clearTimeout(cloudSaveTimer); cloudSaveTimer = null; cloudDirty = false; pendingCloudState = null; pendingCloudSnapshotText = null; pendingCloudOwnerId = null; pendingCloudEpoch = null; pendingCloudStorageKey = null; pendingCloudArchiveKey = null;
         activeUser = null; syncMode = 'local'; cloudAccessApproved = false; cloudIsAdmin = false; cloudAccessStatus = null;
         cloudBlocked = false; cloudDirty = false; state = makeInitialState(); adminAccessRows = [];
         clearInterval(timerInterval); timerInterval = null;
         Object.assign(calculator, makeInitialCalculator()); Object.assign(timer, makeInitialTimer());
         clearWorkspacePresentation();
         setAccountMenuOpen(false);
-        ['import-dialog','pending-dialog','task-dialog','habit-dialog','widget-dialog','access-admin-confirm-dialog','password-recovery-dialog','account-management-dialog'].forEach(id => { const dialog=document.getElementById(id); if (dialog.open) dialog.close(); });
+        ['import-dialog','pending-dialog','task-dialog','habit-dialog','widget-dialog','calendar-dialog','access-admin-confirm-dialog','password-recovery-dialog','account-management-dialog'].forEach(id => { const dialog=document.getElementById(id); if (dialog?.open) dialog.close(); });
         clearTransientCredentials();
         pendingAccessAction = null;
         setAdminNavigation(false);
@@ -2152,7 +2810,7 @@
         renderImportConflicts();
         setAdminNavigation(syncMode === 'cloud' && cloudAccessApproved && cloudIsAdmin);
         setSyncStatus(syncMode === 'cloud' ? (cloudBlocked ? 'Conflit à résoudre' : 'Compte connecté') : 'Sur cet appareil');
-        Object.assign(calculator, state.calculator || makeInitialCalculator()); Object.assign(timer, state.timer || makeInitialTimer()); clearInterval(timerInterval); timerInterval = timer.running ? setInterval(renderTimer, 200) : null; renderCalculator(); renderTimer(); render();
+        Object.assign(calculator, state.calculator || makeInitialCalculator()); Object.assign(timer, state.timer || makeInitialTimer()); clearInterval(timerInterval); timerInterval = timer.running ? setInterval(renderTimer, 200) : null; renderCalculator(); renderTimer(); bindCalendarState(); render();
       }
       function cloudDismissKey(userId) { return `${IMPORT_DISMISSED_PREFIX}${userId}`; }
       function populateImportSources() {
@@ -2181,7 +2839,7 @@
         }
       }
       function openImportDialog(force = false) {
-        if (syncMode !== 'cloud' || !activeUser || !cloudAccessApproved) return;
+        if (!hasConfirmedCloudAdmin()) return;
         const sources = populateImportSources();
         if (!force && localStorage.getItem(cloudDismissKey(activeUser.id))) { showApp(); return; }
         document.getElementById('auth-screen').hidden = true;
@@ -2199,10 +2857,24 @@
       }
       function updateTransferControls() {
         const local = syncMode === 'local' && location.protocol === 'file:' && Boolean(activeUser);
-        const cloud = syncMode === 'cloud' && cloudAccessApproved && Boolean(activeUser);
+        const admin = hasConfirmedCloudAdmin();
         document.getElementById('export-local-profile-button').hidden = !local;
-        document.getElementById('import-local-button').hidden = !cloud;
-        document.querySelector('.import-conflicts-access').hidden = !cloud || !(state.importConflicts || []).length;
+        document.getElementById('import-local-button').hidden = !admin || !readLocalDataSources().length;
+        updateBackupAccessControls();
+      }
+      function updateBackupAccessControls() {
+        const backupsAvailable = hasOwnBackupRecords();
+        const admin = hasConfirmedCloudAdmin();
+        document.getElementById('admin-copies-button').hidden = !admin || !backupsAvailable;
+        document.getElementById('account-backups-button').hidden = !backupsAvailable || admin;
+      }
+      function hasOwnBackupRecords(ownerId=activeUser?.id, epoch=authContextEpoch) {
+        if (!canAccessOwnBackups(ownerId, epoch)) return false;
+        if ((state.importConflicts || []).length) return true;
+        const recoveryPrefix = `${CLOUD_RECOVERY_PREFIX}${ownerId}:`;
+        const v2Prefix = `${CLOUD_PENDING_V2_PREFIX}${ownerId}:`;
+        const legacyKey = `${CLOUD_PENDING_PREFIX}${ownerId}`;
+        return Array.from({ length:localStorage.length }, (_, index) => localStorage.key(index)).some(key => key === legacyKey || key?.startsWith(recoveryPrefix) || key?.startsWith(v2Prefix));
       }
       function downloadJson(name, payload) {
         const blob = new Blob([JSON.stringify(payload, null, 2)], { type:'application/json' });
@@ -2225,8 +2897,17 @@
           showToast(String(cause.message || '').includes('too_large') ? 'Le profil est trop volumineux pour cet export.' : 'Le profil local ne peut pas être exporté.');
         }
       });
-      document.getElementById('import-profile-file').addEventListener('click', () => document.getElementById('import-profile-file-input').click());
+      document.getElementById('import-profile-file').addEventListener('click', () => {
+        if (hasConfirmedCloudAdmin()) document.getElementById('import-profile-file-input').click();
+      });
       document.getElementById('import-profile-file-input').addEventListener('change', async event => {
+        const ownerId = activeUser?.id;
+        const epoch = authContextEpoch;
+        if (!ownerId || !await confirmCloudAdminAccess(ownerId, epoch)) {
+          event.target.value = '';
+          document.getElementById('import-error').textContent = 'L’import est réservé aux administrateurs confirmés.';
+          return;
+        }
         const file = event.target.files?.[0];
         const errorNode = document.getElementById('import-error');
         pendingImportState = null; pendingImportName = ''; errorNode.textContent = '';
@@ -2234,7 +2915,7 @@
         try {
           if (file.size > MAX_IMPORT_FILE_BYTES) throw new Error('import_too_large');
           const parsed = await parseProfileTransfer(await file.text());
-          if (syncMode !== 'cloud' || !cloudAccessApproved) throw new Error('import_access_changed');
+          if (!isCurrentCloudContext(ownerId, epoch) || !await confirmCloudAdminAccess(ownerId, epoch)) throw new Error('import_access_changed');
           pendingImportState = parsed.state; pendingImportName = parsed.name; pendingImportFingerprint = parsed.fingerprint;
           setImportPreview(parsed.state, parsed.name);
         } catch (cause) {
@@ -2243,8 +2924,25 @@
           event.target.value = '';
         }
       });
-      document.querySelector('.import-conflicts-access').addEventListener('click', () => changeView('import-conflicts'));
+      document.getElementById('local-recovery-backups-list').addEventListener('click', event => {
+        const exportButton = event.target.closest('[data-recovery-export]');
+        if (!exportButton) return;
+        const ownerId = activeUser?.id; const epoch = authContextEpoch;
+        const key = exportButton.dataset.recoveryExport;
+        if (!canAccessOwnBackups(ownerId, epoch) || !readOwnRecoveryBackups(ownerId, epoch).some(item => item.key === key)) return;
+        const raw = localStorage.getItem(key);
+        if (!raw || !canAccessOwnBackups(ownerId, epoch) || localStorage.getItem(key) !== raw || !(key.startsWith(`${CLOUD_RECOVERY_PREFIX}${ownerId}:`) || isOwnedPendingKey(ownerId, key))) return;
+        try {
+          const snapshot = JSON.parse(raw);
+          if (!snapshot || !Array.isArray(snapshot.tasks) || !Array.isArray(snapshot.habits)) throw new Error('invalid_backup');
+          downloadJson(`organisation-sauvegarde-${safeFileLabel(activeUser.username || activeUser.name)}.json`, snapshot);
+        } catch (cause) {
+          console.error('Téléchargement de la sauvegarde impossible.', cause);
+          showToast('Cette sauvegarde est illisible; elle reste conservée sur cet appareil.');
+        }
+      });
       document.getElementById('import-conflicts-list').addEventListener('click', async event => {
+        if (!canAccessOwnBackups()) return;
         const exportButton = event.target.closest('[data-conflict-export]');
         const restoreButton = event.target.closest('[data-conflict-restore]');
         if (exportButton) {
@@ -2253,7 +2951,7 @@
         }
         if (restoreButton) {
           const record = (state.importConflicts || []).find(item => item.id === restoreButton.dataset.conflictId && !item.resolved);
-          if (!record || !cloudAccessApproved || syncMode !== 'cloud') return;
+          if (!record || !canAccessOwnBackups()) return;
           const restorationArchive = String(record.kind || '').startsWith('restauration-');
           pendingConflictRestore = { id:record.id, side:restoreButton.dataset.conflictRestore };
           document.getElementById('conflict-restore-message').textContent = pendingConflictRestore.side === 'local'
@@ -2273,8 +2971,11 @@
             collection.push(duplicate);
           } else {
             const selected = structuredClone(record.localValue);
-            if (!['note','widget','calculator','stopwatch','timer'].includes(dataKind)) throw new Error('conflict_kind_unsupported');
-            const current = dataKind === 'note' ? working.notes[record.key] : dataKind === 'widget' ? working.widgets.find(item => item.type === record.key) : working[dataKind];
+            if (!['note','widget','calendar-event','calculator','stopwatch','timer'].includes(dataKind)) throw new Error('conflict_kind_unsupported');
+            const current = dataKind === 'note' ? working.notes[record.key]
+              : dataKind === 'widget' ? working.widgets.find(item => item.type === record.key)
+                : dataKind === 'calendar-event' ? working.calendarEvents.find(item => item.id === record.key) || null
+                  : working[dataKind];
             const backupFingerprint = await fingerprintState({ kind:`restauration-${dataKind}`, key:record.key, current, selected });
             const priorBackup = working.importConflicts.find(item => item.fingerprint === backupFingerprint);
             if (priorBackup) { priorBackup.resolved = false; delete priorBackup.resolvedAt; }
@@ -2285,6 +2986,13 @@
             } else if (dataKind === 'widget') {
               working.widgets = working.widgets.filter(item => item.type !== record.key);
               if (selected) working.widgets.push(selected);
+            } else if (dataKind === 'calendar-event') {
+              working.calendarEvents = working.calendarEvents.filter(item => item.id !== record.key);
+              if (selected) {
+                const event = normalizeCalendarEvent(selected);
+                if (!event || event.id !== record.key) throw new Error('conflict_kind_unsupported');
+                working.calendarEvents.push(event);
+              }
             }
             else working[dataKind] = selected;
           }
@@ -2299,6 +3007,7 @@
         const button = document.getElementById('confirm-conflict-restore');
         if (!choice || !activeUser || !cloudAccessApproved || syncMode !== 'cloud') return;
         const ownerId = activeUser.id; const epoch = authContextEpoch;
+        if (!canAccessOwnBackups(ownerId, epoch)) return;
         button.disabled = true;
         try {
           const { data:sessionData, error:sessionError } = await supabaseClient.auth.getUser();
@@ -2319,10 +3028,136 @@
           showToast(String(cause.message || '').includes('too_large') ? 'L’archive dépasserait la limite. Rien n’a été modifié.' : 'La restauration a échoué; les données archivées restent conservées.');
         } finally { if (isCurrentCloudContext(ownerId, epoch)) button.disabled = false; }
       });
+      function archivePendingCloudSnapshot(ownerId, snapshotText, reason='pending') {
+        const prefix = `${CLOUD_RECOVERY_PREFIX}${ownerId}:`;
+        const existingKeys = Array.from({ length:localStorage.length }, (_, index) => localStorage.key(index)).filter(key => key?.startsWith(prefix));
+        for (const key of existingKeys) if (localStorage.getItem(key) === snapshotText) return key;
+        const recoveryKey = `${CLOUD_RECOVERY_PREFIX}${ownerId}:${reason}-${Date.now()}-${Math.random().toString(16).slice(2,8)}`;
+        localStorage.setItem(recoveryKey, snapshotText);
+        if (localStorage.getItem(recoveryKey) !== snapshotText) throw new Error('La copie d’origine n’a pas pu être archivée.');
+        return recoveryKey;
+      }
+      function showPendingCloudDialog(ownerId, epoch, pendingKey, snapshotText, message='', archiveKey=null) {
+        if (!snapshotText || !isCurrentCloudContext(ownerId, epoch)) return false;
+        const parsed = JSON.parse(snapshotText);
+        pendingCloudState = loadState(activeUser, parsed, false);
+        pendingCloudSnapshotText = snapshotText;
+        pendingCloudOwnerId = ownerId;
+        pendingCloudEpoch = epoch;
+        pendingCloudStorageKey = pendingKey;
+        pendingCloudArchiveKey = archiveKey;
+        document.getElementById('auth-screen').hidden = true;
+        document.querySelector('.app-shell').hidden = true;
+        document.querySelector('.mobile-nav').hidden = true;
+        document.getElementById('pending-error').textContent = message;
+        document.getElementById('pending-dialog').showModal();
+        return true;
+      }
+      function archiveSelectedPendingForRecovery(ownerId, epoch, pendingKey, snapshotText, failureMessage='') {
+        if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return null;
+        try {
+          const archiveKey = archivePendingCloudSnapshot(ownerId, snapshotText, 'pending');
+          if (localStorage.getItem(archiveKey) !== snapshotText) throw new Error('pending_archive_not_verified');
+          return archiveKey;
+        } catch (cause) {
+          console.error('La copie sélectionnée ne peut pas encore être archivée.', cause);
+          if (isCurrentCloudContext(ownerId, epoch) && cloudAccessApproved) {
+            showPendingCloudDialog(ownerId, epoch, pendingKey, snapshotText,
+              `${failureMessage ? `${failureMessage} ` : ''}La copie exacte n’a pas pu être archivée faute d’espace. Libérez de l’espace et réessayez sans fermer cette page.`, null);
+          }
+          return null;
+        }
+      }
+      function refreshPendingCloudDialog(ownerId, epoch, pendingKey, message) {
+        if (!isCurrentCloudContext(ownerId, epoch)) return false;
+        const latestText = localStorage.getItem(pendingKey);
+        if (!latestText) {
+          document.getElementById('pending-error').textContent = `${message} La copie affichée reste archivée; aucune copie n’a été retirée par cette version.`;
+          return false;
+        }
+        try {
+          const archiveKey = archivePendingCloudSnapshot(ownerId, latestText, 'pending');
+          return showPendingCloudDialog(ownerId, epoch, pendingKey, latestText, message, archiveKey);
+        }
+        catch (cause) {
+          document.getElementById('pending-error').textContent = 'La nouvelle copie n’a pas encore pu être archivée. Libérez de l’espace et réessayez sans fermer cette page.';
+          console.error('La copie locale en attente a changé et ne peut pas être archivée.', cause);
+          return false;
+        }
+      }
+      async function resolvePendingCloudCopyOnOpen(ownerId, epoch, pendingKey, pendingRaw) {
+        if (!pendingRaw) return 'none';
+        if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return 'stale';
+        if (localStorage.getItem(pendingKey) !== pendingRaw) {
+          const archiveKey = archiveSelectedPendingForRecovery(ownerId, epoch, pendingKey, pendingRaw, 'Une copie plus récente est apparue.');
+          if (!archiveKey) return 'different';
+          const latestText = localStorage.getItem(pendingKey);
+          return latestText ? resolvePendingCloudCopyOnOpen(ownerId, epoch, pendingKey, latestText) : 'changed';
+        }
+        const digest = await fingerprintPendingText(pendingRaw);
+        if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return 'stale';
+        if (localStorage.getItem(pendingKey) !== pendingRaw) {
+          const archiveKey = archiveSelectedPendingForRecovery(ownerId, epoch, pendingKey, pendingRaw, 'Une copie plus récente est apparue pendant la vérification.');
+          if (!archiveKey) return 'different';
+          const latestText = localStorage.getItem(pendingKey);
+          return latestText ? resolvePendingCloudCopyOnOpen(ownerId, epoch, pendingKey, latestText) : 'changed';
+        }
+        if (pendingAckMatches(ownerId, digest)) return 'acknowledged';
+        const pendingStateAtOpen = JSON.parse(pendingRaw);
+        if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return 'stale';
+        if (!sameCloudState(pendingStateAtOpen, state)) {
+          const archiveKey = archiveSelectedPendingForRecovery(ownerId, epoch, pendingKey, pendingRaw);
+          if (!archiveKey) return 'different';
+          if (localStorage.getItem(pendingKey) !== pendingRaw) {
+            const latestText = localStorage.getItem(pendingKey);
+            return latestText ? resolvePendingCloudCopyOnOpen(ownerId, epoch, pendingKey, latestText) : 'changed';
+          }
+          showPendingCloudDialog(ownerId, epoch, pendingKey, pendingRaw, '', archiveKey);
+          return 'different';
+        }
+        try { await archiveAndAcknowledgePendingSnapshot(ownerId, epoch, pendingKey, pendingRaw, 'equal'); }
+        catch (cause) { console.warn('La copie en ligne reste conservée; son acquittement local sera réessayé.', cause); }
+        return 'equal';
+      }
+      async function resolvePendingCloudCopiesOnOpen(ownerId, epoch) {
+        const seen = new Set();
+        for (let pass = 0; pass < 8; pass++) {
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return 'stale';
+          const candidates = pendingSnapshotCandidates(ownerId).filter(candidate => {
+            const identity = `${candidate.key}\u0000${candidate.raw}`;
+            if (seen.has(identity)) return false;
+            seen.add(identity); return true;
+          });
+          if (!candidates.length) return 'clear';
+          for (const candidate of candidates) {
+            const resolution = await resolvePendingCloudCopyOnOpen(ownerId, epoch, candidate.key, candidate.raw);
+            if (resolution === 'different' || resolution === 'stale') return resolution;
+          }
+        }
+        return 'clear';
+      }
+      async function preserveCloudCacheBeforeReplacement(ownerId, epoch, cloudState) {
+        const cacheKey = `${CLOUD_CACHE_PREFIX}${ownerId}`;
+        const cachedText = localStorage.getItem(cacheKey);
+        if (cachedText === null) return null;
+        if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) throw new Error('auth_context_stale');
+        let cachedData;
+        try { cachedData = JSON.parse(cachedText); }
+        catch { throw new Error('cloud_cache_recovery_invalid'); }
+        if (!cachedData || !Array.isArray(cachedData.tasks) || !Array.isArray(cachedData.habits)) throw new Error('cloud_cache_recovery_invalid');
+        const cachedState = loadState(activeUser, cachedData, false);
+        if (sameCloudState(cachedState, cloudState)) return cachedText;
+        const recoveryKey = archivePendingCloudSnapshot(ownerId, cachedText, 'cache');
+        if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved || localStorage.getItem(recoveryKey) !== cachedText) throw new Error('cloud_cache_recovery_not_verified');
+        const persisted = await queuePendingSnapshotWrite(ownerId, epoch, JSON.stringify(cachedState));
+        if (!persisted || !isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) throw new Error('cloud_cache_recovery_not_verified');
+        return cachedText;
+      }
       async function openCloudWorkspace(user) {
         const epoch = ++authContextEpoch;
         activeUser = { id:user.id, email:user.email || '', name:user.user_metadata?.display_name || (user.email ? user.email.split('@')[0] : 'Mon espace') };
         syncMode = 'cloud'; cloudBlocked = false; cloudDirty = false; cloudAccessApproved = false; cloudIsAdmin = false; state = makeInitialState();
+        pendingCloudState = null; pendingCloudSnapshotText = null; pendingCloudOwnerId = null; pendingCloudEpoch = null; pendingCloudStorageKey = null; pendingCloudArchiveKey = null;
         clearInterval(cloudAccessRefreshTimer); cloudAccessRefreshTimer = null; setAdminNavigation(false);
         const access = await resolveCloudAccess(user, epoch);
         if (!access || !isCurrentCloudContext(user.id, epoch)) return;
@@ -2353,72 +3188,98 @@
         cloudIsAdmin = confirmedAccess.isAdmin;
         cloudVersion = Number(data?.version || 0);
         state = data ? loadState(activeUser, data.state, false) : makeInitialState();
-        const pendingKey = `${CLOUD_PENDING_PREFIX}${activeUser.id}`;
+        const cacheKey = `${CLOUD_CACHE_PREFIX}${activeUser.id}`;
+        let cacheReplaced = false;
         try {
-          const pendingRaw = localStorage.getItem(pendingKey);
-          if (pendingRaw) {
-            pendingCloudState = loadState(activeUser, JSON.parse(pendingRaw), false);
-            document.getElementById('auth-screen').hidden = true;
-            document.querySelector('.app-shell').hidden = true;
-            document.querySelector('.mobile-nav').hidden = true;
-            document.getElementById('pending-error').textContent = '';
-            document.getElementById('pending-dialog').showModal();
-            return;
+          for (let pass=0; pass<8; pass++) {
+            const preservedCacheText = await preserveCloudCacheBeforeReplacement(activeUser.id, epoch, state);
+            const pendingResolution = await resolvePendingCloudCopiesOnOpen(activeUser.id, epoch);
+            if (['different','stale'].includes(pendingResolution)) return;
+            if (localStorage.getItem(cacheKey) !== preservedCacheText) continue;
+            const confirmedCacheText = JSON.stringify(state);
+            localStorage.setItem(cacheKey, confirmedCacheText);
+            if (localStorage.getItem(cacheKey) !== confirmedCacheText) throw new Error('cloud_cache_not_verified');
+            cacheReplaced = true;
+            break;
           }
+          if (!cacheReplaced) throw new Error('cloud_cache_changed_repeatedly');
         } catch (cause) {
-          console.error('La copie locale en attente est illisible.', cause);
-          throw new Error('Une copie locale en attente est illisible. Elle reste conservée sur cet appareil; aucune donnée en ligne n’a été remplacée.');
+          console.error('La copie locale récente n’a pas pu être préservée avant le chargement.', cause);
+          if (String(cause.message || '').startsWith('cloud_cache_')) throw cause;
+          throw new Error('cloud_cache_recovery_not_verified');
         }
-        if (data?.state) localStorage.setItem(`${CLOUD_CACHE_PREFIX}${activeUser.id}`, JSON.stringify(state));
-        if (!localStorage.getItem(cloudDismissKey(activeUser.id)) && readLocalDataSources().length) openImportDialog();
+        if (cloudIsAdmin && !localStorage.getItem(cloudDismissKey(activeUser.id)) && readLocalDataSources().some(source => source.autoPrompt !== false)) openImportDialog();
         else showApp();
       }
       async function recoverPendingCopy(useLocalCopy) {
         const errorNode = document.getElementById('pending-error');
         const mergeButton = document.getElementById('merge-pending-copy');
         const keepButton = document.getElementById('keep-online-copy');
-        if (!activeUser || !pendingCloudState || !cloudAccessApproved || syncMode !== 'cloud') return;
+        if (!activeUser || !pendingCloudState || !pendingCloudSnapshotText || !pendingCloudStorageKey || !cloudAccessApproved || syncMode !== 'cloud') return;
         const ownerId = activeUser.id;
         const epoch = authContextEpoch;
-        const pendingKey = `${CLOUD_PENDING_PREFIX}${ownerId}`;
+        const pendingKey = pendingCloudStorageKey;
+        const originalPending = pendingCloudSnapshotText;
+        if (pendingCloudOwnerId !== ownerId || pendingCloudEpoch !== epoch || !isOwnedPendingKey(ownerId, pendingKey)) {
+          errorNode.textContent = 'La session a changé depuis l’ouverture. Reconnectez-vous pour revoir les copies; aucune donnée n’a été remplacée.';
+          return;
+        }
+        const currentPending = localStorage.getItem(pendingKey);
+        if (currentPending && currentPending !== originalPending) {
+          const archiveKey = archiveSelectedPendingForRecovery(ownerId, epoch, pendingKey, originalPending, 'Une copie plus récente est apparue.');
+          if (!archiveKey) return;
+          refreshPendingCloudDialog(ownerId, epoch, pendingKey, 'Une nouvelle copie est apparue dans un autre onglet. Vérifiez-la avant de choisir.');
+          return;
+        }
         mergeButton.disabled = true; keepButton.disabled = true; errorNode.textContent = '';
         try {
+          let archiveKey = pendingCloudArchiveKey;
+          if (!archiveKey || localStorage.getItem(archiveKey) !== originalPending) archiveKey = archivePendingCloudSnapshot(ownerId, originalPending, useLocalCopy ? 'merged' : 'online');
+          if (!isCurrentCloudContext(ownerId, epoch)) return;
+          const latestBeforeChoice = localStorage.getItem(pendingKey);
+          if (latestBeforeChoice && latestBeforeChoice !== originalPending) {
+            refreshPendingCloudDialog(ownerId, epoch, pendingKey, 'Une nouvelle copie est apparue après son archivage. Vérifiez-la avant de choisir.');
+            return;
+          }
           if (useLocalCopy) {
-            const originalPending = localStorage.getItem(pendingKey) ?? JSON.stringify(pendingCloudState);
-            const recoveryKey = `${CLOUD_RECOVERY_PREFIX}${ownerId}:merged-${Date.now()}-${Math.random().toString(16).slice(2,8)}`;
-            localStorage.setItem(recoveryKey, originalPending);
-            if (localStorage.getItem(recoveryKey) !== originalPending) throw new Error('La copie d’origine n’a pas pu être archivée.');
             const mergedState = await mergeImportedState(pendingCloudState, state, 'Copie locale en attente');
+            if (!isCurrentCloudContext(ownerId, epoch)) return;
+            const latestBeforeSave = localStorage.getItem(pendingKey);
+            if (latestBeforeSave && latestBeforeSave !== originalPending) {
+              refreshPendingCloudDialog(ownerId, epoch, pendingKey, 'Une nouvelle copie est apparue pendant la fusion. Vérifiez-la avant de choisir.');
+              return;
+            }
             if (bytesIn(mergedState) > MAX_CLOUD_STATE_BYTES) throw new Error('import_too_large');
             state = mergedState;
-            localStorage.setItem(pendingKey, JSON.stringify(state));
-            localStorage.setItem(`${CLOUD_CACHE_PREFIX}${ownerId}`, JSON.stringify(state));
+            localStorage.setItem(`${CLOUD_CACHE_PREFIX}${ownerId}`, JSON.stringify(mergedState));
             cloudDirty = true;
             const snapshot = JSON.parse(JSON.stringify(state));
             await syncCloudSnapshot(snapshot, ownerId, supabaseClient, epoch);
             if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
-            showToast('La copie locale a été fusionnée et synchronisée.');
+            if (!await archiveAndAcknowledgePendingSnapshot(ownerId, epoch, pendingKey, originalPending, 'merged', archiveKey)) throw new Error('pending_ack_not_confirmed');
+            showToast('La copie locale a été fusionnée et synchronisée. Sa sauvegarde reste conservée.');
           } else {
-            const recoveryKey = `${CLOUD_RECOVERY_PREFIX}${ownerId}:${Date.now()}`;
-            localStorage.setItem(recoveryKey, localStorage.getItem(pendingKey) || JSON.stringify(pendingCloudState));
-            localStorage.removeItem(pendingKey);
-            cloudDirty = false;
-            showToast('La copie locale est conservée sur cet appareil et pourra être importée plus tard.');
+            if (!await archiveAndAcknowledgePendingSnapshot(ownerId, epoch, pendingKey, originalPending, 'online', archiveKey)) throw new Error('pending_ack_not_confirmed');
+            showToast('La copie locale reste conservée dans vos sauvegardes.');
           }
           if (!isCurrentCloudContext(ownerId, epoch)) return;
-          pendingCloudState = null;
+          pendingCloudState = null; pendingCloudSnapshotText = null; pendingCloudOwnerId = null; pendingCloudEpoch = null; pendingCloudStorageKey = null; pendingCloudArchiveKey = null;
           document.getElementById('pending-dialog').close();
-          showApp();
+          const nextResolution = await resolvePendingCloudCopiesOnOpen(ownerId, epoch);
+          if (nextResolution === 'different' || nextResolution === 'stale') return;
+          if (cloudIsAdmin && !localStorage.getItem(cloudDismissKey(ownerId)) && readLocalDataSources().some(source => source.autoPrompt !== false)) openImportDialog();
+          else showApp();
         } catch (cause) {
           if (!isCurrentCloudContext(ownerId, epoch)) return;
           console.error('Récupération de la copie locale impossible.', cause);
-          errorNode.textContent = String(cause.message || '').includes('state_conflict') ? 'Les données en ligne ont changé. Rechargez pour revoir les deux versions.' : 'La copie locale est conservée; vérifiez la connexion puis réessayez.';
+          errorNode.textContent = String(cause.message || '').includes('state_conflict') ? 'Les données en ligne ont changé. Rechargez pour revoir les deux versions.' : String(cause.message || '').includes('pending_ack') ? 'La copie reste archivée, mais son choix n’a pas pu être confirmé localement. Libérez de l’espace puis réessayez.' : 'La copie locale est conservée; vérifiez la connexion puis réessayez.';
         } finally { if (isCurrentCloudContext(ownerId, epoch)) { mergeButton.disabled = false; keepButton.disabled = false; } }
       }
       async function syncCloudSnapshot(snapshot, ownerId, client=supabaseClient, contextEpoch=authContextEpoch) {
         if (!cloudAccessApproved || !isCurrentCloudContext(ownerId, contextEpoch)) throw new Error('auth_context_stale');
         const snapshotText = JSON.stringify(snapshot);
-        const pendingKey = `${CLOUD_PENDING_PREFIX}${ownerId}`;
+        const persistedSnapshot = await queuePendingSnapshotWrite(ownerId, contextEpoch, snapshotText);
+        if (!persistedSnapshot || !isCurrentCloudContext(ownerId, contextEpoch) || !cloudAccessApproved) throw new Error('pending_snapshot_not_verified');
         const expectedVersion = cloudVersion;
         const { data:sessionData, error:sessionError } = await client.auth.getUser();
         if (!isCurrentCloudContext(ownerId, contextEpoch) || !cloudAccessApproved) throw new Error('auth_context_stale');
@@ -2433,18 +3294,37 @@
           throw error;
         }
         const returnedVersion = Number(data);
-        if (localStorage.getItem(pendingKey) === snapshotText) {
+        try {
           localStorage.setItem(`${CLOUD_CACHE_PREFIX}${ownerId}`, snapshotText);
-          localStorage.removeItem(pendingKey);
-        }
+          if (localStorage.getItem(`${CLOUD_CACHE_PREFIX}${ownerId}`) !== snapshotText) throw new Error('cloud_cache_not_verified');
+        } catch (cause) { console.warn('Le cloud est synchronisé, mais la copie cache locale n’a pas été actualisée.', cause); }
+        let pendingAcknowledged = true;
+        try { pendingAcknowledged = await clearPendingAfterConfirmedCloudSave(ownerId, contextEpoch, snapshotText, snapshot); }
+        catch (cause) { pendingAcknowledged = false; console.error('Une copie locale reste conservée après la synchronisation.', cause); }
         if (activeUser?.id === ownerId) {
           cloudVersion = returnedVersion;
-          cloudDirty = Boolean(localStorage.getItem(pendingKey));
+          cloudDirty = !sameValue(state, snapshot);
           cloudBlocked = false;
-          setSyncStatus(cloudDirty ? 'Enregistrement…' : 'Synchronisé');
+          setSyncStatus(cloudDirty ? 'Enregistrement…' : pendingAcknowledged ? 'Synchronisé' : 'Synchronisé · copie locale conservée');
           if (cloudDirty) scheduleCloudSave();
         }
         return returnedVersion;
+      }
+      async function clearPendingAfterConfirmedCloudSave(ownerId, epoch, snapshotText, snapshot) {
+        if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return false;
+        const savedState = snapshot;
+        let acknowledged = true;
+        for (const candidate of pendingSnapshotCandidates(ownerId)) {
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return false;
+          try {
+            const pendingState = JSON.parse(candidate.raw);
+            if (candidate.raw === snapshotText || sameCloudState(pendingState, savedState)) {
+              const result = await archiveAndAcknowledgePendingSnapshot(ownerId, epoch, candidate.key, candidate.raw, 'equal');
+              if (!result) acknowledged = false;
+            }
+          } catch (cause) { acknowledged = false; console.warn('Une copie en attente reste non acquittée.', cause); }
+        }
+        return acknowledged;
       }
       function scheduleCloudSave() {
         if (!cloudAccessApproved || cloudBlocked || syncMode !== 'cloud') return;
@@ -2871,22 +3751,26 @@
       document.getElementById('keep-online-copy').addEventListener('click', () => recoverPendingCopy(false));
       document.getElementById('pending-dialog').addEventListener('cancel', event => {
         event.preventDefault();
-        recoverPendingCopy(false);
+        document.getElementById('pending-error').textContent = 'Choisissez une action pour traiter la copie locale. Échap ne supprime aucune copie.';
       });
       document.getElementById('confirm-import').addEventListener('click', async () => {
         const button = document.getElementById('confirm-import');
         const errorNode = document.getElementById('import-error');
-        const source = pendingImportState ? { name:pendingImportName || 'Fichier JSON', requiresPassword:false } : readLocalDataSources().find(item => item.id === document.getElementById('local-source-select').value);
-        if (!source || !activeUser || !supabaseClient || !cloudAccessApproved || syncMode !== 'cloud') { errorNode.textContent = 'Les données locales sélectionnées sont introuvables ou l’accès a changé.'; return; }
-        const ownerId = activeUser.id;
+        const ownerId = activeUser?.id;
         const epoch = authContextEpoch;
+        if (!ownerId || !await confirmCloudAdminAccess(ownerId, epoch)) {
+          errorNode.textContent = 'L’import est réservé aux administrateurs confirmés.';
+          return;
+        }
+        const source = pendingImportState ? { name:pendingImportName || 'Fichier JSON', requiresPassword:false } : readLocalDataSources().find(item => item.id === document.getElementById('local-source-select').value);
+        if (!source || !hasConfirmedCloudAdmin(ownerId, epoch)) { errorNode.textContent = 'Les données locales sélectionnées sont introuvables ou l’accès a changé.'; return; }
         button.disabled = true; errorNode.textContent = '';
         try {
           await flushCloudSave();
-          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+          if (!isCurrentCloudContext(ownerId, epoch) || !await confirmCloudAdminAccess(ownerId, epoch)) return;
           if (source.requiresPassword) {
             const passwordVerified = await verifyLegacyPassword(source.id, document.getElementById('import-local-password').value);
-            if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+            if (!isCurrentCloudContext(ownerId, epoch) || !hasConfirmedCloudAdmin(ownerId, epoch)) return;
             if (!passwordVerified) { errorNode.textContent = 'Le mot de passe de ce profil local est incorrect.'; return; }
           }
           const sourceState = pendingImportState || localProfileState(source);
@@ -2895,13 +3779,13 @@
           if (bytesIn(transferState) > MAX_IMPORT_FILE_BYTES) throw new Error('import_too_large');
           const transferFingerprint = pendingImportFingerprint || await fingerprintState(transferState);
           const mergedState = await mergeImportedState(localState, state, pendingImportName || source.name, transferFingerprint);
-          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+          if (!isCurrentCloudContext(ownerId, epoch) || !hasConfirmedCloudAdmin(ownerId, epoch)) return;
           const { data:sessionData, error:sessionError } = await supabaseClient.auth.getUser();
-          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+          if (!isCurrentCloudContext(ownerId, epoch) || !await confirmCloudAdminAccess(ownerId, epoch)) return;
           if (sessionError) throw sessionError;
           if (!sessionData.user || sessionData.user.id !== ownerId) throw new Error('auth_context_mismatch');
           const { data, error } = await supabaseClient.rpc('save_organisation_state', { p_state:mergedState, p_expected_version:cloudVersion, p_expected_user_id:ownerId });
-          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+          if (!isCurrentCloudContext(ownerId, epoch) || !hasConfirmedCloudAdmin(ownerId, epoch)) return;
           if (error) throw error;
           cloudVersion = Number(data); state = mergedState;
           localStorage.setItem(`${CLOUD_CACHE_PREFIX}${ownerId}`, JSON.stringify(state));
@@ -2990,6 +3874,7 @@
         if (pendingCloudState || document.getElementById('pending-dialog').open) return 'Choisissez d’abord quoi faire de la copie locale en attente. Rien n’a été rechargé.';
         if (document.getElementById('conflict-restore-dialog').open || document.getElementById('access-admin-confirm-dialog').open) return 'Terminez l’action ouverte avant d’appliquer la mise à jour. Rien n’a été rechargé.';
         if (document.getElementById('habit-dialog').open || document.getElementById('widget-dialog').open) return 'Terminez ou annulez la modification ouverte avant d’appliquer la mise à jour. Rien n’a été rechargé.';
+        if (document.getElementById('calendar-dialog')?.open) return 'Terminez ou annulez le brouillon d’événement avant d’appliquer la mise à jour. Rien n’a été rechargé.';
         if (syncMode === 'cloud' && cloudBlocked) return 'Un conflit de sauvegarde doit être résolu avant de recharger. Votre copie locale est conservée.';
         return '';
       }
@@ -3024,20 +3909,19 @@
             const epoch = authContextEpoch;
             recoveryOwnerId = ownerId;
             recoveryOwnerEpoch = epoch;
-            const pendingKey = `${CLOUD_PENDING_PREFIX}${ownerId}`;
-            const needsRecoveryCopy = cloudDirty || cloudSaveTimer !== null || Boolean(localStorage.getItem(pendingKey));
+            const needsRecoveryCopy = cloudDirty || cloudSaveTimer !== null || await hasUnacknowledgedPendingSnapshots(ownerId, epoch);
             if (needsRecoveryCopy) recoveryKey = preserveCloudRecoveryCopy(ownerId);
             await flushCloudSave();
             if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) throw new Error('La session a changé pendant la sauvegarde.');
             const lateBlocker = pendingReloadBlocker();
             if (lateBlocker) {
-              if (cloudDirty || cloudSaveTimer !== null || localStorage.getItem(pendingKey)) {
+              if (cloudDirty || cloudSaveTimer !== null || await hasUnacknowledgedPendingSnapshots(ownerId, epoch)) {
                 if (!recoveryKey) recoveryKey = preserveCloudRecoveryCopy(ownerId);
                 else refreshCloudRecoveryCopy(recoveryKey);
               }
               setAppUpdateMessage(lateBlocker); button.disabled = false; return;
             }
-            if (cloudDirty || cloudSaveTimer !== null || cloudBlocked || localStorage.getItem(pendingKey)) {
+            if (cloudDirty || cloudSaveTimer !== null || cloudBlocked || await hasUnacknowledgedPendingSnapshots(ownerId, epoch)) {
               if (!recoveryKey) recoveryKey = preserveCloudRecoveryCopy(ownerId);
               throw new Error('La sauvegarde cloud est toujours en attente.');
             }
@@ -3060,13 +3944,12 @@
               let latestSnapshot = null;
               if (activeUser?.id === recoveryOwnerId && authContextEpoch === recoveryOwnerEpoch && syncMode === 'cloud') {
                 latestSnapshot = JSON.stringify(state);
-              } else if (recoveryOwnerId) {
-                const pendingSnapshot = localStorage.getItem(`${CLOUD_PENDING_PREFIX}${recoveryOwnerId}`);
-                if (pendingSnapshot) { JSON.parse(pendingSnapshot); latestSnapshot = pendingSnapshot; }
               }
               if (latestSnapshot !== null) {
                 localStorage.setItem(recoveryKey, latestSnapshot);
                 if (localStorage.getItem(recoveryKey) !== latestSnapshot) throw new Error('La copie de secours n’a pas pu être vérifiée.');
+              } else if (recoveryOwnerId) {
+                for (const candidate of pendingSnapshotCandidates(recoveryOwnerId)) archivePendingCloudSnapshot(recoveryOwnerId, candidate.raw, 'update');
               }
             }
             catch (backupError) { console.error('La copie de secours initiale est conservée; sa mise à jour a échoué.', backupError); }
@@ -3150,7 +4033,13 @@
             if (authLinkType === 'recovery' || authLinkType === 'invite') {
               showPasswordSetup();
             } else try { await openCloudWorkspace(data.session.user); }
-            catch (cause) { console.error('Chargement des données en ligne impossible.', cause); document.getElementById('login-error').textContent = 'Connexion reconnue, mais chargement des données impossible. Vérifiez la configuration Supabase.'; showLogin(); }
+            catch (cause) {
+              console.error('Chargement des données en ligne impossible.', cause);
+              document.getElementById('login-error').textContent = String(cause.message || '').startsWith('cloud_cache_')
+                ? 'Une copie locale récente n’a pas pu être protégée avant le chargement. Elle est toujours dans le cache de cet appareil; libérez de l’espace puis reconnectez-vous. Aucune copie cloud n’a été remplacée.'
+                : 'Connexion reconnue, mais chargement des données impossible. Vérifiez la configuration Supabase.';
+              showLogin();
+            }
           } else showLogin();
         } catch (cause) {
           console.error('Initialisation de Supabase impossible.', cause);
@@ -3164,6 +4053,21 @@
         if (activeUser) localStorage.setItem(cloudDismissKey(activeUser.id), '1');
         document.getElementById('import-dialog').close(); showApp();
       });
+      function archiveLegacyPendingStorageEvent(event) {
+        const ownerId = activeUser?.id; const epoch = authContextEpoch;
+        if (!ownerId || event.storageArea !== localStorage || event.key !== `${CLOUD_PENDING_PREFIX}${ownerId}` || typeof event.newValue !== 'string' || !canAccessOwnBackups(ownerId, epoch)) return false;
+        try {
+          const saved = JSON.parse(event.newValue);
+          if (!saved || !Array.isArray(saved.tasks) || !Array.isArray(saved.habits)) return false;
+          const archiveKey = archivePendingCloudSnapshot(ownerId, event.newValue, 'legacy');
+          return isCurrentCloudContext(ownerId, epoch) && localStorage.getItem(archiveKey) === event.newValue;
+        } catch (cause) {
+          console.error('Une copie legacy détectée dans un autre onglet n’a pas pu être archivée.', cause);
+          if (isCurrentCloudContext(ownerId, epoch)) showToast('Une copie locale détectée dans un autre onglet n’a pas pu être archivée. Libérez de l’espace puis vérifiez les copies disponibles.');
+          return false;
+        }
+      }
+      window.addEventListener('storage', archiveLegacyPendingStorageEvent);
       document.addEventListener('visibilitychange', () => { if (!document.hidden) verifyActiveCloudAccess(); });
       document.getElementById('import-local-button').hidden = true;
       startAppUpdateChecks();

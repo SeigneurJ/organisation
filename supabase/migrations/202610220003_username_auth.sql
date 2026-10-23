@@ -222,3 +222,51 @@ begin
      limit 100
   )
   delete from organisation_private.username_auth_rate_limits as limits
+   using expired
+   where limits.bucket_hash = expired.bucket_hash;
+
+  insert into organisation_private.username_auth_rate_limits as limits
+    (bucket_hash, window_started_at, attempts)
+  values (p_ip_bucket_hash, now(), 1)
+  on conflict (bucket_hash) do update
+     set attempts = case
+           when limits.window_started_at <= now() - interval '10 minutes' then 1
+           else limits.attempts + 1
+         end,
+         window_started_at = case
+           when limits.window_started_at <= now() - interval '10 minutes' then now()
+           else limits.window_started_at
+         end
+  returning limits.window_started_at, limits.attempts
+       into ip_window, ip_attempt_count;
+
+  if ip_attempt_count > 30 then
+    seconds_left := greatest(1, ceil(extract(epoch from (ip_window + interval '10 minutes' - now())))::integer);
+    return query select false, seconds_left;
+    return;
+  end if;
+
+  insert into organisation_private.username_auth_rate_limits as limits
+    (bucket_hash, window_started_at, attempts)
+  values (p_account_ip_bucket_hash, now(), 1)
+  on conflict (bucket_hash) do update
+     set attempts = case
+           when limits.window_started_at <= now() - interval '10 minutes' then 1
+           else limits.attempts + 1
+         end,
+         window_started_at = case
+           when limits.window_started_at <= now() - interval '10 minutes' then now()
+           else limits.window_started_at
+         end
+  returning limits.window_started_at, limits.attempts
+       into account_window, account_attempt_count;
+
+  seconds_left := greatest(1, ceil(extract(epoch from (account_window + interval '10 minutes' - now())))::integer);
+  return query select account_attempt_count <= 5, seconds_left;
+end;
+$$;
+
+revoke all on function public.organisation_consume_username_auth_attempt(text, text) from public, anon, authenticated;
+grant execute on function public.organisation_consume_username_auth_attempt(text, text) to service_role;
+
+commit;

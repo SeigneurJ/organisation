@@ -200,4 +200,78 @@ async function handleRequest(request) {
   try { body = await readJsonLimited(request); }
   catch { return jsonResponse({ error:'Requête invalide.' }, 400, origin); }
   const action = body?.action;
-  const user
+  const username = normalizeUsername(body?.username);
+  if (!['sign-in','reset-password','claim-username'].includes(action) || !USERNAME_PATTERN.test(username)) {
+    return jsonResponse({ error:'Requête invalide.' }, 400, origin);
+  }
+  if (action === 'sign-in' && (typeof body?.password !== 'string' || body.password.length < 1 || body.password.length > 256)) {
+    return jsonResponse({ error:'Requête invalide.' }, 400, origin);
+  }
+
+  let confirmedUser = null;
+  if (action === 'claim-username') {
+    try { confirmedUser = await getConfirmedAuthUser(config, request.headers.get('authorization')); }
+    catch { return jsonResponse({ error:'Session invalide. Reconnectez-vous.' }, 401, origin); }
+    if (!confirmedUser) return jsonResponse({ error:'Session confirmée requise. Reconnectez-vous.' }, 401, origin);
+  }
+
+  if (action === 'claim-username') {
+    try {
+      const result = await serviceRpc(config, 'organisation_claim_username_for_user', {
+        p_user_id:confirmedUser.id,
+        p_username:body.username.trim().normalize('NFC')
+      });
+      const claimed = typeof result === 'string' ? result : result?.username;
+      if (typeof claimed !== 'string') throw new Error('claim_failed');
+      return jsonResponse({ username:claimed }, 200, origin);
+    } catch {
+      return jsonResponse({ error:'Cet identifiant ne peut pas être utilisé. Essayez-en un autre.' }, 409, origin);
+    }
+  }
+
+  let account;
+  try { account = await resolveUsername(config, username); }
+  catch {
+    return jsonResponse({ error:GENERIC_SERVICE_ERROR }, 503, origin);
+  }
+
+  if (action === 'reset-password') {
+    // Auth recovery responses are intentionally identical for known/unknown IDs.
+    try {
+      const response = await sendRecovery(config, account?.email || await dummyEmail('reset', username));
+      if (!response.ok) console.warn('Username recovery upstream status:', response.status);
+    } catch {
+      console.warn('Username recovery request unavailable.');
+    }
+    return jsonResponse({ message:GENERIC_RESET_MESSAGE }, 202, origin);
+  }
+
+  let authResponse;
+  try { authResponse = await authPasswordGrant(config, account?.email || await dummyEmail('login', username), body.password); }
+  catch { return jsonResponse({ error:GENERIC_SERVICE_ERROR }, 503, origin); }
+  if (!account || !authResponse.ok) {
+    // Count only failed sign-ins, so a family account is not locked out by
+    // successful logins and the username flow works when proxy IP is absent.
+    try {
+      const rate = await consumeRateLimit(config, username, clientIp(request));
+      if (!rate.allowed) return jsonResponse({ error:'Trop de tentatives. Réessayez plus tard.' }, 429, origin);
+    } catch { /* Supabase Auth's own rate limits remain in force. */ }
+    // Consume a similar Auth password-check path, but never forward its detail.
+    return jsonResponse({ error:GENERIC_LOGIN_ERROR }, 401, origin);
+  }
+  let session;
+  try { session = await authResponse.json(); }
+  catch { return jsonResponse({ error:GENERIC_LOGIN_ERROR }, 401, origin); }
+  if (session.user?.id !== account.userId || typeof session.access_token !== 'string' || typeof session.refresh_token !== 'string') {
+    return jsonResponse({ error:GENERIC_LOGIN_ERROR }, 401, origin);
+  }
+  // Do not return Auth's user object: it contains the private email address.
+  return jsonResponse({
+    access_token:session.access_token,
+    refresh_token:session.refresh_token,
+    expires_in:session.expires_in,
+    token_type:session.token_type
+  }, 200, origin);
+}
+
+Deno.serve(handleRequest);

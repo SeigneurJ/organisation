@@ -28,4 +28,34 @@ La clé publishable est conçue pour être utilisée côté navigateur; elle ne 
 
 ## Données et protection
 
-La migration initiale crée une ligne JSON par utilisateur dans `public.organisation_states`. La migration d’approbation a créé `public.organisation_access` et une liste privée d’administrateurs contenant uniquement des UUID Auth. Les colonnes 
+La migration initiale crée une ligne JSON par utilisateur dans `public.organisation_states`. La migration d’approbation a créé `public.organisation_access` et une liste privée d’administrateurs contenant uniquement des UUID Auth. Les colonnes nom et e-mail sont des métadonnées d’affichage, jamais des preuves d’autorité.
+
+Les demandes peuvent être `pending`, `approved`, `rejected` ou `suspended`. L’utilisateur peut lire son propre statut, mais ne peut pas écrire directement dans cette table. `request_organisation_access` ne crée qu’une demande `pending` et ne peut pas changer un statut existant. Les administrateurs lisent les demandes via SELECT sous RLS et changent leur statut via `set_organisation_access_status`, qui vérifie l’UUID de l’appelant dans `organisation_private.organisation_admins`.
+
+La lecture de `organisation_states` exige le propriétaire `auth.uid()` et le statut approuvé courant en base. Aucun droit direct `insert` ou `update` n’est accordé sur la table : les écritures passent par `save_organisation_state`, qui vérifie l’UUID Auth capturé par le client, l’approbation courante, la taille de l’état et la version attendue avant de modifier uniquement la ligne de `auth.uid()`. La suspension bloque les requêtes suivantes même avec un JWT encore valide. Les données déjà téléchargées ou copiées sur son appareil ne peuvent pas être effacées à distance. L’administration des comptes reste distincte de la lecture de leurs données; l’admin n’a pas d’accès implicite aux espaces des autres.
+
+La fonction `save_organisation_state` refuse les états invalides/surdimensionnés et vérifie une version attendue pour éviter qu’une modification concurrente écrase silencieusement une version plus récente.
+
+Les modifications en ligne sont envoyées après une courte pause. L’autre appareil récupère l’état à sa prochaine connexion ou actualisation. En cas de conflit de version, l’application conserve la copie en attente sur l’appareil jusqu’à une décision. La fusion est explicite et utilise la version en ligne comme version active. Chaque valeur locale écartée est conservée dans `importConflicts` sur la ligne cloud du même compte; elle peut être consultée, exportée ou restaurée depuis un autre appareil. Les tâches et habitudes en conflit sont restaurées comme nouvel élément afin de garder l’élément en ligne intact. Pour une note, un encart ou un outil, la valeur remplacée est archivée avant la restauration. Les archives ne disposent pas d’action de suppression. Ce premier raccordement ne fournit pas de fusion en temps réel.
+
+Les informations sont hébergées par Supabase. Évitez d’y inscrire des informations très sensibles. La clé publishable peut être publique; la sécurité dépend des politiques RLS, de la configuration Auth et de l’absence de clé secrète dans le client.
+
+## Import et export des profils
+
+Depuis un profil local déverrouillé dans le fichier `file://`, **Exporter le profil local** crée un fichier JSON. Ce fichier n’est pas chiffré; il contient seulement les données d’organisation, jamais le mot de passe, son hash, l’e-mail privé, la session ou les jetons Auth. L’ancienne copie locale n’est pas modifiée. Sur le site HTTPS, **Importer des données locales** permet d’importer ce fichier dans le compte connecté ou de choisir un profil local déjà présent dans le navigateur. L’import ne se fait qu’après sélection et confirmation.
+
+Le fichier source est limité à 512 Kio et l’état fusionné à 768 Kio. Si une limite est dépassée ou si l’enregistrement échoue, l’import est annulé sans écriture et la source reste intacte. Le transfert valide une liste limitée de champs et calcule une empreinte de son contenu normalisé afin d’éviter de fusionner deux fois le même fichier.
+
+Les tâches et habitudes sans identifiant en conflit sont ajoutées. Lorsqu’un même identifiant contient des valeurs différentes, la version en ligne reste active et la copie locale est archivée. Les notes sont traitées de même par date; les encarts sont comparés par type. Les autres outils conservent la version active et archivent l’autre. Les suppressions locales ne sont pas propagées. Les archives de conflit sont propres à chaque compte cloud et peuvent être examinées, exportées ou restaurées; les copies de secours `localStorage` restent propres à leur appareil tant qu’elles ne sont pas importées.
+
+Les profils liés aux autres utilisateurs locaux ne sont pas importés automatiquement. Si un profil possède encore une protection locale par mot de passe, le mot de passe est demandé uniquement pour lire ce profil; il n’est jamais transféré. Les mots de passe locaux hachés ne peuvent pas être convertis en mots de passe Supabase : chaque personne doit établir son mot de passe cloud elle-même.
+
+## Utilisation hors ligne
+
+Sur l’écran d’accès, **Continuer sur cet appareil** permet d’ouvrir un ancien profil local en saisissant son nom exact et son mot de passe. Le nom est associé à un seul profil; si plusieurs profils portent le même nom, l’accès est refusé plutôt que de proposer les autres comptes. La vérification repose sur le sel et le hash déjà présents dans le navigateur; le mot de passe saisi n’est pas conservé. Un espace vierge peut aussi être créé sans authentification. Une modification faite en mode local n’est pas envoyée à Supabase. `file://` reste hors ligne et local uniquement.
+
+## Récupération de compte
+
+Le bouton **Mot de passe oublié ?** envoie le lien de récupération via Supabase Auth. Il faut configurer l’envoi d’e-mails et la redirection HTTPS dans Supabase. La révocation applicative change le statut en `suspended`; la désactivation ou suppression d’une identité Auth reste une opération distincte réservée à l’administrateur du projet.
+
+Le HTML et le JavaScript de GitHub Pages sont publics et copiables. RLS protège les données et opérations serveur, mais ne rend pas secrets les outils exécutés entièrement dans le navigateur. Le parcours local ne doit pas contourner l’écran d’approbation sur la version publique; les profils locaux existants restent soumis à leur mot de passe.

@@ -236,4 +236,138 @@ revoke all on function public.handle_organisation_auth_user_update() from public
 grant execute on function public.handle_organisation_auth_user_insert() to supabase_auth_admin;
 grant execute on function public.handle_organisation_auth_user_update() to supabase_auth_admin;
 
-drop trigge
+drop trigger if exists on_organisation_auth_user_created on auth.users;
+create trigger on_organisation_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_organisation_auth_user_insert();
+
+drop trigger if exists on_organisation_auth_user_updated on auth.users;
+create trigger on_organisation_auth_user_updated
+  after update of email, raw_user_meta_data on auth.users
+  for each row execute procedure public.handle_organisation_auth_user_update();
+
+-- Backfill existing Auth users as pending. No existing identity is promoted.
+insert into public.organisation_access (user_id, email, display_name, status, requested_at)
+select users.id,
+       users.email,
+       coalesce(
+         nullif(left(btrim(coalesce(users.raw_user_meta_data ->> 'display_name', '')), 80), ''),
+         nullif(left(split_part(coalesce(users.email, ''), '@', 1), 80), ''),
+         'Utilisateur'
+       ),
+       'pending',
+       coalesce(users.created_at, now())
+  from auth.users as users
+on conflict (user_id) do nothing;
+
+-- Gate reads of the application state on current DB approval. Writes go only
+-- through the versioned RPC below; direct table DML is not granted. The RPC
+-- checks both the captured Auth UUID and current approval in the database.
+-- organisation_is_approved() checks current DB state, not JWT metadata.
+revoke all on table public.organisation_states from public, anon, authenticated;
+grant select on table public.organisation_states to authenticated;
+
+drop policy if exists "Users can read their own organisation state" on public.organisation_states;
+drop policy if exists "Approved users can read their own organisation state" on public.organisation_states;
+create policy "Approved users can read their own organisation state"
+  on public.organisation_states for select to authenticated
+  using (
+    user_id = (select auth.uid())
+    and (select public.organisation_is_approved())
+  );
+
+drop policy if exists "Users can insert their own organisation state" on public.organisation_states;
+drop policy if exists "Approved users can insert their own organisation state" on public.organisation_states;
+create policy "Approved users can insert their own organisation state"
+  on public.organisation_states for insert to authenticated
+  with check (
+    user_id = (select auth.uid())
+    and (select public.organisation_is_approved())
+  );
+
+drop policy if exists "Users can update their own organisation state" on public.organisation_states;
+drop policy if exists "Approved users can update their own organisation state" on public.organisation_states;
+create policy "Approved users can update their own organisation state"
+  on public.organisation_states for update to authenticated
+  using (
+    user_id = (select auth.uid())
+    and (select public.organisation_is_approved())
+  )
+  with check (
+    user_id = (select auth.uid())
+    and (select public.organisation_is_approved())
+  );
+
+-- Bind every state mutation to the user context captured by the caller. This
+-- prevents a delayed/multi-tab request created for user A from being applied
+-- under a later JWT for user B. Remove the earlier overload so PostgREST has
+-- exactly one RPC signature and stale clients fail closed.
+drop function if exists public.save_organisation_state(jsonb, bigint);
+
+create or replace function public.save_organisation_state(
+  p_state jsonb,
+  p_expected_version bigint,
+  p_expected_user_id uuid
+)
+returns bigint
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  next_version bigint;
+begin
+  if auth.uid() is null then
+    raise exception 'not_authenticated' using errcode = '42501';
+  end if;
+
+  if p_expected_user_id is null or auth.uid() is distinct from p_expected_user_id then
+    raise exception 'auth_context_mismatch' using errcode = '42501';
+  end if;
+
+  if not public.organisation_is_approved() then
+    raise exception 'access_not_approved' using errcode = '42501';
+  end if;
+
+  if p_expected_version is null or p_expected_version < 0 then
+    raise exception 'invalid_expected_version' using errcode = '22023';
+  end if;
+
+  if jsonb_typeof(p_state) is distinct from 'object' then
+    raise exception 'state_must_be_object' using errcode = '22023';
+  end if;
+
+  if pg_column_size(p_state) > 1048576 then
+    raise exception 'state_too_large' using errcode = '22023';
+  end if;
+
+  if p_expected_version = 0 then
+    insert into public.organisation_states (user_id, state, version, updated_at)
+    values (auth.uid(), p_state, 1, now())
+    on conflict (user_id) do nothing
+    returning version into next_version;
+  else
+    update public.organisation_states
+       set state = p_state,
+           version = version + 1,
+           updated_at = now()
+     where user_id = auth.uid()
+       and version = p_expected_version
+    returning version into next_version;
+  end if;
+
+  if next_version is null then
+    raise exception 'state_conflict' using errcode = '40001';
+  end if;
+
+  return next_version;
+end;
+$$;
+
+revoke all on function public.save_organisation_state(jsonb, bigint, uuid) from public, anon;
+grant execute on function public.save_organisation_state(jsonb, bigint, uuid) to authenticated;
+
+comment on table public.organisation_access is
+  'Access workflow. User-facing metadata is not used as an authorization source; only organisation_private.organisation_admins grants admin authority.';
+
+commit;

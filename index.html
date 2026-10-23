@@ -165,24 +165,14 @@
     .calculator-key.equals:hover { background:#314936; }
     .calculator-key.zero { grid-column:span 2; }
     .calculator-hint { margin:13px 2px 0; color:var(--muted); font-size:10px; text-align:center; }
-    .stopwatch-page { max-width:620px; }
-    .stopwatch-shell { border:1px solid var(--line); background:var(--surface); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); }
-    .stopwatch-display { min-height:190px; display:grid; place-items:center; padding:24px 12px; margin-bottom:18px; border:1px solid #e4e3d8; border-radius:10px; background:linear-gradient(145deg,#fbfaf4,#f1efe5); }
-    .stopwatch-time { color:var(--ink); font:clamp(44px,10vw,68px)/1.1 var(--sans); font-variant-numeric:tabular-nums; letter-spacing:-.055em; }
-    .stopwatch-time small { color:var(--muted); font-size:.48em; letter-spacing:-.02em; }
-    .stopwatch-controls { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
-    .stopwatch-button { min-height:54px; border:1px solid #e6e6e7; border-radius:8px; background:#fff; color:var(--ink); cursor:pointer; font-size:14px; transition:background .15s,border-color .15s,transform .15s; }
-    .stopwatch-button:hover:not(:disabled) { transform:translateY(-1px); border-color:#b7d8cd; background:#f2f8f5; }
-    .stopwatch-button:focus-visible { outline:2px solid #138a69; outline-offset:2px; }
-    .stopwatch-button:disabled { opacity:.48; cursor:not-allowed; }
-    .stopwatch-button.primary { background:#138a69; border-color:#138a69; color:white; font-weight:650; }
-    .stopwatch-button.primary:hover:not(:disabled) { background:#087a5b; }
-    .stopwatch-button.utility { background:#f1f1f2; color:#4e4f53; }
-    .stopwatch-laps { margin:22px 0 0; padding:0; list-style:none; border-top:1px solid var(--line); max-height:260px; overflow:auto; }
-    .stopwatch-laps:empty { display:none; }
-    .stopwatch-lap { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 3px; border-bottom:1px solid #ececed; font-size:13px; font-variant-numeric:tabular-nums; }
-    .stopwatch-lap span:first-child { color:var(--muted); }
-    .stopwatch-lap strong { font-weight:600; }
+    .tool-controls { display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:360px; margin:0 auto; }
+    .tool-button { min-height:50px; border:1px solid #e6e6e7; border-radius:8px; background:#fff; color:var(--ink); cursor:pointer; font-size:14px; transition:background .15s,border-color .15s,transform .15s; }
+    .tool-button:hover:not(:disabled) { transform:translateY(-1px); border-color:#b7d8cd; background:#f2f8f5; }
+    .tool-button:focus-visible { outline:2px solid #138a69; outline-offset:2px; }
+    .tool-button:disabled { opacity:.48; cursor:not-allowed; }
+    .tool-button.primary { background:#138a69; border-color:#138a69; color:white; font-weight:650; }
+    .tool-button.primary:hover:not(:disabled) { background:#087a5b; }
+    .tool-button.utility { background:#f1f1f2; color:#4e4f53; }
     .timer-page { max-width:620px; }
     .timer-shell { border:1px solid var(--line); background:var(--surface); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); }
     .timer-display { min-height:190px; display:grid; place-items:center; padding:24px 12px; margin-bottom:18px; border:1px solid #e4e3d8; border-radius:10px; background:linear-gradient(145deg,#fbfaf4,#f1efe5); }
@@ -196,8 +186,6 @@
     .timer-preset:disabled { opacity:.5; cursor:not-allowed; }
     .timer-status { min-height:22px; margin:0 0 12px; color:var(--muted); text-align:center; font-size:12px; }
     .timer-status.complete { color:var(--sage-dark); font-weight:650; }
-    .timer-shell .stopwatch-controls { grid-template-columns:1fr 1fr; max-width:360px; margin:0 auto; }
-    .timer-shell .stopwatch-button { min-height:50px; }
     .sidebar-toggle { width:44px; height:44px; display:grid; place-items:center; flex:0 0 auto; border:1px solid var(--line); border-radius:9px; background:var(--surface); color:var(--ink); cursor:pointer; }
     .sidebar-toggle:hover { background:#f1f1f2; }
     .sidebar-toggle:focus-visible { outline:2px solid #138a69; outline-offset:2px; }
@@ -466,9 +454,7 @@
     .note-panel textarea:focus { border-color:#9bcdbb; box-shadow:0 0 0 3px rgba(16,163,127,.12); }
     .note-status { color:#74757a; font-size:10px; }
     .calculator-shell { border-color:#e7e7e8; border-radius:12px; background:#fff; box-shadow:none; }
-    .stopwatch-shell { border-color:#e7e7e8; border-radius:12px; background:#fff; box-shadow:none; }
     .timer-shell { border-color:#e7e7e8; border-radius:12px; background:#fff; box-shadow:none; }
-    .stopwatch-display { border-color:#ededee; border-radius:9px; background:#f7f7f8; }
     .timer-display { border-color:#ededee; border-radius:9px; background:#f7f7f8; }
     .calculator-display { border-color:#ededee; border-radius:9px; background:#f7f7f8; }
     .calculator-result { font:500 clamp(35px,8vw,48px)/1.05 var(--sans); letter-spacing:-.04em; }
@@ -649,7 +635,6 @@
         <button class="nav-item" data-view="tasks"><span class="nav-icon" aria-hidden="true">☷</span><span>Tâches</span><span class="nav-count" id="nav-task-count">0</span></button>
         <button class="nav-item" data-view="habits"><span class="nav-icon" aria-hidden="true">◌</span><span>Habitudes</span></button>
         <button class="nav-item" data-view="calculator"><span class="nav-icon" aria-hidden="true">＋</span><span>Calculatrice</span></button>
-        <button class="nav-item" data-view="stopwatch"><span class="nav-icon" aria-hidden="true">◴</span><span>Chronomètre</span></button>
         <button class="nav-item" data-view="timer"><span class="nav-icon" aria-hidden="true">◷</span><span>Minuteur</span></button>
         <button class="nav-item admin-only" data-view="admin" hidden><span class="nav-icon" aria-hidden="true">✓</span><span>Comptes à valider</span><span class="nav-count" id="nav-admin-pending-count">0</span></button>
       </nav>
@@ -702,19 +687,6 @@
         </section>
       </section>
 
-      <section class="section-view section-layout stopwatch-page" id="stopwatch-view" aria-labelledby="stopwatch-title">
-        <header class="page-heading"><div><p class="eyebrow">Un outil à portée de main</p><h1 id="stopwatch-title">Chronomètre.</h1><p class="heading-sub">Prenez le temps, à votre rythme.</p></div></header>
-        <section class="stopwatch-shell" aria-label="Chronomètre">
-          <div class="stopwatch-display"><output class="stopwatch-time" id="stopwatch-time" aria-label="Temps écoulé">00:00<small>.00</small></output></div>
-          <div class="stopwatch-controls" role="group" aria-label="Commandes du chronomètre">
-            <button class="stopwatch-button utility" id="stopwatch-reset" type="button" disabled>Réinitialiser</button>
-            <button class="stopwatch-button primary" id="stopwatch-toggle" type="button" aria-pressed="false">Démarrer</button>
-            <button class="stopwatch-button" id="stopwatch-lap" type="button" disabled>Tour</button>
-          </div>
-          <ol class="stopwatch-laps" id="stopwatch-laps" aria-label="Tours enregistrés"></ol>
-        </section>
-      </section>
-
       <section class="section-view section-layout timer-page" id="timer-view" aria-labelledby="timer-title">
         <header class="page-heading"><div><p class="eyebrow">Un outil à portée de main</p><h1 id="timer-title">Minuteur.</h1><p class="heading-sub">Définissez un temps, puis laissez-le s’écouler.</p></div></header>
         <section class="timer-shell" aria-label="Minuteur">
@@ -729,9 +701,9 @@
             <button class="timer-preset" type="button" data-timer-preset="1500">25 min</button>
           </div>
           <p class="timer-status" id="timer-status" role="status" aria-live="polite">Prêt</p>
-          <div class="stopwatch-controls" role="group" aria-label="Commandes du minuteur">
-            <button class="stopwatch-button utility" id="timer-reset" type="button" disabled>Réinitialiser</button>
-            <button class="stopwatch-button primary" id="timer-toggle" type="button" aria-pressed="false">Démarrer</button>
+          <div class="tool-controls" role="group" aria-label="Commandes du minuteur">
+            <button class="tool-button utility" id="timer-reset" type="button" disabled>Réinitialiser</button>
+            <button class="tool-button primary" id="timer-toggle" type="button" aria-pressed="false">Démarrer</button>
           </div>
         </section>
       </section>
@@ -755,7 +727,7 @@
     <button class="nav-item" data-view="tasks"><span class="nav-icon" aria-hidden="true">☷</span><span>Tâches</span><span class="nav-count" id="mobile-task-count">0</span></button>
     <button class="nav-item" data-view="habits"><span class="nav-icon" aria-hidden="true">◌</span><span>Habitudes</span></button>
     <button class="nav-item" data-view="calculator"><span class="nav-icon" aria-hidden="true">＋</span><span>Calculatrice</span></button>
-    <button class="nav-item" data-view="stopwatch"><span class="nav-icon" aria-hidden="true">◴</span><span>Chronomètre</span></button>
+    <button class="nav-item" data-view="timer"><span class="nav-icon" aria-hidden="true">◷</span><span>Minuteur</span></button>
     <button class="nav-item admin-only" data-view="admin" hidden aria-label="Comptes à valider"><span class="nav-icon" aria-hidden="true">✓</span><span>Comptes</span><span class="nav-count" id="mobile-admin-pending-count">0</span></button>
   </nav>
 
@@ -906,7 +878,7 @@
       const IMPORT_DISMISSED_PREFIX = 'organisation-import-dismissed-v1:';
       const MAX_IMPORT_FILE_BYTES = 512 * 1024;
       const MAX_CLOUD_STATE_BYTES = 768 * 1024;
-      const APP_BUILD_ID = 202610230003;
+      const APP_BUILD_ID = 202610230005;
       const APP_UPDATE_CHECK_INTERVAL_MS = 10 * 60 * 1000;
       const APP_UPDATE_CHECK_COOLDOWN_MS = 45 * 1000;
       const priorityLabels = { high: 'Prioritaire', medium: 'Important', low: 'À mon rythme' };
@@ -975,9 +947,7 @@
       let taskDialogDirty = false;
       let toastTimer;
       const calculator = makeInitialCalculator();
-      const stopwatch = makeInitialStopwatch();
       const timer = makeInitialTimer();
-      let stopwatchInterval = null;
       let timerInterval = null;
 
       function loadState(sourceUser = activeUser, sourceState = undefined, saveLocally = true) {
@@ -1012,7 +982,7 @@
             migrated.habits = migrated.habits.filter(habit => !sampleHabitIds.has(habit.id));
             const seen = new Set();
             migrated.widgets = (Array.isArray(migrated.widgets) ? migrated.widgets : []).filter(widget => {
-              if (!widget || !widgetTypes.includes(widget.type) || seen.has(widget.type)) return false;
+              if (!widget || (!widgetTypes.includes(widget.type) && widget.type !== 'stopwatch') || seen.has(widget.type)) return false;
               seen.add(widget.type); return true;
             }).map(widget => ({ id: `widget-${widget.type}`, type: widget.type }));
             const savedCalculator = saved.calculator || {};
@@ -1174,7 +1144,8 @@
       function renderWidgets() {
         const grid = document.getElementById('dashboard-grid');
         if (!grid) return;
-        grid.innerHTML = state.widgets.length ? state.widgets.map(widgetMarkup).join('') : '<div class="dashboard-empty"><strong>Votre espace est vide.</strong>Ajoutez les encarts qui vous seront utiles, puis glissez-les pour les organiser.</div>';
+        const visibleWidgets = state.widgets.filter(widget => widget.type !== 'stopwatch');
+        grid.innerHTML = visibleWidgets.length ? visibleWidgets.map(widgetMarkup).join('') : '<div class="dashboard-empty"><strong>Votre espace est vide.</strong>Ajoutez les encarts qui vous seront utiles, puis glissez-les pour les organiser.</div>';
         grid.querySelectorAll('[data-remove-widget]').forEach(button => button.addEventListener('click', event => {
           event.preventDefault(); event.stopPropagation(); removeWidget(button.dataset.removeWidget);
         }));
@@ -1213,7 +1184,7 @@
         renderWidgets(); renderDate(); renderProgress(); renderHabits(); renderTaskList('today-task-list','today'); renderTaskList('all-task-list','all'); renderNote();
       }
       function clearWorkspacePresentation() {
-        renderCalculator(); renderStopwatch(); renderTimer(); render();
+        renderCalculator(); renderTimer(); render();
       }
       function clearTransientCredentials() {
         ['login-password','request-password','import-local-password','local-profile-password','new-password','account-current-password','account-new-password','account-confirm-password'].forEach(id => {
@@ -1230,44 +1201,6 @@
         document.getElementById('calculator-expression').textContent = calculator.expression;
         const visibleValue = calculator.entry.endsWith('.') ? `${calculatorDisplayValue(Number(calculator.entry))},` : calculatorDisplayValue(Number(calculator.entry));
         document.getElementById('calculator-result').textContent = calculator.error ? 'Impossible' : visibleValue;
-      }
-      function stopwatchElapsed() { return stopwatch.elapsed + (stopwatch.running && stopwatch.startedAt ? Date.now() - stopwatch.startedAt : 0); }
-      function formatStopwatch(ms) {
-        const total = Math.max(0, Math.floor(ms));
-        const hundredths = Math.floor((total % 1000) / 10);
-        const seconds = Math.floor(total / 1000) % 60;
-        const minutes = Math.floor(total / 60000) % 60;
-        const hours = Math.floor(total / 3600000);
-        const main = hours ? `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}` : `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
-        return `${main}<small>.${String(hundredths).padStart(2,'0')}</small>`;
-      }
-      function renderStopwatch() {
-        const elapsed = stopwatchElapsed();
-        document.getElementById('stopwatch-time').innerHTML = formatStopwatch(elapsed);
-        const toggle = document.getElementById('stopwatch-toggle');
-        toggle.textContent = stopwatch.running ? 'Pause' : (stopwatch.elapsed || stopwatch.laps.length ? 'Reprendre' : 'Démarrer');
-        toggle.setAttribute('aria-pressed', String(stopwatch.running));
-        document.getElementById('stopwatch-reset').disabled = stopwatch.running || (!stopwatch.elapsed && !stopwatch.laps.length);
-        document.getElementById('stopwatch-lap').disabled = !stopwatch.running;
-        document.getElementById('stopwatch-laps').innerHTML = stopwatch.laps.map((lap,index) => `<li class="stopwatch-lap"><span>Tour ${stopwatch.laps.length-index}</span><strong>${formatStopwatch(lap.elapsed).replace(/<[^>]*>/g,'')}${lap.split ? ` <span style="font-weight:400;color:var(--muted)">(+${formatStopwatch(lap.split).replace(/<[^>]*>/g,'')})</span>` : ''}</strong></li>`).join('');
-      }
-      function persistStopwatch() { state.stopwatch = { ...stopwatch, laps:stopwatch.laps.map(lap => ({ ...lap })) }; saveState(); }
-      function toggleStopwatch() {
-        if (stopwatch.running) { stopwatch.elapsed = stopwatchElapsed(); stopwatch.running = false; stopwatch.startedAt = null; clearInterval(stopwatchInterval); stopwatchInterval = null; }
-        else { stopwatch.startedAt = Date.now(); stopwatch.running = true; stopwatchInterval = setInterval(renderStopwatch, 50); }
-        persistStopwatch(); renderStopwatch();
-      }
-      function resetStopwatch() {
-        if (stopwatch.running) return;
-        Object.assign(stopwatch, makeInitialStopwatch()); persistStopwatch(); renderStopwatch();
-      }
-      function recordStopwatchLap() {
-        if (!stopwatch.running) return;
-        const elapsed = stopwatchElapsed();
-        const previous = stopwatch.laps[0]?.elapsed || 0;
-        stopwatch.laps.unshift({ elapsed, split:elapsed - previous });
-        if (stopwatch.laps.length > 100) stopwatch.laps.length = 100;
-        persistStopwatch(); renderStopwatch();
       }
       function timerRemaining() {
         if (!timer.running || !Number.isFinite(timer.deadline)) return Math.max(0, timer.remainingMs);
@@ -1516,9 +1449,6 @@
         if (event.target.closest('#sidebar-overlay')) { setSidebarOpen(false, true); return; }
         const calcButton = event.target.closest('[data-calc]');
         if (calcButton) calculatorInput(calcButton.dataset.calc, calcButton.dataset.value || '');
-        if (event.target.closest('#stopwatch-toggle')) toggleStopwatch();
-        if (event.target.closest('#stopwatch-reset')) resetStopwatch();
-        if (event.target.closest('#stopwatch-lap')) recordStopwatchLap();
         if (event.target.closest('#timer-toggle')) toggleTimer();
         if (event.target.closest('#timer-reset')) resetTimer();
         const timerPreset = event.target.closest('[data-timer-preset]');
@@ -1556,9 +1486,15 @@
         if (removeHabit) { state.habits = state.habits.filter(item => item.id !== removeHabit.dataset.id); saveState(); render(); showToast('Le rituel a été supprimé.'); }
         if (event.target.closest('[data-add-habit]')) document.getElementById('habit-dialog').showModal();
       });
+      function handleSidebarEscape(event) {
+        if (event.key !== 'Escape' || document.querySelector('dialog[open]')) return false;
+        if (document.getElementById('sidebar-toggle').getAttribute('aria-expanded') !== 'true') return false;
+        setSidebarOpen(false, true);
+        return true;
+      }
       document.addEventListener('keydown', event => {
         if (!workspaceIsUsable()) return;
-        if (event.key === 'Escape' && document.getElementById('sidebar-toggle').getAttribute('aria-expanded') === 'true') { setSidebarOpen(false, true); return; }
+        if (handleSidebarEscape(event)) return;
         if (event.key === 'Tab' && window.matchMedia('(max-width:700px)').matches && document.body.classList.contains('sidebar-open')) {
           const focusable = [...document.querySelectorAll('#main-sidebar button:not([disabled])')];
           if (event.shiftKey && document.activeElement === focusable[0]) { event.preventDefault(); focusable.at(-1)?.focus(); }
@@ -1619,7 +1555,7 @@
       });
       document.getElementById('reset-button').addEventListener('click', () => {
         if (!window.confirm('Effacer vos tâches, habitudes, notes et encarts de cet espace ?')) return;
-        state = makeInitialState(); Object.assign(calculator, state.calculator); Object.assign(stopwatch, state.stopwatch); Object.assign(timer, state.timer); clearInterval(stopwatchInterval); stopwatchInterval = null; clearInterval(timerInterval); timerInterval = null; currentFilter = 'all'; saveState(); renderCalculator(); renderStopwatch(); renderTimer(); render(); setFilter('all'); showToast('Votre espace est vide.');
+        state = makeInitialState(); Object.assign(calculator, state.calculator); Object.assign(timer, state.timer); clearInterval(timerInterval); timerInterval = null; currentFilter = 'all'; saveState(); renderCalculator(); renderTimer(); render(); setFilter('all'); showToast('Votre espace est vide.');
       });
       document.getElementById('add-widget-trigger').addEventListener('click', () => { refreshWidgetOptions(); document.getElementById('widget-dialog').showModal(); });
       document.getElementById('close-widget-dialog').addEventListener('click', () => document.getElementById('widget-dialog').close());
@@ -1874,7 +1810,7 @@
         }
         const widgets = (Array.isArray(raw.widgets) ? raw.widgets : []).map(item => {
           assertAllowedKeys(item, ['id','type']);
-          if (!widgetTypes.includes(item.type)) throw new Error('import_invalid');
+          if (!widgetTypes.includes(item.type) && item.type !== 'stopwatch') throw new Error('import_invalid');
           return { id:`widget-${item.type}`, type:item.type };
         });
         if (new Set(tasks.map(item => item.id)).size !== tasks.length || new Set(habits.map(item => item.id)).size !== habits.length || new Set(widgets.map(item => item.type)).size !== widgets.length) throw new Error('import_invalid');
@@ -2000,8 +1936,8 @@
         clearInterval(cloudAccessRefreshTimer); cloudAccessRefreshTimer = null;
         clearTimeout(cloudSaveTimer); cloudSaveTimer = null; cloudDirty = false; pendingCloudState = null;
         cloudAccessApproved = false; cloudIsAdmin = false; setAdminNavigation(false);
-        clearInterval(stopwatchInterval); stopwatchInterval = null; clearInterval(timerInterval); timerInterval = null;
-        state = makeInitialState(); Object.assign(calculator, makeInitialCalculator()); Object.assign(stopwatch, makeInitialStopwatch()); Object.assign(timer, makeInitialTimer());
+        clearInterval(timerInterval); timerInterval = null;
+        state = makeInitialState(); Object.assign(calculator, makeInitialCalculator()); Object.assign(timer, makeInitialTimer());
         clearWorkspacePresentation();
         ['import-dialog','pending-dialog','task-dialog','habit-dialog','widget-dialog','access-admin-confirm-dialog','password-recovery-dialog','account-management-dialog'].forEach(id => { const dialog=document.getElementById(id); if (dialog.open) dialog.close(); });
         clearTransientCredentials();
@@ -2191,8 +2127,8 @@
         clearTimeout(cloudSaveTimer); cloudSaveTimer = null; cloudDirty = false; pendingCloudState = null;
         activeUser = null; syncMode = 'local'; cloudAccessApproved = false; cloudIsAdmin = false; cloudAccessStatus = null;
         cloudBlocked = false; cloudDirty = false; state = makeInitialState(); adminAccessRows = [];
-        clearInterval(stopwatchInterval); stopwatchInterval = null; clearInterval(timerInterval); timerInterval = null;
-        Object.assign(calculator, makeInitialCalculator()); Object.assign(stopwatch, makeInitialStopwatch()); Object.assign(timer, makeInitialTimer());
+        clearInterval(timerInterval); timerInterval = null;
+        Object.assign(calculator, makeInitialCalculator()); Object.assign(timer, makeInitialTimer());
         clearWorkspacePresentation();
         setAccountMenuOpen(false);
         ['import-dialog','pending-dialog','task-dialog','habit-dialog','widget-dialog','access-admin-confirm-dialog','password-recovery-dialog','account-management-dialog'].forEach(id => { const dialog=document.getElementById(id); if (dialog.open) dialog.close(); });
@@ -2216,7 +2152,7 @@
         renderImportConflicts();
         setAdminNavigation(syncMode === 'cloud' && cloudAccessApproved && cloudIsAdmin);
         setSyncStatus(syncMode === 'cloud' ? (cloudBlocked ? 'Conflit à résoudre' : 'Compte connecté') : 'Sur cet appareil');
-        Object.assign(calculator, state.calculator || makeInitialCalculator()); Object.assign(stopwatch, state.stopwatch || makeInitialStopwatch()); Object.assign(timer, state.timer || makeInitialTimer()); clearInterval(stopwatchInterval); stopwatchInterval = stopwatch.running ? setInterval(renderStopwatch, 50) : null; clearInterval(timerInterval); timerInterval = timer.running ? setInterval(renderTimer, 200) : null; renderCalculator(); renderStopwatch(); renderTimer(); render();
+        Object.assign(calculator, state.calculator || makeInitialCalculator()); Object.assign(timer, state.timer || makeInitialTimer()); clearInterval(timerInterval); timerInterval = timer.running ? setInterval(renderTimer, 200) : null; renderCalculator(); renderTimer(); render();
       }
       function cloudDismissKey(userId) { return `${IMPORT_DISMISSED_PREFIX}${userId}`; }
       function populateImportSources() {

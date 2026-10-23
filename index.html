@@ -731,11 +731,11 @@
   </dialog>
   <dialog id="password-recovery-dialog" aria-labelledby="password-recovery-title">
     <form class="dialog-form" id="password-recovery-form">
-      <div class="dialog-heading"><div><p class="eyebrow">Récupération du compte</p><h2 id="password-recovery-title">Choisir un nouveau mot de passe</h2></div></div>
+      <div class="dialog-heading"><div><p class="eyebrow">Activation ou récupération du compte</p><h2 id="password-recovery-title">Définir votre mot de passe</h2></div></div>
       <p class="panel-note">Ce mot de passe sera géré uniquement par Supabase Auth.</p>
-      <div class="field"><label for="new-password">Nouveau mot de passe</label><input id="new-password" type="password" autocomplete="new-password" required minlength="8"></div>
+      <div class="field"><label for="new-password">Mot de passe</label><input id="new-password" type="password" autocomplete="new-password" required minlength="8"></div>
       <p class="auth-error" id="password-recovery-error" role="alert"></p>
-      <div class="dialog-actions"><button class="primary-button" type="submit" id="save-new-password">Enregistrer le mot de passe</button></div>
+      <div class="dialog-actions"><button class="primary-button" type="submit" id="save-new-password">Définir le mot de passe</button></div>
     </form>
   </dialog>
   <dialog id="access-admin-confirm-dialog" aria-labelledby="access-admin-confirm-title">
@@ -2487,6 +2487,9 @@
       setSidebarOpen(!window.matchMedia('(max-width:700px)').matches, false);
       window.matchMedia('(max-width:700px)').addEventListener('change', event => setSidebarOpen(!event.matches, false));
       async function initializeAccess() {
+        // Preserve the link type before Supabase consumes the URL fragment.
+        const authLinkParams = new URLSearchParams(location.hash.replace(/^#/, '') || location.search.replace(/^\?/, ''));
+        const authLinkType = authLinkParams.get('type');
         const onlineButton = document.getElementById('login-button');
         const resetButton = document.getElementById('reset-password-button');
         const requestButton = document.getElementById('show-access-request');
@@ -2506,6 +2509,13 @@
         onlineStatus.textContent = 'Connexion au service en ligne…';
         try {
           const sdk = await loadSupabaseSdk();
+          const showPasswordSetup = () => {
+            document.getElementById('auth-screen').hidden = true;
+            document.querySelector('.app-shell').hidden = true;
+            document.querySelector('.mobile-nav').hidden = true;
+            const dialog = document.getElementById('password-recovery-dialog');
+            if (!dialog.open) dialog.showModal();
+          };
           supabaseClient = sdk.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, { auth:{ autoRefreshToken:true, persistSession:true, detectSessionInUrl:true } });
           supabaseClient.auth.onAuthStateChange((event, session) => {
             if (event === 'SIGNED_OUT') {
@@ -2526,10 +2536,7 @@
               return;
             }
             if (event === 'PASSWORD_RECOVERY') {
-              document.getElementById('auth-screen').hidden = true;
-              document.querySelector('.app-shell').hidden = true;
-              document.querySelector('.mobile-nav').hidden = true;
-              document.getElementById('password-recovery-dialog').showModal();
+              showPasswordSetup();
             }
           });
           const { data, error } = await supabaseClient.auth.getSession();
@@ -2537,10 +2544,8 @@
           onlineButton.disabled = false; resetButton.disabled = false;
           onlineStatus.textContent = 'Retrouvez vos données sur vos appareils après connexion.';
           if (data.session?.user) {
-            const recoveryParams = new URLSearchParams(location.hash.replace(/^#/, '') || location.search.replace(/^\?/, ''));
-            if (recoveryParams.get('type') === 'recovery') {
-              document.getElementById('auth-screen').hidden = true;
-              document.getElementById('password-recovery-dialog').showModal();
+            if (authLinkType === 'recovery' || authLinkType === 'invite') {
+              showPasswordSetup();
             } else try { await openCloudWorkspace(data.session.user); }
             catch (cause) { console.error('Chargement des données en ligne impossible.', cause); document.getElementById('login-error').textContent = 'Connexion reconnue, mais chargement des données impossible. Vérifiez la configuration Supabase.'; showLogin(); }
           } else showLogin();
@@ -2563,3 +2568,4 @@
   </script>
 </body>
 </html>
+

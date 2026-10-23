@@ -740,10 +740,10 @@
         <button class="nav-item" data-view="calculator"><span class="nav-icon" aria-hidden="true">＋</span><span>Calculatrice</span></button>
         <button class="nav-item" data-view="timer"><span class="nav-icon" aria-hidden="true">◷</span><span>Minuteur</span></button>
         <button class="nav-item" data-view="calendar"><span class="nav-icon" aria-hidden="true">▦</span><span>Calendrier</span></button>
-        <button class="nav-item admin-only" data-view="admin" hidden><span class="nav-icon" aria-hidden="true">✓</span><span>Comptes à valider</span><span class="nav-count" id="nav-admin-pending-count">0</span></button>
       </nav>
       <section class="sidebar-admin-tools admin-only" aria-labelledby="sidebar-admin-tools-title" hidden>
         <p class="nav-label" id="sidebar-admin-tools-title">Administration</p>
+        <button class="nav-item admin-only" data-view="admin" hidden><span class="nav-icon" aria-hidden="true">✓</span><span>Comptes à valider</span><span class="nav-count" id="nav-admin-pending-count">0</span></button>
         <button class="nav-item" id="admin-copies-button" data-view="import-conflicts" type="button" hidden><span class="nav-icon" aria-hidden="true">▤</span><span>Copies importées à examiner</span></button>
         <button class="nav-item" id="import-local-button" type="button" hidden><span class="nav-icon" aria-hidden="true">↥</span><span>Importer des données locales</span></button>
       </section>
@@ -995,7 +995,7 @@
       const IMPORT_DISMISSED_PREFIX = 'organisation-import-dismissed-v1:';
       const MAX_IMPORT_FILE_BYTES = 512 * 1024;
       const MAX_CLOUD_STATE_BYTES = 768 * 1024;
-      const APP_BUILD_ID = 202610240001;
+      const APP_BUILD_ID = 202610240002;
       const APP_UPDATE_CHECK_INTERVAL_MS = 10 * 60 * 1000;
       const APP_UPDATE_CHECK_COOLDOWN_MS = 45 * 1000;
       const priorityLabels = { high: 'Prioritaire', medium: 'Important', low: 'À mon rythme' };

@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 60713)
-Total output lines: 3027
-
 <!doctype html>
 <html lang="fr">
 <head>
@@ -1367,7 +1364,32 @@ Total output lines: 3027
       function renderTaskSubtaskDraft() {
         const list = document.getElementById('task-subtasks-draft');
         list.innerHTML = taskDraftSubtasks.map(subtask => `<div class="task-subtask-row task-subtask-draft-row">
-          <button class="subtask-toggle" type="button" data-draft-subtask-toggle="${escapeHTML(subtask.id)}…713 tokens truncated…? '';
+          <button class="subtask-toggle" type="button" data-draft-subtask-toggle="${escapeHTML(subtask.id)}" aria-pressed="${subtask.done ? 'true' : 'false'}" aria-label="${subtask.done ? 'Marquer comme à faire' : 'Terminer'} : ${escapeHTML(subtask.title || 'cette sous-tâche')}"></button>
+          <div class="task-subtask-draft-fields"><input class="task-subtask-draft-title subtask-title" type="text" maxlength="100" data-draft-subtask-title="${escapeHTML(subtask.id)}" value="${escapeHTML(subtask.title)}" placeholder="Décrire cette étape" aria-label="Intitulé de la sous-tâche"><button class="task-subtask-remove" type="button" data-remove-draft-subtask="${escapeHTML(subtask.id)}" aria-label="Supprimer cette sous-tâche">×</button></div>
+          <div class="task-subtask-draft-timing" aria-label="Planning facultatif de la sous-tâche">
+            <input type="date" data-draft-subtask-due="${escapeHTML(subtask.id)}" value="${escapeHTML(isValidLocalDate(subtask.due) ? subtask.due : '')}" aria-label="Date de la sous-tâche" aria-describedby="task-time-help">
+            <input type="time" data-draft-subtask-time="${escapeHTML(subtask.id)}" value="${escapeHTML(/^([01]\d|2[0-3]):[0-5]\d$/.test(subtask.time) ? subtask.time : '')}" aria-label="Heure de la sous-tâche" aria-describedby="task-time-help">
+            <input type="number" min="0" step="1" inputmode="numeric" data-draft-subtask-estimated-minutes="${escapeHTML(subtask.id)}" value="${Number.isSafeInteger(subtask.estimatedMinutes) && subtask.estimatedMinutes >= 0 ? subtask.estimatedMinutes : ''}" placeholder="Durée (min)" aria-label="Durée estimée de la sous-tâche, en minutes" aria-describedby="task-time-help">
+          </div>
+        </div>`).join('');
+        document.getElementById('add-task-subtask').disabled = taskDraftSubtasks.length >= 100;
+      }
+      function openTaskDialog(taskId=null) {
+        const dialog = document.getElementById('task-dialog');
+        const form = document.getElementById('task-form');
+        const task = taskId ? state.tasks.find(item => item.id === taskId) : null;
+        if (taskId && !task) return;
+        editingTaskId = task?.id || null;
+        taskDraftSubtasks = normalizeTaskSubtasks(task?.subtasks);
+        taskDialogDirty = false;
+        form.reset();
+        document.getElementById('dialog-title').textContent = editingTaskId ? 'Modifier une tâche' : 'Ajouter une tâche';
+        document.getElementById('task-submit-button').textContent = editingTaskId ? 'Enregistrer les modifications' : 'Ajouter à ma liste';
+        document.getElementById('task-title-input').value = task?.title || '';
+        document.getElementById('task-priority').value = task?.priority || 'low';
+        document.getElementById('task-due').value = task?.due || '';
+        document.getElementById('task-time').value = task?.time || '';
+        document.getElementById('task-estimated-minutes').value = task?.estimatedMinutes ?? '';
         renderTaskSubtaskDraft();
         dialog.showModal(); setTimeout(() => document.getElementById('task-title-input').focus(), 40);
       }
@@ -3002,4 +3024,3 @@ Total output lines: 3027
   </script>
 </body>
 </html>
-

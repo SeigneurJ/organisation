@@ -218,6 +218,7 @@
       .topline { justify-content:flex-start; }
       .account-actions { margin-left:auto; }
     }
+    [hidden] { display:none !important; }
     dialog { width:min(450px, calc(100vw - 30px)); border:1px solid var(--line); border-radius:14px; padding:0; color:var(--ink); background:var(--surface); box-shadow:0 24px 80px rgba(35,39,30,.24); }
     dialog::backdrop { background:rgba(32,36,30,.32); backdrop-filter:blur(2px); }
     .dialog-form { padding:25px; }
@@ -237,19 +238,58 @@
     .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
     .auth-screen { min-height:100vh; display:grid; place-items:center; padding:24px; }
     .auth-card { width:min(440px,100%); padding:34px; background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); }
+    .access-card { align-self:center; }
     .auth-card h1 { font-size:42px; margin:8px 0 10px; }
+    .auth-mode-title { margin:24px 0 10px; font:21px/1.2 var(--serif); font-weight:400; }
     .auth-card p { color:var(--muted); }
     .auth-card .field { margin:18px 0; }
     .auth-note { font-size:11px; line-height:1.55; padding:12px; background:var(--paper); border-radius:7px; }
     .auth-error { min-height:20px; color:#a5412b!important; font-size:12px; }
+    .auth-primary,.auth-local { width:100%; min-height:44px; }
+    .auth-reset { display:block; margin:10px auto 0; }
+    .auth-separator { display:flex; align-items:center; gap:12px; margin:20px 0; color:var(--muted); font-size:11px; }
+    .auth-separator::before,.auth-separator::after { content:""; height:1px; flex:1; background:var(--line); }
+    .admin-page { max-width:900px; }
+    .admin-access-panel { margin-bottom:16px; }
+    .account-card-list { display:grid; gap:10px; }
+    .account-card { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:12px; align-items:center; padding:14px; border:1px solid var(--line); border-radius:9px; background:var(--surface); }
+    .account-card-name { font-weight:650; }
+    .account-card-email,.account-card-date { display:block; margin-top:3px; color:var(--muted); font-size:11px; overflow-wrap:anywhere; }
+    .account-card-status { display:inline-flex; margin-top:8px; padding:4px 8px; border-radius:20px; background:var(--paper); color:var(--ink); font-size:10px; }
+    .account-card-actions { display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; }
+    .account-card-actions button { min-height:40px; }
+    .account-empty { padding:18px 12px; color:var(--muted); text-align:center; }
     .account-actions { display:flex; align-items:center; gap:10px; }
     .user-chip { border:1px solid var(--line); background:var(--surface); padding:7px 10px; border-radius:20px; font-size:11px; color:var(--sage-dark); }
-    .account-list { display:grid; gap:8px; margin:16px 0 24px; }
-    .account-row { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:11px; border:1px solid var(--line); border-radius:8px; }
-    .account-row strong { font-size:13px; }
-    .account-row small { display:block; color:var(--muted); font-size:10px; }
-    .account-row-actions { display:flex; gap:8px; }
-    .account-form-title { margin:20px 0 12px; font:20px var(--serif); }
+    .sync-status { color:var(--muted); font-size:10px; }
+    .account-actions { flex-wrap:wrap; }
+    .profile-export-control { display:flex; align-items:center; gap:7px; }
+    .profile-file-import { display:grid; justify-items:start; gap:8px; }
+    .profile-transfer-control { display:grid; justify-items:start; gap:8px; }
+    .profile-transfer-button { min-height:44px; white-space:normal; text-align:center; }
+    .profile-privacy { display:none; margin:0; color:var(--muted); font-size:11px; line-height:1.45; }
+    #export-local-profile-button:not([hidden]) + .profile-privacy,
+    #import-profile-file:not([hidden]) + .profile-privacy { display:block; }
+    #import-dialog { width:min(680px,calc(100vw - 30px)); }
+    .profile-transfer-grid { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(190px,.8fr); gap:12px; margin:18px 0; }
+    .profile-transfer-card { min-width:0; padding:16px; border:1px solid var(--line); border-radius:10px; background:#fff; }
+    .profile-transfer-card h3,.profile-import-preview h3 { margin:0 0 12px; font-size:13px; font-weight:700; }
+    .profile-transfer-card .field { margin:0 0 12px; }
+    .profile-transfer-card .field:last-child { margin-bottom:0; }
+    .profile-destination-name { margin:0; font-weight:650; overflow-wrap:anywhere; }
+    .profile-import-preview { margin:16px 0 0; padding:16px; border:1px solid #cdd8cb; border-radius:10px; background:#f5f8f3; }
+    .profile-import-preview dl { display:grid; gap:9px; margin:0; }
+    .profile-import-preview dl > div { display:grid; grid-template-columns:minmax(90px,.4fr) minmax(0,1fr); gap:12px; }
+    .profile-import-preview dt { color:var(--muted); font-size:11px; font-weight:650; }
+    .profile-import-preview dd { min-width:0; margin:0; overflow-wrap:anywhere; }
+    .import-conflicts-page { max-width:1000px; }
+    .import-conflicts-summary { margin:0 0 18px; }
+    .import-conflicts-list { display:grid; gap:14px; }
+    .import-conflict-card { min-width:0; padding:18px; border:1px solid var(--line); border-radius:10px; background:var(--surface); }
+    .import-conflict-version-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
+    .import-conflict-version { min-width:0; padding:14px; border:1px solid var(--line); border-radius:8px; background:#fff; overflow-wrap:anywhere; }
+    .import-conflict-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; margin-top:14px; }
+    .import-conflict-actions button { min-height:44px; }
     @media (max-width: 930px) {
       .app-shell { grid-template-columns:190px minmax(0,1fr); }
       .sidebar { padding-left:20px; padding-right:14px; }
@@ -258,6 +298,10 @@
       .main-column,.right-column { gap:14px; }
       .panel { padding:18px; }
       .focus-panel { padding:21px; }
+    }
+    @media (max-width:520px) {
+      .dialog-actions { flex-direction:column-reverse; }
+      .dialog-actions > button { width:100%; }
     }
     @media (max-width: 700px) {
       .app-shell { display:block; padding-bottom:70px; }
@@ -421,21 +465,81 @@
       .mobile-nav .nav-item.active { background:#ededee; }
       .page-heading { margin-bottom:22px; }
     }
+    @media (max-width:700px) { .mobile-nav.has-admin-tab { grid-template-columns:repeat(6,minmax(0,1fr)); } }
+    @media (max-width:520px) {
+      .account-card { grid-template-columns:1fr; }
+      .account-card-actions { justify-content:stretch; }
+      .account-card-actions > button { flex:1 1 100%; }
+      .account-actions { gap:8px; }
+      .profile-export-control { flex-basis:100%; justify-content:flex-end; flex-wrap:wrap; }
+      .profile-privacy { flex-basis:100%; text-align:right; }
+      .import-conflicts-access { flex-basis:100%; text-align:right; }
+      .profile-transfer-grid,.import-conflict-version-pair { grid-template-columns:minmax(0,1fr); }
+      .profile-transfer-card,.profile-import-preview { padding:14px; }
+      .profile-import-preview dl > div { grid-template-columns:1fr; gap:2px; }
+      .import-conflict-card { padding:14px; }
+      .import-conflict-actions { justify-content:stretch; }
+      .import-conflict-actions > button { flex:1 1 100%; }
+    }
+    .auth-screen :is(button,input,select,a):focus-visible,
+    .admin-page :is(button,input,select,a):focus-visible { outline:3px solid #087a5b; outline-offset:3px; }
+    @media (max-width:520px) {
+      .admin-page .page-heading { align-items:stretch; flex-direction:column; gap:12px; }
+      .admin-page .page-heading > button { align-self:flex-start; min-height:44px; }
+      .admin-access-panel .panel-header { align-items:flex-start; flex-direction:column; gap:4px; }
+      .account-card-actions > button { min-height:44px; white-space:normal; line-height:1.3; }
+    }
     @media (max-width:390px) { .auth-card { padding:26px 21px; } }
   </style>
 </head>
 <body>
-  <section class="auth-screen" id="auth-screen" hidden>
+  <section class="auth-screen" id="auth-screen" aria-label="Accès à Organisation">
     <form class="auth-card" id="login-form">
-      <p class="eyebrow">Votre espace personnel</p><h1>Bonjour.</h1><p>Connectez-vous pour retrouver votre journée.</p>
-      <div class="field"><label for="login-name">Nom du compte</label><input id="login-name" required autocomplete="username" placeholder="Votre nom de compte"></div>
+      <p class="eyebrow">Votre espace personnel</p><h1>Se connecter à Organisation.</h1><p>L’accès est réservé aux personnes approuvées. Connectez-vous ou demandez un accès.</p>
+      <h2 class="auth-mode-title">Connexion en ligne</h2>
+      <div class="field"><label for="login-email">Adresse e-mail ou nom d’utilisateur</label><input id="login-email" type="text" required autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="jeremie ou nom@exemple.fr"></div>
       <div class="field"><label for="login-password">Mot de passe</label><input id="login-password" type="password" required autocomplete="current-password"></div>
       <p class="auth-error" id="login-error" role="alert"></p>
-      <button class="primary-button" style="width:100%" type="submit">Se connecter</button>
-      <p class="auth-note">Cette version stocke les comptes et les données dans ce navigateur. Elle convient à un usage personnel local, mais ne protège pas contre une personne ayant accès à l’appareil ou aux fichiers de l’application.</p>
+      <button class="primary-button auth-primary" type="submit" id="login-button">Se connecter</button>
+      <button class="text-button auth-reset" type="button" id="reset-password-button">Mot de passe oublié ?</button>
+      <button class="text-button auth-reset" type="button" id="show-access-request">Demander un accès</button>
+      <p class="auth-note" id="online-status" role="status">La connexion en ligne n’est pas encore configurée.</p>
+      <div id="local-mode-section" hidden>
+        <div class="auth-separator"><span>ou</span></div>
+        <h2 class="auth-mode-title">Sur cet appareil</h2>
+        <button class="secondary-button auth-local" type="button" id="local-mode-button">Continuer sur cet appareil</button>
+        <p class="auth-note">Les données restent dans ce navigateur. Elles ne sont pas synchronisées et ne sont pas protégées par un mot de passe.</p>
+      </div>
     </form>
+    <form class="auth-card access-card" id="access-request-form" hidden aria-labelledby="access-request-title">
+      <p class="eyebrow">Accès à Organisation</p><h1 id="access-request-title" tabindex="-1">Demander un accès.</h1>
+      <p>Jérémie examinera votre demande avant l’activation du compte. Après l’envoi, suivez les étapes indiquées pour confirmer votre adresse si nécessaire.</p>
+      <div class="field"><label for="request-display-name">Votre nom</label><input id="request-display-name" type="text" required maxlength="100" autocomplete="name"></div>
+      <div class="field"><label for="request-email">Adresse e-mail privée</label><input id="request-email" type="email" required autocomplete="email"><span class="panel-note">Cette adresse sert à confirmer votre demande et à récupérer votre compte. Elle reste privée et n’est pas affichée publiquement.</span></div>
+      <div class="field"><label for="request-password">Créer un mot de passe</label><input id="request-password" type="password" required minlength="8" autocomplete="new-password" aria-describedby="request-password-help"><span class="panel-note" id="request-password-help">Au moins 8 caractères.</span></div>
+      <p class="auth-error" id="access-request-error" role="alert"></p>
+      <button class="primary-button auth-primary" type="submit" id="send-access-request">Envoyer ma demande</button>
+      <button class="text-button auth-reset" type="button" id="back-to-login">Retour à la connexion</button>
+    </form>
+    <section class="auth-card access-card" id="username-claim-card" hidden aria-labelledby="claim-username-title">
+      <form id="claim-username-form">
+        <p class="eyebrow">Dernière étape</p><h1 id="claim-username-title">Choisir votre identifiant.</h1>
+        <p>Choisissez un identifiant unique pour vos prochaines connexions. Il sera visible uniquement par vous et l’administrateur. Votre statut d’accès sera vérifié avant l’ouverture de l’application.</p>
+        <div class="field"><label for="claim-username">Identifiant de connexion</label><input id="claim-username" type="text" required minlength="3" maxlength="32" pattern="^[A-Za-z][A-Za-z0-9._-]{2,31}$" autocomplete="username" autocapitalize="none" spellcheck="false" aria-describedby="claim-username-help"><span class="panel-note" id="claim-username-help">3 à 32 caractères; commencez par une lettre non accentuée, puis utilisez des lettres non accentuées, chiffres, point, tiret bas ou tiret. Exemple : jeremie.</span></div>
+        <p class="auth-error" id="claim-username-error" role="alert"></p>
+        <button class="primary-button auth-primary" type="submit" id="claim-username-button">Enregistrer mon identifiant</button>
+        <button class="text-button auth-reset" type="button" id="claim-username-sign-out">Se déconnecter</button>
+      </form>
+    </section>
+    <section class="auth-card access-card" id="access-status-card" hidden aria-labelledby="access-status-title" aria-live="polite">
+      <p class="eyebrow">État de votre accès</p><h1 id="access-status-title" tabindex="-1">Demande en attente.</h1>
+      <p id="access-status-message">Votre demande est en attente de validation par Jérémie.</p>
+      <p class="auth-error" id="access-status-error" role="alert"></p>
+      <button class="primary-button auth-primary" type="button" id="check-access-status">Vérifier le statut</button>
+      <button class="text-button auth-reset" type="button" id="access-status-sign-out">Retour à la connexion</button>
+    </section>
   </section>
-  <div class="app-shell">
+  <div class="app-shell" hidden>
     <aside class="sidebar" id="main-sidebar" aria-label="Navigation principale">
       <p class="nav-label">Mon espace</p>
       <nav class="nav-list" aria-label="Sections">
@@ -445,6 +549,7 @@
         <button class="nav-item" data-view="calculator"><span class="nav-icon" aria-hidden="true">＋</span><span>Calculatrice</span></button>
         <button class="nav-item" data-view="stopwatch"><span class="nav-icon" aria-hidden="true">◴</span><span>Chronomètre</span></button>
         <button class="nav-item" data-view="timer"><span class="nav-icon" aria-hidden="true">◷</span><span>Minuteur</span></button>
+        <button class="nav-item admin-only" data-view="admin" hidden><span class="nav-icon" aria-hidden="true">✓</span><span>Comptes à valider</span><span class="nav-count" id="nav-admin-pending-count">0</span></button>
       </nav>
       <div class="sidebar-bottom">
         <div class="side-actions"><button class="text-button" id="reset-button">Réinitialiser</button></div>
@@ -455,7 +560,7 @@
       <div class="topline">
         <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Ouvrir le menu" aria-controls="main-sidebar" aria-expanded="false"><span class="hamburger" aria-hidden="true"><i></i><i></i><i></i></span></button>
         <div class="today-stamp"><span class="sun-mark" aria-hidden="true">☼</span><span class="date-label" id="date-label"></span></div>
-        <div class="account-actions"><span class="user-chip" id="user-chip">Jérémie</span><button class="text-button" id="manage-accounts" hidden>Gérer les comptes</button><button class="text-button" id="logout-button">Déconnexion</button></div>
+        <div class="account-actions"><span class="sync-status" id="sync-status" role="status"></span><span class="user-chip" id="user-chip">Jérémie</span><div class="profile-export-control"><button class="text-button" id="export-local-profile-button" type="button" hidden>Exporter le profil local</button><p class="profile-privacy">Fichier JSON non chiffr&eacute; contenant des donn&eacute;es personnelles; &agrave; conserver dans un endroit priv&eacute;.</p></div><button class="text-button import-conflicts-access" type="button" data-view="import-conflicts" hidden>Copies importées à examiner</button><button class="text-button" id="import-local-button" type="button" hidden>Importer des données locales</button><button class="text-button" id="logout-button" type="button">Quitter</button></div>
       </div>
 
       <section class="section-view active" id="today-view" aria-labelledby="today-title">
@@ -524,16 +629,28 @@
           </div>
         </section>
       </section>
+      <section class="section-view section-layout admin-page" id="admin-view" aria-labelledby="admin-accounts-title" hidden>
+        <header class="page-heading"><div><p class="eyebrow">Administration</p><h1 id="admin-accounts-title">Comptes à valider.</h1><p class="heading-sub">Les demandes et les accès approuvés sont gérés ici.</p></div><button class="secondary-button" type="button" id="refresh-access-list">Actualiser</button></header>
+        <p class="auth-error" id="admin-access-error" role="alert"></p>
+        <section class="panel admin-access-panel" aria-labelledby="pending-accounts-title"><div class="panel-header"><h2 class="panel-title" id="pending-accounts-title">Demandes en attente</h2><span class="panel-note" id="pending-accounts-summary"></span></div><div class="account-card-list" id="pending-account-list" aria-live="polite"></div></section>
+        <section class="panel admin-access-panel" aria-labelledby="other-accounts-title"><div class="panel-header"><h2 class="panel-title" id="other-accounts-title">Autres accès</h2><span class="panel-note" id="other-accounts-summary"></span></div><div class="account-card-list" id="other-account-list" aria-live="polite"></div></section>
+      </section>
+      <section class="section-view section-layout import-conflicts-page" id="import-conflicts-view" aria-labelledby="import-conflicts-title">
+        <header class="page-heading"><div><p class="eyebrow">Archives de données</p><h1 id="import-conflicts-title">Copies importées à examiner.</h1><p class="heading-sub">Les copies archivées sont conservées dans le cloud. Comparez-les avec la version en ligne et restaurez une copie si nécessaire.</p></div></header>
+        <p class="panel-note import-conflicts-summary" id="import-conflicts-summary" role="status">Les versions en ligne restent actives. Les copies importées archivées peuvent être consultées et restaurées depuis n’importe quel appareil.</p>
+        <div class="import-conflicts-list" id="import-conflicts-list" aria-live="polite"></div>
+      </section>
     </main>
   </div>
   <button class="sidebar-overlay" id="sidebar-overlay" type="button" aria-label="Fermer le menu" hidden></button>
 
-  <nav class="mobile-nav" aria-label="Navigation mobile">
+  <nav class="mobile-nav" aria-label="Navigation mobile" hidden>
     <button class="nav-item active" data-view="today" aria-current="page"><span class="nav-icon" aria-hidden="true">◷</span><span>Aujourd’hui</span></button>
     <button class="nav-item" data-view="tasks"><span class="nav-icon" aria-hidden="true">☷</span><span>Tâches</span><span class="nav-count" id="mobile-task-count">0</span></button>
     <button class="nav-item" data-view="habits"><span class="nav-icon" aria-hidden="true">◌</span><span>Habitudes</span></button>
     <button class="nav-item" data-view="calculator"><span class="nav-icon" aria-hidden="true">＋</span><span>Calculatrice</span></button>
     <button class="nav-item" data-view="stopwatch"><span class="nav-icon" aria-hidden="true">◴</span><span>Chronomètre</span></button>
+    <button class="nav-item admin-only" data-view="admin" hidden aria-label="Comptes à valider"><span class="nav-icon" aria-hidden="true">✓</span><span>Comptes</span><span class="nav-count" id="mobile-admin-pending-count">0</span></button>
   </nav>
 
   <dialog id="widget-dialog" class="widget-add-dialog" aria-labelledby="widget-dialog-title">
@@ -561,32 +678,98 @@
       <div class="dialog-actions"><button class="secondary-button" type="button" id="cancel-dialog">Annuler</button><button class="primary-button" type="submit">Ajouter à ma liste</button></div>
     </form>
   </dialog>
-  <dialog id="account-dialog" aria-labelledby="accounts-title">
+  <dialog id="import-dialog" aria-labelledby="import-title">
     <div class="dialog-form">
-      <div class="dialog-heading"><div><p class="eyebrow">Administration locale</p><h2 id="accounts-title">Les comptes</h2></div><button class="close-button" type="button" aria-label="Fermer" id="close-accounts">×</button></div>
-      <p class="panel-note">Chaque compte conserve sa propre liste, ses habitudes et ses notes.</p>
-      <div class="account-list" id="account-list"></div>
-      <form id="account-form">
-        <h3 class="account-form-title" id="account-form-heading">Créer un compte</h3>
-        <input type="hidden" id="account-id">
-        <div class="field"><label for="account-name">Nom</label><input id="account-name" required maxlength="40" autocomplete="off"></div>
-        <div class="field"><label for="account-password">Mot de passe <span id="password-hint" style="font-weight:400;color:var(--muted)">(12 caractères minimum)</span></label><input id="account-password" type="password" minlength="12" autocomplete="new-password"></div>
-        <div class="dialog-actions"><button class="secondary-button" type="button" id="cancel-account-edit" hidden>Annuler la modification</button><button class="primary-button" type="submit" id="save-account">Créer le compte</button></div>
-      </form>
+      <div class="dialog-heading"><div><p class="eyebrow">Copie et fusion explicites</p><h2 id="import-title">Importer des données</h2></div><button class="close-button" type="button" aria-label="Fermer" id="close-import">×</button></div>
+      <p class="panel-note">Votre profil local et le fichier JSON d’origine restent intacts. Les données sont copiées et fusionnées dans le compte connecté; la version du cloud reste active. En cas de conflit, chaque valeur locale est archivée dans le cloud et pourra être récupérée depuis n’importe quel appareil. Si l’import dépasse la limite, rien ne sera modifié et le fichier restera conservé.</p>
+      <div class="profile-transfer-grid">
+        <section class="profile-transfer-card" aria-labelledby="profile-import-source-title">
+          <h3 id="profile-import-source-title">Source</h3>
+          <div class="field"><label for="local-source-select">Profil local enregistré</label><select id="local-source-select"></select></div>
+          <div class="field" id="import-password-field" hidden><label for="import-local-password">Mot de passe de ce profil local</label><input id="import-local-password" type="password" autocomplete="current-password"></div>
+          <div class="profile-file-import">
+            <button class="secondary-button profile-transfer-button" type="button" id="import-profile-file" hidden>Choisir un fichier JSON</button>
+            <p class="profile-privacy">Fichier JSON non chiffr&eacute; contenant des donn&eacute;es personnelles; &agrave; conserver dans un endroit priv&eacute;.</p>
+            <input id="import-profile-file-input" type="file" accept=".json,application/json" hidden aria-label="Fichier JSON à importer">
+          </div>
+        </section>
+        <section class="profile-transfer-card" aria-labelledby="profile-import-destination-title">
+          <h3 id="profile-import-destination-title">Destination</h3>
+          <p class="panel-note">Les données seront importées dans ce compte.</p>
+          <p class="profile-destination-name" id="cloud-destination-name">Compte connecté</p>
+        </section>
+      </div>
+      <section class="profile-import-preview" id="profile-import-preview" aria-labelledby="profile-import-preview-title" aria-live="polite" hidden>
+        <h3 id="profile-import-preview-title">Aperçu avant import</h3>
+        <dl>
+          <div><dt>Source</dt><dd id="profile-import-source-name"></dd></div>
+          <div><dt>Destination</dt><dd id="profile-import-destination-name">Compte connecté</dd></div>
+          <div><dt>Résumé</dt><dd id="profile-import-summary"></dd></div>
+        </dl>
+      </section>
+      <p class="auth-error" id="import-error" role="alert"></p>
+      <div class="dialog-actions"><button class="secondary-button" type="button" id="skip-import">Continuer sans importer</button><button class="primary-button" type="button" id="confirm-import">Copier et fusionner les données</button></div>
     </div>
+  </dialog>
+  <dialog id="local-access-dialog" aria-labelledby="local-access-title">
+    <form class="dialog-form" id="local-access-form">
+      <div class="dialog-heading"><div><p class="eyebrow">Sur cet appareil</p><h2 id="local-access-title">Ouvrir un espace local</h2></div><button class="close-button" type="button" aria-label="Fermer" id="close-local-access">×</button></div>
+      <p class="panel-note">Saisissez le nom déjà associé à votre profil et son mot de passe. Seules les données de ce profil seront ouvertes. Un nouvel espace vierge reste propre à cet appareil.</p>
+      <div class="field" id="local-name-field"><label for="local-profile-name">Nom du profil</label><input id="local-profile-name" type="text" autocomplete="name" required></div>
+      <div class="field" id="local-password-field"><label for="local-profile-password">Mot de passe local</label><input id="local-profile-password" type="password" autocomplete="current-password"></div>
+      <p class="auth-error" id="local-access-error" role="alert"></p>
+      <div class="dialog-actions"><button class="secondary-button" type="button" id="new-local-space">Créer un espace vierge</button><button class="primary-button" type="submit" id="open-local-profile">Ouvrir cet espace</button></div>
+    </form>
+  </dialog>
+  <dialog id="pending-dialog" aria-labelledby="pending-title">
+    <div class="dialog-form">
+      <div class="dialog-heading"><div><p class="eyebrow">Copie de secours</p><h2 id="pending-title">Une copie attend sur cet appareil</h2></div></div>
+      <p class="panel-note">Une modification précédente n’a pas été synchronisée. Avant la fusion, sa copie complète sera archivée sur cet appareil. Pour les tâches, habitudes ou notes ayant le même identifiant ou le même jour, la version en ligne est prioritaire; les suppressions locales ne sont pas répercutées.</p>
+      <p class="auth-error" id="pending-error" role="alert"></p>
+      <div class="dialog-actions"><button class="secondary-button" type="button" id="keep-online-copy">Continuer avec la version en ligne</button><button class="primary-button" type="button" id="merge-pending-copy">Fusionner la copie locale</button></div>
+    </div>
+  </dialog>
+  <dialog id="password-recovery-dialog" aria-labelledby="password-recovery-title">
+    <form class="dialog-form" id="password-recovery-form">
+      <div class="dialog-heading"><div><p class="eyebrow">Activation ou récupération du compte</p><h2 id="password-recovery-title">Définir votre mot de passe</h2></div></div>
+      <p class="panel-note">Ce mot de passe sera géré uniquement par Supabase Auth.</p>
+      <div class="field"><label for="new-password">Mot de passe</label><input id="new-password" type="password" autocomplete="new-password" required minlength="8"></div>
+      <p class="auth-error" id="password-recovery-error" role="alert"></p>
+      <div class="dialog-actions"><button class="primary-button" type="submit" id="save-new-password">Définir le mot de passe</button></div>
+    </form>
+  </dialog>
+  <dialog id="access-admin-confirm-dialog" aria-labelledby="access-admin-confirm-title">
+    <div class="dialog-form"><div class="dialog-heading"><div><p class="eyebrow">Administration</p><h2 id="access-admin-confirm-title">Confirmer l’action</h2></div><button class="close-button" type="button" id="close-access-admin-confirm" aria-label="Annuler">×</button></div>
+      <p class="panel-note" id="access-admin-confirm-copy"></p><p class="auth-error" id="access-admin-confirm-error" role="alert"></p>
+      <div class="dialog-actions"><button class="secondary-button" type="button" id="cancel-access-admin-confirm">Annuler</button><button class="primary-button" type="button" id="apply-access-admin-confirm">Confirmer</button></div>
+    </div>
+  </dialog>
+  <dialog id="conflict-restore-dialog" aria-labelledby="conflict-restore-title">
+    <form class="dialog-form" method="dialog">
+      <div class="dialog-heading"><div><p class="eyebrow">Restauration d’une copie</p><h2 id="conflict-restore-title">Restaurer cette version ?</h2></div></div>
+      <p class="panel-note" id="conflict-restore-message"></p>
+      <div class="dialog-actions"><button class="secondary-button" type="submit" value="cancel">Annuler</button><button class="primary-button" type="button" id="confirm-conflict-restore">Restaurer cette copie</button></div>
+    </form>
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
 (() => {
       'use strict';
-      // Données de chaque compte stockées séparément; garder le suffixe de version pour les migrations futures.
+      // Supabase project URL and publishable key are public configuration values, never passwords or secret keys.
+      const SUPABASE_URL = 'https://jldtuvkrxecfzrkxnppn.supabase.co';
+      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_IX48zHF_L0Iy_o9h-brU2A_GyxZILIy';
       const LEGACY_STORAGE_KEY = 'le-fil-daily-planner-v1';
       const USERS_KEY = 'le-fil-accounts-v1';
       const SESSION_KEY = 'organisation-active-account-v1';
-      const ADMIN_INITIAL_SALT = '7b68dba709a8070f03e9d2f6ef406c43';
-      const ADMIN_INITIAL_HASH = '873bffddc83a2478038dbf29d7f1ad6d9b82b8afff39e81569444a489914294c';
-      const PBKDF2_ITERATIONS = 310000;
+      const LOCAL_PROFILE_KEY = 'organisation-local-profile-v1';
+      const LEGACY_PBKDF2_ITERATIONS = 310000;
+      const CLOUD_CACHE_PREFIX = 'organisation-cloud-cache-v1:';
+      const CLOUD_PENDING_PREFIX = 'organisation-cloud-pending-v1:';
+      const CLOUD_RECOVERY_PREFIX = 'organisation-cloud-recovery-v1:';
+      const IMPORT_DISMISSED_PREFIX = 'organisation-import-dismissed-v1:';
+      const MAX_IMPORT_FILE_BYTES = 512 * 1024;
+      const MAX_CLOUD_STATE_BYTES = 768 * 1024;
       const priorityLabels = { high: 'Prioritaire', medium: 'Important', low: 'À mon rythme' };
       const todayISO = () => {
         const now = new Date();
@@ -598,9 +781,27 @@
       const makeInitialCalculator = () => ({ entry:'0', stored:null, operator:null, waiting:false, expression:'', error:false });
       const makeInitialStopwatch = () => ({ elapsed:0, running:false, startedAt:null, laps:[] });
       const makeInitialTimer = () => ({ durationMs:300000, remainingMs:300000, running:false, deadline:null, completed:false });
-      const makeInitialState = () => ({ tasks: [], habits: [], notes: {}, widgets: [], calculator:makeInitialCalculator(), stopwatch:makeInitialStopwatch(), timer:makeInitialTimer() });
+      const makeInitialState = () => ({ tasks: [], habits: [], notes: {}, widgets: [], calculator:makeInitialCalculator(), stopwatch:makeInitialStopwatch(), timer:makeInitialTimer(), importConflicts:[], importFingerprints:[] });
       let activeUser = null;
-      let users = [];
+      let syncMode = 'local';
+      let supabaseClient = null;
+      let cloudVersion = 0;
+      let cloudSaveTimer = null;
+      let cloudSaveChain = Promise.resolve();
+      let cloudBlocked = false;
+      let cloudDirty = false;
+      let cloudAccessApproved = false;
+      let cloudIsAdmin = false;
+      let cloudAccessStatus = null;
+      let cloudAccessRefreshTimer = null;
+      let pendingAccessAction = null;
+      let adminAccessRows = [];
+      let authContextEpoch = 0;
+      let pendingCloudState = null;
+      let pendingImportState = null;
+      let pendingImportName = '';
+      let pendingImportFingerprint = null;
+      let pendingConflictRestore = null;
       let state = makeInitialState();
       let currentFilter = 'all';
       let toastTimer;
@@ -610,14 +811,19 @@
       let stopwatchInterval = null;
       let timerInterval = null;
 
-      function loadState() {
+      function loadState(sourceUser = activeUser, sourceState = undefined, saveLocally = true) {
         try {
-          const key = `le-fil-data-v1:${activeUser.id}`;
-          let raw = localStorage.getItem(key);
-          if (!raw && activeUser.admin) { raw = localStorage.getItem(LEGACY_STORAGE_KEY); if (raw) localStorage.setItem(key, raw); }
+          const key = `le-fil-data-v1:${sourceUser.id}`;
+          let raw = sourceState === undefined ? localStorage.getItem(key) : JSON.stringify(sourceState);
+          if (!raw && sourceUser.admin) {
+            raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+            if (raw && saveLocally) localStorage.setItem(key, raw);
+          }
           const saved = JSON.parse(raw);
           if (saved && Array.isArray(saved.tasks) && Array.isArray(saved.habits)) {
             const migrated = { ...makeInitialState(), ...saved };
+            migrated.importConflicts = Array.isArray(saved.importConflicts) ? saved.importConflicts : [];
+            migrated.importFingerprints = Array.isArray(saved.importFingerprints) ? saved.importFingerprints.filter(value => typeof value === 'string' && /^[0-9a-f]{64}$/.test(value)) : [];
             // Remove only the exact sample records shipped by older versions; keep every user-created item.
             migrated.tasks = migrated.tasks.filter(task => !sampleTaskIds.has(task.id));
             migrated.habits = migrated.habits.filter(habit => !sampleHabitIds.has(habit.id));
@@ -651,15 +857,29 @@
             const now = Date.now();
             const liveRemaining = running ? Math.max(0, deadline - now) : remainingMs;
             migrated.timer = { durationMs, remainingMs:liveRemaining, running:Boolean(running && liveRemaining > 0), deadline:Boolean(running && liveRemaining > 0) ? deadline : null, completed:Boolean(savedTimer.completed || (running && liveRemaining <= 0)) };
-            localStorage.setItem(key, JSON.stringify(migrated));
+            if (saveLocally) localStorage.setItem(key, JSON.stringify(migrated));
             return migrated;
           }
         } catch (error) { console.warn('Données locales illisibles, création d’un espace vide.', error); }
         return makeInitialState();
       }
       function saveState() {
-        // Toutes les données de l'espace (tâches, habitudes, notes, encarts, calculatrice, chronomètre et minuteur) sont sérialisées ici.
-        try { if (activeUser) localStorage.setItem(`le-fil-data-v1:${activeUser.id}`, JSON.stringify(state)); }
+        try {
+          if (!activeUser) return;
+          if (syncMode === 'cloud' && supabaseClient) {
+            if (!cloudAccessApproved) return;
+            localStorage.setItem(`${CLOUD_CACHE_PREFIX}${activeUser.id}`, JSON.stringify(state));
+            localStorage.setItem(`${CLOUD_PENDING_PREFIX}${activeUser.id}`, JSON.stringify(state));
+            cloudDirty = true;
+            scheduleCloudSave();
+            setSyncStatus(cloudBlocked ? 'Conflit à résoudre' : 'Enregistrement…');
+            return;
+          }
+          if (location.protocol !== 'file:') return;
+          const localId = activeUser.localId || activeUser.id;
+          localStorage.setItem(`le-fil-data-v1:${localId}`, JSON.stringify(state));
+          setSyncStatus('Sur cet appareil');
+        }
         catch (error) { showToast('Enregistrement local indisponible sur ce navigateur.'); }
       }
       function persistCalculator() { state.calculator = { ...calculator }; saveState(); }
@@ -730,7 +950,7 @@
         const greeting = state.tasks.length === 0 ? 'Ajoutez les encarts qui vous seront utiles, quand vous le souhaitez.' : remaining === 0 ? 'Vous avez fait votre part. Le reste peut attendre.' : `Il vous reste ${remaining} petite${remaining > 1 ? 's' : ''} chose${remaining > 1 ? 's' : ''} à votre rythme.`;
         const daySummary = document.getElementById('day-summary'); if (daySummary) daySummary.textContent = greeting;
         document.getElementById('user-chip').textContent = activeUser?.name || '';
-        document.getElementById('manage-accounts').hidden = !activeUser?.admin;
+        document.getElementById('import-local-button').hidden = syncMode !== 'cloud' || !readLocalDataSources().length;
       }
       function renderNote() {
         const note = document.getElementById('daily-note'); if (note) note.value = state.notes[todayISO()] || '';
@@ -784,6 +1004,15 @@
       }
       function render() {
         renderWidgets(); renderDate(); renderProgress(); renderHabits(); renderTaskList('today-task-list','today'); renderTaskList('all-task-list','all'); renderNote();
+      }
+      function clearWorkspacePresentation() {
+        renderCalculator(); renderStopwatch(); renderTimer(); render();
+      }
+      function clearTransientCredentials() {
+        ['login-password','request-password','import-local-password','local-profile-password','new-password'].forEach(id => {
+          const input = document.getElementById(id);
+          if (input) input.value = '';
+        });
       }
       function calculatorDisplayValue(value) {
         if (!Number.isFinite(value)) return 'Erreur';
@@ -910,6 +1139,7 @@
         return right;
       }
       function calculatorInput(kind, value='') {
+        if (!workspaceIsUsable()) return;
         if (calculator.error && kind !== 'clear') clearCalculator();
         if (kind === 'clear') { clearCalculator(); return; }
         if (kind === 'digit') {
@@ -946,6 +1176,8 @@
         persistCalculator(); renderCalculator();
       }
       function changeView(view) {
+        if (view === 'admin' && (!cloudAccessApproved || !cloudIsAdmin || syncMode !== 'cloud')) return;
+        if (view === 'import-conflicts' && (!cloudAccessApproved || syncMode !== 'cloud')) return;
         document.querySelectorAll('.section-view').forEach(section => section.classList.toggle('active', section.id === `${view}-view`));
         document.querySelectorAll('.nav-item[data-view]').forEach(button => {
           const active = button.dataset.view === view;
@@ -954,6 +1186,8 @@
         });
         window.scrollTo({ top:0, behavior:'smooth' });
         if (window.matchMedia('(max-width:700px)').matches) setSidebarOpen(false, true);
+        if (view === 'admin') refreshAdminAccessList();
+        if (view === 'import-conflicts') renderImportConflicts();
       }
       function setSidebarOpen(open, restoreFocus=false) {
         const shell = document.querySelector('.app-shell');
@@ -1032,6 +1266,7 @@
         if (event.target.closest('[data-add-habit]')) document.getElementById('habit-dialog').showModal();
       });
       document.addEventListener('keydown', event => {
+        if (!workspaceIsUsable()) return;
         if (event.key === 'Escape' && document.getElementById('sidebar-toggle').getAttribute('aria-expanded') === 'true') { setSidebarOpen(false, true); return; }
         if (event.key === 'Tab' && window.matchMedia('(max-width:700px)').matches && document.body.classList.contains('sidebar-open')) {
           const focusable = [...document.querySelectorAll('#main-sidebar button:not([disabled])')];
@@ -1105,94 +1340,1232 @@
         const handle = event.target.closest('[data-drag-widget]'); if (!handle) return;
         if (event.key === 'ArrowUp' || event.key === 'ArrowDown') { event.preventDefault(); moveWidget(handle.dataset.dragWidget, event.key === 'ArrowUp' ? -1 : 1); }
       });
-      async function hashPassword(password, salt) {
-        const material = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
-        const bits = await crypto.subtle.deriveBits({ name:'PBKDF2', salt, iterations:PBKDF2_ITERATIONS, hash:'SHA-256' }, material, 256);
-        return [...new Uint8Array(bits)].map(byte => byte.toString(16).padStart(2,'0')).join('');
-      }
-      function makeSalt() { const bytes = crypto.getRandomValues(new Uint8Array(16)); return [...bytes].map(byte => byte.toString(16).padStart(2,'0')).join(''); }
-      function decodeSalt(hex) { return new Uint8Array(hex.match(/.{2}/g).map(byte => parseInt(byte,16))); }
       const normalizeName = name => name.trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('fr');
-      function readUsers() { try { const value = JSON.parse(localStorage.getItem(USERS_KEY)); return Array.isArray(value) ? value : []; } catch { return []; } }
-      function saveUsers() { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
-      async function ensureAdmin() {
-        users = readUsers();
-        if (users.length) return;
-        users = [{ id:'admin-jeremie', name:'Jérémie', admin:true, salt:ADMIN_INITIAL_SALT, passwordHash:ADMIN_INITIAL_HASH }];
-        saveUsers();
+      function readLocalUsers() { try { const value = JSON.parse(localStorage.getItem(USERS_KEY)); return Array.isArray(value) ? value : []; } catch { return []; } }
+      function hasLegacyCredentials(user) { return Boolean(user && typeof user.id === 'string' && /^[0-9a-f]{32}$/i.test(user.salt || '') && /^[0-9a-f]{64}$/i.test(user.passwordHash || '')); }
+      async function verifyLegacyPassword(profileId, password) {
+        const user = readLocalUsers().find(item => item.id === profileId);
+        if (!hasLegacyCredentials(user) || !window.crypto?.subtle || typeof TextEncoder === 'undefined') throw new Error('Ce profil local ne peut pas être vérifié dans ce navigateur.');
+        const salt = new Uint8Array((user.salt.match(/.{2}/g) || []).map(byte => parseInt(byte,16)));
+        const material = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
+        const bits = await crypto.subtle.deriveBits({ name:'PBKDF2', salt, iterations:LEGACY_PBKDF2_ITERATIONS, hash:'SHA-256' }, material, 256);
+        const actual = [...new Uint8Array(bits)].map(byte => byte.toString(16).padStart(2,'0')).join('');
+        return actual === String(user.passwordHash).toLowerCase();
+      }
+      function getLocalOnlyProfile() {
+        let id = localStorage.getItem(LOCAL_PROFILE_KEY);
+        if (!id) { id = `local-device-${Date.now()}-${Math.random().toString(16).slice(2,8)}`; localStorage.setItem(LOCAL_PROFILE_KEY, id); }
+        return { id, name:'Cet appareil', admin:false, localOnly:true };
+      }
+      function setSyncStatus(message) { const element = document.getElementById('sync-status'); if (element) element.textContent = message; }
+      function hasCloudConfiguration() {
+        return /^https:\/\//.test(SUPABASE_URL) && !SUPABASE_URL.includes('YOUR_PROJECT_REF') && SUPABASE_PUBLISHABLE_KEY && !SUPABASE_PUBLISHABLE_KEY.includes('YOUR_SUPABASE_PUBLISHABLE_KEY');
+      }
+      function loadSupabaseSdk() {
+        if (window.supabase?.createClient) return Promise.resolve(window.supabase);
+        return new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0';
+          script.async = true;
+          script.onload = () => window.supabase?.createClient ? resolve(window.supabase) : reject(new Error('Le client Supabase ne s’est pas chargé.'));
+          script.onerror = () => reject(new Error('La bibliothèque de connexion en ligne est indisponible.'));
+          document.head.appendChild(script);
+        });
+      }
+      function readLocalDataSources() {
+        const sources = [];
+        try {
+          const savedUsers = readLocalUsers();
+          const byId = new Map(savedUsers.filter(hasLegacyCredentials).map(user => [user.id, { id:user.id, name:String(user.name || 'Compte local'), admin:Boolean(user.admin), requiresPassword:true }]));
+          const keys = Array.from({ length:localStorage.length }, (_, index) => localStorage.key(index)).filter(Boolean);
+          const meaningful = key => {
+            try {
+              const value = JSON.parse(localStorage.getItem(key));
+              return Boolean(value && ((Array.isArray(value.tasks) && value.tasks.length) || (Array.isArray(value.habits) && value.habits.length) || (value.notes && Object.keys(value.notes).length) || (Array.isArray(value.widgets) && value.widgets.length) || (value.stopwatch && (value.stopwatch.elapsed || value.stopwatch.laps?.length)) || (value.timer && value.timer.durationMs !== 300000)));
+            } catch { return false; }
+          };
+          keys.filter(key => key.startsWith('le-fil-data-v1:') && meaningful(key)).forEach(key => {
+            const id = key.slice('le-fil-data-v1:'.length);
+            if (byId.has(id)) sources.push(byId.get(id));
+            else if (id === localStorage.getItem(LOCAL_PROFILE_KEY)) sources.push({ id, name:'Espace de cet appareil', admin:false, localOnly:true });
+          });
+          if (syncMode === 'cloud' && activeUser?.id) {
+            const ownerRecoveryPrefix = `${CLOUD_RECOVERY_PREFIX}${activeUser.id}:`;
+            keys.filter(key => key.startsWith(ownerRecoveryPrefix) && meaningful(key)).forEach(key => {
+              sources.push({ id:key, name:'Copie cloud non synchronisée', admin:false, recoveryKey:key });
+            });
+          }
+          if (meaningful(LEGACY_STORAGE_KEY)) {
+            const admin = [...byId.values()].find(user => user.admin);
+            if (admin && !sources.some(source => source.id === admin.id)) sources.push(admin);
+          }
+        } catch (error) { console.warn('Lecture des données locales impossible.', error); }
+        return sources;
+      }
+      function localProfileState(profile) {
+        if (profile.recoveryKey) {
+          const raw = localStorage.getItem(profile.recoveryKey);
+          if (!raw) throw new Error('La copie de secours sélectionnée est introuvable.');
+          const saved = JSON.parse(raw);
+          if (!saved || !Array.isArray(saved.tasks) || !Array.isArray(saved.habits)) throw new Error('La copie de secours sélectionnée est illisible.');
+          return loadState(activeUser, saved, false);
+        }
+        const sourceUser = { id:profile.id, admin:profile.admin };
+        let raw = localStorage.getItem(`le-fil-data-v1:${sourceUser.id}`);
+        if (!raw && sourceUser.admin) raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+        if (!raw) throw new Error('Les données du profil local sélectionné sont introuvables.');
+        const saved = JSON.parse(raw);
+        if (!saved || !Array.isArray(saved.tasks) || !Array.isArray(saved.habits)) throw new Error('Les données du profil local sélectionné sont illisibles.');
+        return loadState(sourceUser, saved, false);
+      }
+      function openLocalAccessDialog() {
+        if (location.protocol !== 'file:') return;
+        const profiles = readLocalUsers().filter(hasLegacyCredentials).map(user => ({ id:user.id, name:String(user.name || 'Compte local'), admin:Boolean(user.admin) }));
+        const remembered = localStorage.getItem(SESSION_KEY);
+        const preferred = profiles.find(profile => profile.id === remembered) || profiles.find(profile => normalizeName(profile.name) === 'jeremie');
+        document.getElementById('local-profile-name').value = preferred?.name || '';
+        document.getElementById('local-name-field').hidden = !profiles.length;
+        document.getElementById('local-password-field').hidden = !profiles.length;
+        document.getElementById('open-local-profile').hidden = !profiles.length;
+        document.getElementById('local-profile-name').required = profiles.length > 0;
+        document.getElementById('local-profile-password').required = profiles.length > 0;
+        document.getElementById('local-access-error').textContent = '';
+        document.getElementById('local-profile-password').value = '';
+        document.getElementById('local-access-dialog').showModal();
+      }
+      function bytesIn(value) { return new TextEncoder().encode(JSON.stringify(value)).byteLength; }
+      async function fingerprintState(value) {
+        const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify(value)));
+        return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2,'0')).join('');
+      }
+      function sameValue(left, right) { return JSON.stringify(left) === JSON.stringify(right); }
+      async function mergeImportedState(localState, onlineState, sourceName='Copie locale', transferFingerprint=null) {
+        const result = structuredClone(onlineState);
+        result.importConflicts = Array.isArray(result.importConflicts) ? result.importConflicts : [];
+        result.importFingerprints = Array.isArray(result.importFingerprints) ? result.importFingerprints : [];
+        const fingerprint = transferFingerprint || await fingerprintState(localState);
+        if (result.importFingerprints.includes(fingerprint)) return result;
+        const knownArchiveIds = new Set(result.importConflicts.map(item => item?.id).filter(Boolean));
+        for (const archived of Array.isArray(localState.importConflicts) ? localState.importConflicts : []) {
+          if (archived?.id && !knownArchiveIds.has(archived.id)) { result.importConflicts.push(structuredClone(archived)); knownArchiveIds.add(archived.id); }
+        }
+        for (const receipt of Array.isArray(localState.importFingerprints) ? localState.importFingerprints : []) {
+          if (/^[0-9a-f]{64}$/.test(receipt) && !result.importFingerprints.includes(receipt)) result.importFingerprints.push(receipt);
+        }
+        const existingConflictFingerprints = new Set(result.importConflicts.map(item => item?.fingerprint).filter(Boolean));
+        const archive = async (kind, key, localValue, cloudValue) => {
+          const payload = { kind, key:String(key), localValue, cloudValue };
+          const conflictFingerprint = await fingerprintState(payload);
+          if (existingConflictFingerprints.has(conflictFingerprint)) return;
+          existingConflictFingerprints.add(conflictFingerprint);
+          result.importConflicts.push({ id:`conflict-${conflictFingerprint.slice(0,24)}`, fingerprint:conflictFingerprint, source:String(sourceName).slice(0,120), importedAt:new Date().toISOString(), ...payload, resolved:false });
+        };
+        for (const kind of ['tasks','habits']) {
+          const onlineItems = Array.isArray(result[kind]) ? result[kind] : [];
+          const localItems = Array.isArray(localState[kind]) ? localState[kind] : [];
+          const byId = new Map(onlineItems.map((item,index) => [String(item.id), index]));
+          for (const localItem of localItems) {
+            const key = String(localItem.id);
+            if (!byId.has(key)) { byId.set(key, onlineItems.length); onlineItems.push(structuredClone(localItem)); }
+            else {
+              const cloudItem = onlineItems[byId.get(key)];
+              if (!sameValue(localItem, cloudItem)) await archive(kind.slice(0,-1), key, structuredClone(localItem), structuredClone(cloudItem));
+            }
+          }
+          result[kind] = onlineItems;
+        }
+        result.notes = { ...(result.notes || {}) };
+        for (const [date, localValue] of Object.entries(localState.notes || {})) {
+          if (!(date in result.notes)) result.notes[date] = localValue;
+          else if (!sameValue(localValue, result.notes[date])) await archive('note', date, localValue, result.notes[date]);
+        }
+        result.widgets = Array.isArray(result.widgets) ? result.widgets : [];
+        for (const localWidget of localState.widgets || []) {
+          const current = result.widgets.find(widget => widget.type === localWidget.type);
+          if (!current) result.widgets.push(structuredClone(localWidget));
+          else if (!sameValue(localWidget, current)) await archive('widget', localWidget.type, structuredClone(localWidget), structuredClone(current));
+        }
+        for (const field of ['calculator','stopwatch','timer']) {
+          if (!sameValue(localState[field], result[field]) && !sameValue(result[field], makeInitialState()[field])) {
+            await archive(field, field, structuredClone(localState[field]), structuredClone(result[field]));
+          } else if (sameValue(result[field], makeInitialState()[field]) && !sameValue(localState[field], result[field])) result[field] = structuredClone(localState[field]);
+        }
+        result.importFingerprints.push(fingerprint);
+        if (bytesIn(result) > MAX_CLOUD_STATE_BYTES) throw new Error('import_too_large');
+        return result;
+      }
+      function assertSafeJsonTree(value) {
+        if (Array.isArray(value)) { value.forEach(assertSafeJsonTree); return; }
+        if (!value || typeof value !== 'object') return;
+        for (const [key, child] of Object.entries(value)) {
+          if (['__proto__','constructor','prototype'].includes(key)) throw new Error('import_invalid');
+          assertSafeJsonTree(child);
+        }
+      }
+      function assertAllowedKeys(value, allowed) {
+        if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('import_invalid');
+        assertSafeJsonTree(value);
+        if (Object.keys(value).some(key => !allowed.includes(key))) throw new Error('import_invalid');
+      }
+      function boundedString(value, max, allowEmpty=false) {
+        if (typeof value !== 'string' || value.length > max || (!allowEmpty && !value.trim())) throw new Error('import_invalid');
+        return value;
+      }
+      function sanitizeTransferState(raw) {
+        assertAllowedKeys(raw, ['tasks','habits','notes','widgets','calculator','stopwatch','timer']);
+        for (const field of ['tasks','habits','widgets']) if (raw[field] !== undefined && !Array.isArray(raw[field])) throw new Error('import_invalid');
+        if (raw.notes !== undefined && (!raw.notes || typeof raw.notes !== 'object' || Array.isArray(raw.notes))) throw new Error('import_invalid');
+        const tasks = (Array.isArray(raw.tasks) ? raw.tasks : []).map(item => {
+          assertAllowedKeys(item, ['id','title','priority','due','done']);
+          if (typeof item.done !== 'boolean' || !['low','medium','high'].includes(item.priority)) throw new Error('import_invalid');
+          const due = boundedString(item.due ?? '', 10, true);
+          if (due && !/^\d{4}-\d{2}-\d{2}$/.test(due)) throw new Error('import_invalid');
+          return { id:boundedString(item.id, 160), title:boundedString(item.title, 100), priority:item.priority, due, done:item.done };
+        });
+        const habits = (Array.isArray(raw.habits) ? raw.habits : []).map(item => {
+          assertAllowedKeys(item, ['id','name','detail','done']);
+          if (typeof item.done !== 'boolean') throw new Error('import_invalid');
+          return { id:boundedString(item.id, 160), name:boundedString(item.name, 70), detail:boundedString(item.detail ?? '', 70, true), done:item.done };
+        });
+        assertAllowedKeys(raw.notes || {}, Object.keys(raw.notes || {}));
+        const notes = {};
+        for (const [date, note] of Object.entries(raw.notes || {})) {
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error('import_invalid');
+          notes[date] = boundedString(note, 20000, true);
+        }
+        const widgets = (Array.isArray(raw.widgets) ? raw.widgets : []).map(item => {
+          assertAllowedKeys(item, ['id','type']);
+          if (!widgetTypes.includes(item.type)) throw new Error('import_invalid');
+          return { id:`widget-${item.type}`, type:item.type };
+        });
+        if (new Set(tasks.map(item => item.id)).size !== tasks.length || new Set(habits.map(item => item.id)).size !== habits.length || new Set(widgets.map(item => item.type)).size !== widgets.length) throw new Error('import_invalid');
+        const base = makeInitialState();
+        const calculator = raw.calculator || base.calculator;
+        assertAllowedKeys(calculator, ['entry','stored','operator','waiting','expression','error']);
+        const stopwatch = raw.stopwatch || base.stopwatch;
+        assertAllowedKeys(stopwatch, ['elapsed','running','startedAt','laps']);
+        const timer = raw.timer || base.timer;
+        assertAllowedKeys(timer, ['durationMs','remainingMs','running','deadline','completed']);
+        if (typeof calculator.entry !== 'string' || calculator.entry.length > 32 || !/^-?\d+(?:\.\d*)?$/.test(calculator.entry)
+          || !(calculator.stored === null || Number.isFinite(calculator.stored)) || !(calculator.operator === null || ['+','-','*','/'].includes(calculator.operator))
+          || typeof calculator.waiting !== 'boolean' || typeof calculator.expression !== 'string' || calculator.expression.length > 120 || typeof calculator.error !== 'boolean') throw new Error('import_invalid');
+        if (!Number.isFinite(stopwatch.elapsed) || stopwatch.elapsed < 0 || typeof stopwatch.running !== 'boolean'
+          || !(stopwatch.startedAt === null || Number.isFinite(stopwatch.startedAt)) || !Array.isArray(stopwatch.laps) || stopwatch.laps.length > 100) throw new Error('import_invalid');
+        for (const lap of stopwatch.laps) {
+          assertAllowedKeys(lap, ['elapsed','split']);
+          if (!Number.isFinite(lap.elapsed) || lap.elapsed < 0 || !Number.isFinite(lap.split) || lap.split < 0) throw new Error('import_invalid');
+        }
+        if (!Number.isFinite(timer.durationMs) || timer.durationMs < 1000 || timer.durationMs > 59999000
+          || !Number.isFinite(timer.remainingMs) || timer.remainingMs < 0 || timer.remainingMs > timer.durationMs
+          || typeof timer.running !== 'boolean' || !(timer.deadline === null || Number.isFinite(timer.deadline)) || typeof timer.completed !== 'boolean') throw new Error('import_invalid');
+        const normalized = loadState({ id:'transfer-validation', admin:false }, { tasks, habits, notes, widgets, calculator, stopwatch, timer }, false);
+        return { tasks:normalized.tasks, habits:normalized.habits, notes:normalized.notes, widgets:normalized.widgets, calculator:normalized.calculator, stopwatch:normalized.stopwatch, timer:normalized.timer };
+      }
+      function transferableState(raw) {
+        const stateData = raw || makeInitialState();
+        return sanitizeTransferState({
+          tasks:(stateData.tasks || []).map(({id,title,priority,due,done}) => ({id,title,priority,due,done})),
+          habits:(stateData.habits || []).map(({id,name,detail,done}) => ({id,name,detail,done})),
+          notes:stateData.notes || {},
+          widgets:(stateData.widgets || []).map(({id,type}) => ({id,type})),
+          calculator:stateData.calculator || makeInitialCalculator(),
+          stopwatch:stateData.stopwatch || makeInitialStopwatch(),
+          timer:stateData.timer || makeInitialTimer()
+        });
+      }
+      async function parseProfileTransfer(text) {
+        if (new TextEncoder().encode(text).byteLength > MAX_IMPORT_FILE_BYTES) throw new Error('import_too_large');
+        const payload = JSON.parse(text);
+        assertAllowedKeys(payload, ['format','version','exportedAt','sourceName','transferId','state']);
+        if (payload.format !== 'organisation-profile' || payload.version !== 1 || typeof payload.exportedAt !== 'string' || typeof payload.transferId !== 'string') throw new Error('import_invalid');
+        const stateData = sanitizeTransferState(payload.state);
+        return { state:stateData, name:boundedString(payload.sourceName || 'Profil importé', 120), fingerprint:await fingerprintState(stateData) };
+      }
+      function setImportPreview(stateData, sourceName) {
+        const preview = document.getElementById('profile-import-preview');
+        document.getElementById('profile-import-source-name').textContent = sourceName;
+        document.getElementById('profile-import-destination-name').textContent = activeUser?.name || 'Compte connecté';
+        document.getElementById('cloud-destination-name').textContent = activeUser?.name || 'Compte connecté';
+        document.getElementById('profile-import-summary').textContent = `${stateData.tasks.length} tâche(s), ${stateData.habits.length} habitude(s), ${Object.keys(stateData.notes).length} note(s), ${stateData.widgets.length} encart(s). Les copies en conflit seront conservées dans les archives.`;
+        preview.hidden = false;
+      }
+      function renderImportConflicts() {
+        const list = document.getElementById('import-conflicts-list');
+        const records = Array.isArray(state.importConflicts) ? state.importConflicts : [];
+        list.replaceChildren();
+        const unresolved = records.filter(item => !item.resolved).length;
+        document.getElementById('import-conflicts-summary').textContent = records.length
+          ? `${records.length} copie(s) conservée(s); ${unresolved} à examiner. Les archives ne sont pas supprimées.`
+          : 'Aucune copie en conflit pour le moment.';
+        for (const item of records.slice().reverse()) {
+          const restorationArchive = String(item.kind || '').startsWith('restauration-');
+          const card = document.createElement('article'); card.className = 'import-conflict-card';
+          const title = document.createElement('h2'); title.textContent = `${item.kind || 'Donnée'} · ${item.key || ''}`; card.append(title);
+          const source = document.createElement('p'); source.className = 'panel-note'; source.textContent = `${item.source || 'Copie importée'} · ${item.importedAt ? formatAccessDate(item.importedAt) : ''}${item.resolved ? ' · examinée' : ''}`; card.append(source);
+          const pair = document.createElement('div'); pair.className = 'import-conflict-version-pair';
+          const localVersionLabel = restorationArchive ? 'Version remplacée' : 'Copie importée';
+          const cloudVersionLabel = restorationArchive ? 'Version restaurée' : 'Version utilisée';
+          for (const [label,value] of [[localVersionLabel,item.localValue],[cloudVersionLabel,item.cloudValue]]) {
+            const version = document.createElement('section'); version.className = 'import-conflict-version';
+            const heading = document.createElement('strong'); heading.textContent = label; version.append(heading);
+            const content = document.createElement('p'); content.textContent = typeof value === 'string' ? value : JSON.stringify(value, null, 2); version.append(content); pair.append(version);
+          }
+          card.append(pair);
+          const actions = document.createElement('div'); actions.className = 'import-conflict-actions';
+          const exportButton = document.createElement('button'); exportButton.type = 'button'; exportButton.className = 'secondary-button'; exportButton.dataset.conflictExport = item.id; exportButton.textContent = 'Exporter cette copie'; actions.append(exportButton);
+          if (!item.resolved) for (const side of ['local','cloud']) {
+            const button = document.createElement('button'); button.type = 'button'; button.className = side === 'local' ? 'primary-button' : 'secondary-button'; button.dataset.conflictRestore = side; button.dataset.conflictId = item.id;
+            button.textContent = restorationArchive ? (side === 'local' ? 'Restaurer la version remplacée' : 'Garder la version restaurée') : (side === 'local' ? 'Restaurer la copie importée' : 'Garder la version en ligne'); actions.append(button);
+          }
+          card.append(actions); list.append(card);
+        }
+      }
+      function setAuthPanel(panelId) {
+        ['login-form','access-request-form','access-status-card','username-claim-card'].forEach(id => { document.getElementById(id).hidden = id !== panelId; });
+      }
+      function isCurrentCloudContext(ownerId, epoch) {
+        return epoch === authContextEpoch && syncMode === 'cloud' && activeUser?.id === ownerId && Boolean(supabaseClient);
+      }
+      function workspaceIsUsable() {
+        return syncMode === 'cloud' ? Boolean(activeUser && cloudAccessApproved) : Boolean(location.protocol === 'file:' && activeUser);
+      }
+      function guardWorkspaceInteraction(event) {
+        const target = event.target.closest?.('.app-shell,.mobile-nav,#task-dialog,#habit-dialog,#widget-dialog,#import-dialog,#pending-dialog,#access-admin-confirm-dialog,#conflict-restore-dialog');
+        if (!target || workspaceIsUsable()) return;
+        event.preventDefault(); event.stopImmediatePropagation();
+      }
+      ['click','input','change','submit','keydown'].forEach(type => document.addEventListener(type, guardWorkspaceInteraction, true));
+      function setAdminNavigation(visible) {
+        const adminView = document.getElementById('admin-view');
+        if (!visible && adminView.classList.contains('active')) changeView('today');
+        document.querySelectorAll('.admin-only').forEach(button => { button.hidden = !visible; });
+        document.querySelector('.mobile-nav').classList.toggle('has-admin-tab', Boolean(visible));
+        adminView.hidden = !visible;
+        if (!visible) {
+          adminAccessRows = [];
+          document.getElementById('pending-account-list').replaceChildren();
+          document.getElementById('other-account-list').replaceChildren();
+          document.getElementById('pending-accounts-summary').textContent = '';
+          document.getElementById('other-accounts-summary').textContent = '';
+          document.getElementById('nav-admin-pending-count').textContent = '0';
+          document.getElementById('mobile-admin-pending-count').textContent = '0';
+          document.getElementById('admin-access-error').textContent = '';
+        }
+      }
+      function showAccessStatus(status, { requestSent=false, canRefresh=Boolean(activeUser), message='' } = {}) {
+        authContextEpoch++;
+        clearInterval(cloudAccessRefreshTimer); cloudAccessRefreshTimer = null;
+        clearTimeout(cloudSaveTimer); cloudSaveTimer = null; cloudDirty = false; pendingCloudState = null;
+        cloudAccessApproved = false; cloudIsAdmin = false; setAdminNavigation(false);
+        clearInterval(stopwatchInterval); stopwatchInterval = null; clearInterval(timerInterval); timerInterval = null;
+        state = makeInitialState(); Object.assign(calculator, makeInitialCalculator()); Object.assign(stopwatch, makeInitialStopwatch()); Object.assign(timer, makeInitialTimer());
+        clearWorkspacePresentation();
+        ['import-dialog','pending-dialog','task-dialog','habit-dialog','widget-dialog','access-admin-confirm-dialog','password-recovery-dialog'].forEach(id => { const dialog=document.getElementById(id); if (dialog.open) dialog.close(); });
+        clearTransientCredentials();
+        pendingAccessAction = null;
+        document.querySelector('.app-shell').hidden = true;
+        document.querySelector('.mobile-nav').hidden = true;
+        document.getElementById('auth-screen').hidden = false;
+        setAuthPanel('access-status-card');
+        const titles = {
+          pending:requestSent ? 'Demande envoyée.' : 'Votre demande est en attente.',
+          rejected:'Votre demande n’a pas été approuvée.',
+          suspended:'Votre accès est suspendu.',
+          unavailable:'Vérification de l’accès indisponible.'
+        };
+        const messages = {
+          pending:requestSent ? 'Votre demande a été enregistrée. Jérémie examinera votre accès. Connectez-vous pour vérifier son état.' : 'Votre demande est en attente de validation par Jérémie. Vous pourrez accéder à Organisation après son approbation.',
+          rejected:'Votre demande d’accès n’a pas été approuvée. Contactez Jérémie si vous souhaitez en savoir plus.',
+          suspended:'Votre accès à Organisation a été suspendu. Contactez Jérémie si vous pensez qu’il s’agit d’une erreur. Vos données ne sont pas supprimées.',
+          unavailable:'Nous ne pouvons pas confirmer votre autorisation pour le moment. Réessayez lorsque la connexion sera disponible.'
+        };
+        document.getElementById('access-status-title').textContent = titles[status] || titles.unavailable;
+        document.getElementById('access-status-message').textContent = message || messages[status] || messages.unavailable;
+        document.getElementById('access-status-error').textContent = '';
+        const checkButton = document.getElementById('check-access-status');
+        checkButton.hidden = !canRefresh; checkButton.disabled = false; checkButton.textContent = 'Vérifier le statut';
+        document.getElementById('access-status-title').focus();
+      }
+      function startCloudAccessPolling() {
+        clearInterval(cloudAccessRefreshTimer);
+        cloudAccessRefreshTimer = setInterval(verifyActiveCloudAccess, 30000);
+      }
+      async function verifyActiveCloudAccess() {
+        if (!activeUser || syncMode !== 'cloud' || !cloudAccessApproved || document.hidden) return;
+        const ownerId = activeUser.id;
+        const epoch = authContextEpoch;
+        try {
+          const access = await resolveCloudAccess({ id:ownerId, email:activeUser.email, user_metadata:{ display_name:activeUser.name } }, epoch);
+          if (!access || !isCurrentCloudContext(ownerId, epoch)) return;
+          cloudAccessStatus = access.status;
+          if (access.status !== 'approved') { showAccessStatus(access.status); return; }
+          const wasAdmin = cloudIsAdmin;
+          cloudIsAdmin = access.isAdmin;
+          setAdminNavigation(cloudIsAdmin);
+          if (wasAdmin && !cloudIsAdmin && document.getElementById('admin-view').classList.contains('active')) changeView('today');
+        } catch (cause) {
+          console.error('Vérification de l’accès impossible.', cause);
+          showAccessStatus('unavailable');
+        }
+      }
+      async function resolveCloudAccess(user, contextEpoch=authContextEpoch) {
+        const ownerId = user.id;
+        const isCurrent = () => isCurrentCloudContext(ownerId, contextEpoch);
+        const { data:sessionData, error:sessionError } = await supabaseClient.auth.getUser();
+        if (!isCurrent()) return null;
+        if (sessionError) throw sessionError;
+        if (!sessionData.user || sessionData.user.id !== user.id) throw new Error('session_user_changed');
+        const [{ data:adminData, error:adminError }, { data:row, error:rowError }] = await Promise.all([
+          supabaseClient.rpc('organisation_is_admin'),
+          supabaseClient.from('organisation_access').select('user_id,email,display_name,status,username,requested_at,updated_at,reviewed_at,reviewed_by').eq('user_id', user.id).maybeSingle()
+        ]);
+        if (!isCurrent()) return null;
+        if (adminError) throw adminError;
+        if (rowError) throw rowError;
+        const isAdmin = adminData === true;
+        let accessRow = row;
+        let requestedStatus = null;
+        if (!accessRow && !isAdmin) {
+          const displayName = String(user.user_metadata?.display_name || user.email?.split('@')[0] || '');
+          const { data, error } = await supabaseClient.rpc('request_organisation_access', { p_display_name:displayName });
+          if (!isCurrent()) return null;
+          if (error) throw error;
+          requestedStatus = typeof data === 'string' ? data : null;
+          const { data:refreshed, error:refreshError } = await supabaseClient.from('organisation_access').select('user_id,email,display_name,status,username,requested_at,updated_at,reviewed_at,reviewed_by').eq('user_id', user.id).maybeSingle();
+          if (!isCurrent()) return null;
+          if (refreshError) throw refreshError;
+          accessRow = refreshed;
+        }
+        const { data:confirmedSession, error:confirmedSessionError } = await supabaseClient.auth.getUser();
+        if (!isCurrent()) return null;
+        if (confirmedSessionError) throw confirmedSessionError;
+        if (!confirmedSession.user || confirmedSession.user.id !== user.id) throw new Error('session_user_changed');
+        const status = isAdmin ? 'approved' : (accessRow?.status || requestedStatus || 'pending');
+        if (!['pending','approved','rejected','suspended'].includes(status)) throw new Error('invalid_access_status');
+        return { isAdmin, status, accessRow, username:accessRow?.username || null };
+      }
+      function accessStatusLabel(status) {
+        return ({ pending:'En attente', approved:'Actif', rejected:'Refusé', suspended:'Accès suspendu' })[status] || 'État inconnu';
+      }
+      function formatAccessDate(value) {
+        if (!value) return 'Date indisponible';
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? 'Date indisponible' : date.toLocaleString('fr-FR', { dateStyle:'medium', timeStyle:'short' });
+      }
+      function renderAccessAccountCard(row, pending) {
+        const id = String(row.user_id || '');
+        if (!/^[0-9a-f-]{36}$/i.test(id)) return '';
+        const name = String(row.display_name || row.email || 'Compte sans nom');
+        const email = String(row.email || 'Adresse e-mail indisponible');
+        const status = String(row.status || 'pending');
+        const button = (targetStatus, label, className) => `<button type="button" class="${className}" data-access-change="${escapeHTML(targetStatus)}" data-access-user="${escapeHTML(id)}" aria-label="${escapeHTML(label)}">${escapeHTML(label)}</button>`;
+        let actions = '';
+        if (pending) {
+          actions = button('approved', `Approuver la demande de ${name}`, 'primary-button') + button('rejected', `Refuser la demande de ${name}`, 'secondary-button');
+        } else if (status === 'approved') {
+          actions = button('suspended', `Révoquer l’accès de ${name}`, 'secondary-button');
+        } else {
+          actions = button('approved', `Réactiver l’accès de ${name}`, 'primary-button');
+        }
+        return `<article class="account-card"><div><div class="account-card-name">${escapeHTML(name)}</div><span class="account-card-email">${escapeHTML(email)}</span><span class="account-card-date">Demande : ${escapeHTML(formatAccessDate(row.requested_at))}</span><span class="account-card-status">${escapeHTML(accessStatusLabel(status))}</span></div><div class="account-card-actions">${actions}</div></article>`;
+      }
+      async function refreshAdminAccessList() {
+        if (!cloudAccessApproved || !cloudIsAdmin || syncMode !== 'cloud') return;
+        const ownerId = activeUser?.id;
+        const epoch = authContextEpoch;
+        const errorNode = document.getElementById('admin-access-error');
+        errorNode.textContent = '';
+        try {
+          const { data, error } = await supabaseClient.from('organisation_access').select('user_id,email,display_name,status,requested_at,updated_at,reviewed_at,reviewed_by').order('requested_at', { ascending:false });
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved || !cloudIsAdmin) return;
+          if (error) throw error;
+          const { data:sessionData, error:sessionError } = await supabaseClient.auth.getUser();
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved || !cloudIsAdmin) return;
+          if (sessionError) throw sessionError;
+          if (!sessionData.user || sessionData.user.id !== ownerId) { showLogin(); return; }
+          const records = (Array.isArray(data) ? data : []).filter(row => row.user_id !== activeUser?.id);
+          adminAccessRows = records;
+          const pending = records.filter(row => row.status === 'pending');
+          const other = records.filter(row => row.status !== 'pending');
+          document.getElementById('pending-account-list').innerHTML = pending.map(row => renderAccessAccountCard(row, true)).join('') || '<p class="account-empty">Aucune demande en attente.</p>';
+          document.getElementById('other-account-list').innerHTML = other.map(row => renderAccessAccountCard(row, false)).join('') || '<p class="account-empty">Aucun autre compte.</p>';
+          document.getElementById('pending-accounts-summary').textContent = `${pending.length} demande${pending.length === 1 ? '' : 's'}`;
+          document.getElementById('other-accounts-summary').textContent = `${other.length} compte${other.length === 1 ? '' : 's'}`;
+          document.getElementById('nav-admin-pending-count').textContent = String(pending.length);
+          document.getElementById('mobile-admin-pending-count').textContent = String(pending.length);
+        } catch (cause) {
+          console.error('Chargement des demandes d’accès impossible.', cause);
+          errorNode.textContent = 'La liste des comptes ne peut pas être chargée. Actualisez la page puis réessayez.';
+        }
+      }
+      function askAccessStatusChange(row, status) {
+        if (!cloudAccessApproved || !cloudIsAdmin || !row || !['approved','rejected','suspended'].includes(status)) return;
+        pendingAccessAction = { userId:row.user_id, status };
+        const name = String(row.display_name || row.email || 'ce compte');
+        const messages = {
+          approved:`Approuver l’accès de ${name} ? Cette personne pourra utiliser Organisation.`,
+          rejected:`Refuser la demande de ${name} ? Cette personne ne pourra pas utiliser Organisation.`,
+          suspended:`Révoquer l’accès de ${name} ? Cette personne ne pourra plus se connecter. Ses données ne seront pas supprimées.`
+        };
+        document.getElementById('access-admin-confirm-copy').textContent = messages[status];
+        document.getElementById('access-admin-confirm-error').textContent = '';
+        document.getElementById('access-admin-confirm-dialog').showModal();
+        document.getElementById('apply-access-admin-confirm').focus();
+      }
+      async function applyAccessStatusChange() {
+        if (!pendingAccessAction || !cloudAccessApproved || !cloudIsAdmin) return;
+        const ownerId = activeUser?.id;
+        const epoch = authContextEpoch;
+        const action = { ...pendingAccessAction };
+        const button = document.getElementById('apply-access-admin-confirm');
+        const errorNode = document.getElementById('access-admin-confirm-error');
+        const closeButton = document.getElementById('close-access-admin-confirm');
+        const cancelButton = document.getElementById('cancel-access-admin-confirm');
+        button.disabled = true; errorNode.textContent = '';
+        closeButton.disabled = true; cancelButton.disabled = true;
+        try {
+          const { data:sessionData, error:sessionError } = await supabaseClient.auth.getUser();
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved || !cloudIsAdmin) return;
+          if (sessionError) throw sessionError;
+          if (!sessionData.user || sessionData.user.id !== ownerId) { showLogin(); return; }
+          const { data, error } = await supabaseClient.rpc('set_organisation_access_status', { p_user_id:action.userId, p_status:action.status });
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved || !cloudIsAdmin) return;
+          if (error) throw error;
+          if (data !== action.status) throw new Error('unexpected_status');
+          document.getElementById('access-admin-confirm-dialog').close();
+          pendingAccessAction = null;
+          await refreshAdminAccessList();
+          showToast('Le statut du compte a été mis à jour.');
+        } catch (cause) {
+          if (!isCurrentCloudContext(ownerId, epoch)) return;
+          console.error('Modification du statut du compte impossible.', cause);
+          errorNode.textContent = 'Le statut n’a pas été modifié. Actualisez la liste puis réessayez.';
+        } finally { if (isCurrentCloudContext(ownerId, epoch)) { button.disabled = false; closeButton.disabled = false; cancelButton.disabled = false; } }
       }
       function showLogin() {
+        authContextEpoch++;
+        clearInterval(cloudAccessRefreshTimer); cloudAccessRefreshTimer = null;
+        clearTimeout(cloudSaveTimer); cloudSaveTimer = null; cloudDirty = false; pendingCloudState = null;
+        activeUser = null; syncMode = 'local'; cloudAccessApproved = false; cloudIsAdmin = false; cloudAccessStatus = null;
+        cloudBlocked = false; cloudDirty = false; state = makeInitialState(); adminAccessRows = [];
+        clearInterval(stopwatchInterval); stopwatchInterval = null; clearInterval(timerInterval); timerInterval = null;
+        Object.assign(calculator, makeInitialCalculator()); Object.assign(stopwatch, makeInitialStopwatch()); Object.assign(timer, makeInitialTimer());
+        clearWorkspacePresentation();
+        ['import-dialog','pending-dialog','task-dialog','habit-dialog','widget-dialog','access-admin-confirm-dialog','password-recovery-dialog'].forEach(id => { const dialog=document.getElementById(id); if (dialog.open) dialog.close(); });
+        clearTransientCredentials();
+        pendingAccessAction = null;
+        setAdminNavigation(false);
+        setAuthPanel('login-form');
         document.getElementById('auth-screen').hidden = false;
         document.querySelector('.app-shell').hidden = true;
         document.querySelector('.mobile-nav').hidden = true;
-        document.getElementById('login-name').focus();
+        document.getElementById('login-email').focus();
       }
       function showApp() {
+        if (syncMode === 'cloud' && (!activeUser || !cloudAccessApproved)) { showAccessStatus(cloudAccessStatus || 'pending'); return; }
+        if (syncMode === 'local' && location.protocol !== 'file:') { showLogin(); return; }
         document.getElementById('auth-screen').hidden = true;
         document.querySelector('.app-shell').hidden = false;
         document.querySelector('.mobile-nav').hidden = false;
-        state = loadState(); Object.assign(calculator, state.calculator || makeInitialCalculator()); Object.assign(stopwatch, state.stopwatch || makeInitialStopwatch()); Object.assign(timer, state.timer || makeInitialTimer()); clearInterval(stopwatchInterval); stopwatchInterval = stopwatch.running ? setInterval(renderStopwatch, 50) : null; clearInterval(timerInterval); timerInterval = timer.running ? setInterval(renderTimer, 200) : null; renderCalculator(); renderStopwatch(); renderTimer(); render();
+        document.getElementById('user-chip').textContent = activeUser?.name || 'Mon espace';
+        updateTransferControls();
+        renderImportConflicts();
+        setAdminNavigation(syncMode === 'cloud' && cloudAccessApproved && cloudIsAdmin);
+        setSyncStatus(syncMode === 'cloud' ? (cloudBlocked ? 'Conflit à résoudre' : 'Compte connecté') : 'Sur cet appareil');
+        Object.assign(calculator, state.calculator || makeInitialCalculator()); Object.assign(stopwatch, state.stopwatch || makeInitialStopwatch()); Object.assign(timer, state.timer || makeInitialTimer()); clearInterval(stopwatchInterval); stopwatchInterval = stopwatch.running ? setInterval(renderStopwatch, 50) : null; clearInterval(timerInterval); timerInterval = timer.running ? setInterval(renderTimer, 200) : null; renderCalculator(); renderStopwatch(); renderTimer(); render();
+      }
+      function cloudDismissKey(userId) { return `${IMPORT_DISMISSED_PREFIX}${userId}`; }
+      function populateImportSources() {
+        const select = document.getElementById('local-source-select');
+        const sources = readLocalDataSources();
+        select.innerHTML = sources.map(source => `<option value="${escapeHTML(source.id)}" data-requires-password="${source.requiresPassword ? 'true' : 'false'}">${escapeHTML(source.name)}</option>`).join('');
+        select.closest('.field').hidden = !sources.length;
+        select.disabled = !sources.length;
+        updateImportPasswordField();
+        return sources;
+      }
+      function updateImportPasswordField() {
+        const select = document.getElementById('local-source-select');
+        const required = select.selectedOptions[0]?.dataset.requiresPassword === 'true';
+        const field = document.getElementById('import-password-field');
+        const input = document.getElementById('import-local-password');
+        field.hidden = !required; input.required = required;
+        if (!required) input.value = '';
+        pendingImportState = null; pendingImportFingerprint = null; pendingImportName = '';
+        document.getElementById('import-profile-file-input').value = '';
+        document.getElementById('profile-import-preview').hidden = true;
+        const source = readLocalDataSources().find(item => item.id === select.value);
+        if (source) {
+          try { setImportPreview(transferableState(localProfileState(source)), source.name); }
+          catch (cause) { document.getElementById('import-error').textContent = cause.message || 'Le profil sélectionné est illisible.'; }
+        }
+      }
+      function openImportDialog(force = false) {
+        if (syncMode !== 'cloud' || !activeUser || !cloudAccessApproved) return;
+        const sources = populateImportSources();
+        if (!force && localStorage.getItem(cloudDismissKey(activeUser.id))) { showApp(); return; }
+        document.getElementById('auth-screen').hidden = true;
+        document.getElementById('import-error').textContent = '';
+        document.getElementById('import-local-password').value = '';
+        document.getElementById('profile-import-preview').hidden = true;
+        pendingImportState = null; pendingImportName = ''; pendingImportFingerprint = null;
+        document.getElementById('import-profile-file').hidden = false;
+        if (sources.length) {
+          const selected = sources.find(item => item.id === document.getElementById('local-source-select').value) || sources[0];
+          try { setImportPreview(transferableState(localProfileState(selected)), selected.name); }
+          catch (cause) { document.getElementById('import-error').textContent = cause.message || 'Le profil sélectionné est illisible.'; }
+        }
+        document.getElementById('import-dialog').showModal();
+      }
+      function updateTransferControls() {
+        const local = syncMode === 'local' && location.protocol === 'file:' && Boolean(activeUser);
+        const cloud = syncMode === 'cloud' && cloudAccessApproved && Boolean(activeUser);
+        document.getElementById('export-local-profile-button').hidden = !local;
+        document.getElementById('import-local-button').hidden = !cloud;
+        document.querySelector('.import-conflicts-access').hidden = !cloud || !(state.importConflicts || []).length;
+      }
+      function downloadJson(name, payload) {
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type:'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a'); link.href = url; link.download = name; link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+      function safeFileLabel(value) { return String(value || 'profil').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9_-]+/g,'-').replace(/^-|-$/g,'').slice(0,48) || 'profil'; }
+      document.getElementById('export-local-profile-button').addEventListener('click', async () => {
+        if (syncMode !== 'local' || location.protocol !== 'file:' || !activeUser) return;
+        try {
+          const profile = { id:activeUser.localId || activeUser.id, admin:Boolean(activeUser.admin) };
+          const exportedState = transferableState(localProfileState(profile));
+          const payload = { format:'organisation-profile', version:1, transferId:crypto.randomUUID(), exportedAt:new Date().toISOString(), sourceName:activeUser.name || 'Profil local', state:exportedState };
+          if (bytesIn(payload) > MAX_IMPORT_FILE_BYTES) throw new Error('export_too_large');
+          downloadJson(`organisation-${safeFileLabel(activeUser.name)}.json`, payload);
+          showToast('Le fichier de profil a été exporté. Il n’est pas chiffré.');
+        } catch (cause) {
+          console.error('Export du profil impossible.', cause);
+          showToast(String(cause.message || '').includes('too_large') ? 'Le profil est trop volumineux pour cet export.' : 'Le profil local ne peut pas être exporté.');
+        }
+      });
+      document.getElementById('import-profile-file').addEventListener('click', () => document.getElementById('import-profile-file-input').click());
+      document.getElementById('import-profile-file-input').addEventListener('change', async event => {
+        const file = event.target.files?.[0];
+        const errorNode = document.getElementById('import-error');
+        pendingImportState = null; pendingImportName = ''; errorNode.textContent = '';
+        if (!file) return;
+        try {
+          if (file.size > MAX_IMPORT_FILE_BYTES) throw new Error('import_too_large');
+          const parsed = await parseProfileTransfer(await file.text());
+          if (syncMode !== 'cloud' || !cloudAccessApproved) throw new Error('import_access_changed');
+          pendingImportState = parsed.state; pendingImportName = parsed.name; pendingImportFingerprint = parsed.fingerprint;
+          setImportPreview(parsed.state, parsed.name);
+        } catch (cause) {
+          console.error('Lecture du fichier de profil impossible.', cause);
+          errorNode.textContent = String(cause.message || '').includes('too_large') ? 'Le fichier est trop volumineux; rien n’a été importé et le fichier reste sur votre appareil.' : 'Ce fichier de profil est invalide ou illisible. Rien n’a été modifié.';
+          event.target.value = '';
+        }
+      });
+      document.querySelector('.import-conflicts-access').addEventListener('click', () => changeView('import-conflicts'));
+      document.getElementById('import-conflicts-list').addEventListener('click', async event => {
+        const exportButton = event.target.closest('[data-conflict-export]');
+        const restoreButton = event.target.closest('[data-conflict-restore]');
+        if (exportButton) {
+          const record = (state.importConflicts || []).find(item => item.id === exportButton.dataset.conflictExport);
+          if (record) downloadJson(`organisation-copie-${safeFileLabel(record.key)}.json`, { format:'organisation-conflict-copy', version:1, conflict:record });
+        }
+        if (restoreButton) {
+          const record = (state.importConflicts || []).find(item => item.id === restoreButton.dataset.conflictId && !item.resolved);
+          if (!record || !cloudAccessApproved || syncMode !== 'cloud') return;
+          const restorationArchive = String(record.kind || '').startsWith('restauration-');
+          pendingConflictRestore = { id:record.id, side:restoreButton.dataset.conflictRestore };
+          document.getElementById('conflict-restore-message').textContent = pendingConflictRestore.side === 'local'
+            ? `${restorationArchive ? 'Restaurer la version remplacée' : 'Restaurer la copie importée'} « ${record.key} » ? La valeur actuelle sera d’abord conservée dans les archives.`
+            : restorationArchive ? `Garder la version restaurée pour « ${record.key} » ? La version remplacée restera archivée.`
+              : `Conserver la version en ligne pour « ${record.key} » ? La copie importée restera archivée.`;
+          document.getElementById('conflict-restore-dialog').showModal();
+        }
+      });
+      async function applyConflictRestore(working, record, side) {
+        if (side === 'local') {
+          const dataKind = String(record.kind || '').startsWith('restauration-') ? record.kind.slice('restauration-'.length) : record.kind;
+          if (dataKind === 'task' || dataKind === 'habit') {
+            const collection = dataKind === 'task' ? working.tasks : working.habits;
+            const duplicate = structuredClone(record.localValue);
+            duplicate.id = `${duplicate.id}-restaure-${crypto.randomUUID()}`;
+            collection.push(duplicate);
+          } else {
+            const selected = structuredClone(record.localValue);
+            if (!['note','widget','calculator','stopwatch','timer'].includes(dataKind)) throw new Error('conflict_kind_unsupported');
+            const current = dataKind === 'note' ? working.notes[record.key] : dataKind === 'widget' ? working.widgets.find(item => item.type === record.key) : working[dataKind];
+            const backupFingerprint = await fingerprintState({ kind:`restauration-${dataKind}`, key:record.key, current, selected });
+            const priorBackup = working.importConflicts.find(item => item.fingerprint === backupFingerprint);
+            if (priorBackup) { priorBackup.resolved = false; delete priorBackup.resolvedAt; }
+            else working.importConflicts.push({ id:`conflict-${backupFingerprint.slice(0,24)}`, fingerprint:backupFingerprint, kind:`restauration-${dataKind}`, key:record.key, source:'Valeur remplacée pendant la restauration', importedAt:new Date().toISOString(), localValue:current ?? null, cloudValue:selected, resolved:false });
+            if (dataKind === 'note') {
+              if (selected === null) delete working.notes[record.key];
+              else working.notes[record.key] = selected;
+            } else if (dataKind === 'widget') {
+              working.widgets = working.widgets.filter(item => item.type !== record.key);
+              if (selected) working.widgets.push(selected);
+            }
+            else working[dataKind] = selected;
+          }
+        }
+        record.resolved = true; record.resolvedAt = new Date().toISOString();
+        if (bytesIn(working) > MAX_CLOUD_STATE_BYTES) throw new Error('import_too_large');
+        return working;
+      }
+      document.getElementById('conflict-restore-dialog').addEventListener('cancel', () => { pendingConflictRestore = null; });
+      document.getElementById('confirm-conflict-restore').addEventListener('click', async () => {
+        const choice = pendingConflictRestore;
+        const button = document.getElementById('confirm-conflict-restore');
+        if (!choice || !activeUser || !cloudAccessApproved || syncMode !== 'cloud') return;
+        const ownerId = activeUser.id; const epoch = authContextEpoch;
+        button.disabled = true;
+        try {
+          const { data:sessionData, error:sessionError } = await supabaseClient.auth.getUser();
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+          if (sessionError || sessionData.user?.id !== ownerId) throw sessionError || new Error('auth_context_mismatch');
+          const working = structuredClone(state);
+          const record = working.importConflicts.find(item => item.id === choice.id && !item.resolved);
+          if (!record) throw new Error('conflict_missing');
+          await applyConflictRestore(working, record, choice.side);
+          state = working; saveState(); render(); renderImportConflicts(); updateTransferControls();
+          document.getElementById('conflict-restore-dialog').close(); pendingConflictRestore = null;
+          const restorationArchive = String(record.kind || '').startsWith('restauration-');
+          showToast(choice.side === 'local'
+            ? `${restorationArchive ? 'La version remplacée' : 'La copie importée'} a été restaurée et la valeur précédente est archivée.`
+            : restorationArchive ? 'La version restaurée est conservée; la version remplacée reste archivée.' : 'La version en ligne est conservée; la copie reste archivée.');
+        } catch (cause) {
+          console.error('Restauration de la copie impossible.', cause);
+          showToast(String(cause.message || '').includes('too_large') ? 'L’archive dépasserait la limite. Rien n’a été modifié.' : 'La restauration a échoué; les données archivées restent conservées.');
+        } finally { if (isCurrentCloudContext(ownerId, epoch)) button.disabled = false; }
+      });
+      async function openCloudWorkspace(user) {
+        const epoch = ++authContextEpoch;
+        activeUser = { id:user.id, email:user.email || '', name:user.user_metadata?.display_name || (user.email ? user.email.split('@')[0] : 'Mon espace') };
+        syncMode = 'cloud'; cloudBlocked = false; cloudDirty = false; cloudAccessApproved = false; cloudIsAdmin = false; state = makeInitialState();
+        clearInterval(cloudAccessRefreshTimer); cloudAccessRefreshTimer = null; setAdminNavigation(false);
+        const access = await resolveCloudAccess(user, epoch);
+        if (!access || !isCurrentCloudContext(user.id, epoch)) return;
+        cloudAccessStatus = access.status;
+        cloudIsAdmin = access.isAdmin;
+        if (!access.username) {
+          document.getElementById('auth-screen').hidden = false;
+          document.querySelector('.app-shell').hidden = true;
+          document.querySelector('.mobile-nav').hidden = true;
+          document.getElementById('claim-username-error').textContent = '';
+          setAuthPanel('username-claim-card');
+          document.getElementById('claim-username').focus();
+          return;
+        }
+        if (access.status !== 'approved') { showAccessStatus(access.status); return; }
+        cloudAccessApproved = true;
+        startCloudAccessPolling();
+        const { data, error } = await supabaseClient.from('organisation_states').select('state,version').maybeSingle();
+        if (!isCurrentCloudContext(user.id, epoch) || !cloudAccessApproved) return;
+        if (error) throw error;
+        const confirmedAccess = await resolveCloudAccess(user, epoch);
+        if (!confirmedAccess || !isCurrentCloudContext(user.id, epoch)) return;
+        if (confirmedAccess.status !== 'approved') { cloudAccessStatus = confirmedAccess.status; showAccessStatus(confirmedAccess.status); return; }
+        cloudIsAdmin = confirmedAccess.isAdmin;
+        cloudVersion = Number(data?.version || 0);
+        state = data ? loadState(activeUser, data.state, false) : makeInitialState();
+        const pendingKey = `${CLOUD_PENDING_PREFIX}${activeUser.id}`;
+        try {
+          const pendingRaw = localStorage.getItem(pendingKey);
+          if (pendingRaw) {
+            pendingCloudState = loadState(activeUser, JSON.parse(pendingRaw), false);
+            document.getElementById('auth-screen').hidden = true;
+            document.querySelector('.app-shell').hidden = true;
+            document.querySelector('.mobile-nav').hidden = true;
+            document.getElementById('pending-error').textContent = '';
+            document.getElementById('pending-dialog').showModal();
+            return;
+          }
+        } catch (cause) {
+          console.error('La copie locale en attente est illisible.', cause);
+          throw new Error('Une copie locale en attente est illisible. Elle reste conservée sur cet appareil; aucune donnée en ligne n’a été remplacée.');
+        }
+        if (data?.state) localStorage.setItem(`${CLOUD_CACHE_PREFIX}${activeUser.id}`, JSON.stringify(state));
+        if (!localStorage.getItem(cloudDismissKey(activeUser.id)) && readLocalDataSources().length) openImportDialog();
+        else showApp();
+      }
+      async function recoverPendingCopy(useLocalCopy) {
+        const errorNode = document.getElementById('pending-error');
+        const mergeButton = document.getElementById('merge-pending-copy');
+        const keepButton = document.getElementById('keep-online-copy');
+        if (!activeUser || !pendingCloudState || !cloudAccessApproved || syncMode !== 'cloud') return;
+        const ownerId = activeUser.id;
+        const epoch = authContextEpoch;
+        const pendingKey = `${CLOUD_PENDING_PREFIX}${ownerId}`;
+        mergeButton.disabled = true; keepButton.disabled = true; errorNode.textContent = '';
+        try {
+          if (useLocalCopy) {
+            const originalPending = localStorage.getItem(pendingKey) ?? JSON.stringify(pendingCloudState);
+            const recoveryKey = `${CLOUD_RECOVERY_PREFIX}${ownerId}:merged-${Date.now()}-${Math.random().toString(16).slice(2,8)}`;
+            localStorage.setItem(recoveryKey, originalPending);
+            if (localStorage.getItem(recoveryKey) !== originalPending) throw new Error('La copie d’origine n’a pas pu être archivée.');
+            const mergedState = await mergeImportedState(pendingCloudState, state, 'Copie locale en attente');
+            if (bytesIn(mergedState) > MAX_CLOUD_STATE_BYTES) throw new Error('import_too_large');
+            state = mergedState;
+            localStorage.setItem(pendingKey, JSON.stringify(state));
+            localStorage.setItem(`${CLOUD_CACHE_PREFIX}${ownerId}`, JSON.stringify(state));
+            cloudDirty = true;
+            const snapshot = JSON.parse(JSON.stringify(state));
+            await syncCloudSnapshot(snapshot, ownerId, supabaseClient, epoch);
+            if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+            showToast('La copie locale a été fusionnée et synchronisée.');
+          } else {
+            const recoveryKey = `${CLOUD_RECOVERY_PREFIX}${ownerId}:${Date.now()}`;
+            localStorage.setItem(recoveryKey, localStorage.getItem(pendingKey) || JSON.stringify(pendingCloudState));
+            localStorage.removeItem(pendingKey);
+            cloudDirty = false;
+            showToast('La copie locale est conservée sur cet appareil et pourra être importée plus tard.');
+          }
+          if (!isCurrentCloudContext(ownerId, epoch)) return;
+          pendingCloudState = null;
+          document.getElementById('pending-dialog').close();
+          showApp();
+        } catch (cause) {
+          if (!isCurrentCloudContext(ownerId, epoch)) return;
+          console.error('Récupération de la copie locale impossible.', cause);
+          errorNode.textContent = String(cause.message || '').includes('state_conflict') ? 'Les données en ligne ont changé. Rechargez pour revoir les deux versions.' : 'La copie locale est conservée; vérifiez la connexion puis réessayez.';
+        } finally { if (isCurrentCloudContext(ownerId, epoch)) { mergeButton.disabled = false; keepButton.disabled = false; } }
+      }
+      async function syncCloudSnapshot(snapshot, ownerId, client=supabaseClient, contextEpoch=authContextEpoch) {
+        if (!cloudAccessApproved || !isCurrentCloudContext(ownerId, contextEpoch)) throw new Error('auth_context_stale');
+        const snapshotText = JSON.stringify(snapshot);
+        const pendingKey = `${CLOUD_PENDING_PREFIX}${ownerId}`;
+        const expectedVersion = cloudVersion;
+        const { data:sessionData, error:sessionError } = await client.auth.getUser();
+        if (!isCurrentCloudContext(ownerId, contextEpoch) || !cloudAccessApproved) throw new Error('auth_context_stale');
+        if (sessionError) throw sessionError;
+        if (!sessionData.user || sessionData.user.id !== ownerId) throw new Error('auth_context_mismatch');
+        const { data, error } = await client.rpc('save_organisation_state', { p_state:snapshot, p_expected_version:expectedVersion, p_expected_user_id:ownerId });
+        if (!isCurrentCloudContext(ownerId, contextEpoch) || !cloudAccessApproved) return null;
+        if (error) {
+          if (String(error.message || '').includes('state_conflict') || error.code === '40001') {
+            if (activeUser?.id === ownerId) { cloudBlocked = true; setSyncStatus('Conflit à résoudre'); }
+          }
+          throw error;
+        }
+        const returnedVersion = Number(data);
+        if (localStorage.getItem(pendingKey) === snapshotText) {
+          localStorage.setItem(`${CLOUD_CACHE_PREFIX}${ownerId}`, snapshotText);
+          localStorage.removeItem(pendingKey);
+        }
+        if (activeUser?.id === ownerId) {
+          cloudVersion = returnedVersion;
+          cloudDirty = Boolean(localStorage.getItem(pendingKey));
+          cloudBlocked = false;
+          setSyncStatus(cloudDirty ? 'Enregistrement…' : 'Synchronisé');
+          if (cloudDirty) scheduleCloudSave();
+        }
+        return returnedVersion;
+      }
+      function scheduleCloudSave() {
+        if (!cloudAccessApproved || cloudBlocked || syncMode !== 'cloud') return;
+        clearTimeout(cloudSaveTimer);
+        const ownerId = activeUser?.id;
+        const epoch = authContextEpoch;
+        const client = supabaseClient;
+        const snapshot = JSON.parse(JSON.stringify(state));
+        cloudSaveTimer = setTimeout(() => {
+          cloudSaveChain = cloudSaveChain.then(async () => {
+            if (cloudBlocked || !client || !cloudAccessApproved || !isCurrentCloudContext(ownerId, epoch)) return;
+            try {
+              await syncCloudSnapshot(snapshot, ownerId, client, epoch);
+            } catch (error) {
+              if (isCurrentCloudContext(ownerId, epoch)) {
+                if (String(error.message || '').includes('state_conflict') || error.code === '40001') {
+                  cloudBlocked = true;
+                  setSyncStatus('Conflit à résoudre');
+                  showToast('Une modification plus récente existe en ligne. Cette copie reste sur cet appareil; rechargez avant de reprendre.');
+                } else {
+                  setSyncStatus('Hors ligne · copie locale conservée');
+                  showToast('La synchronisation est indisponible. La copie de cet appareil est conservée.');
+                }
+              }
+              console.error('Échec de synchronisation.', error);
+            }
+          });
+        }, 650);
+      }
+      async function flushCloudSave() {
+        if (!activeUser || !cloudAccessApproved || syncMode !== 'cloud') return;
+        const ownerId = activeUser.id;
+        const epoch = authContextEpoch;
+        clearTimeout(cloudSaveTimer);
+        await cloudSaveChain;
+        if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+        if (cloudDirty && !cloudBlocked) {
+          await syncCloudSnapshot(JSON.parse(JSON.stringify(state)), ownerId, supabaseClient, epoch);
+        }
+      }
+      async function usernameAuthAction(action, username, password='', accessToken='') {
+        const headers = { 'Content-Type':'application/json', 'apikey':SUPABASE_PUBLISHABLE_KEY };
+        if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/username-auth`, {
+          method:'POST', headers, cache:'no-store',
+          body:JSON.stringify({ action, username, ...(password ? { password } : {}) })
+        });
+        let body = {};
+        try { body = await response.json(); } catch { /* report a generic unavailable result below */ }
+        if (!response.ok) throw new Error(body.error || body.message || 'username_auth_unavailable');
+        return body;
+      }
+      async function signInOnline(identifier, password) {
+        const epoch = authContextEpoch;
+        let user;
+        if (identifier.includes('@')) {
+          const { data, error } = await supabaseClient.auth.signInWithPassword({ email:identifier, password });
+          if (epoch !== authContextEpoch) return;
+          if (error) throw error;
+          user = data.user;
+        } else {
+          const tokens = await usernameAuthAction('sign-in', identifier, password);
+          if (epoch !== authContextEpoch) return;
+          const { data, error } = await supabaseClient.auth.setSession({ access_token:tokens.access_token, refresh_token:tokens.refresh_token });
+          if (error) throw error;
+          user = data.user;
+        }
+        if (epoch !== authContextEpoch) return;
+        await openCloudWorkspace(user);
       }
       document.getElementById('login-form').addEventListener('submit', async event => {
         event.preventDefault();
-        const name = document.getElementById('login-name').value;
+        if (!supabaseClient) return;
+        const identifier = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-password').value;
-        const account = users.find(user => normalizeName(user.name) === normalizeName(name));
         const error = document.getElementById('login-error');
+        const button = document.getElementById('login-button');
+        const epoch = authContextEpoch;
+        button.disabled = true;
         try {
-          if (!account || await hashPassword(password, decodeSalt(account.salt)) !== account.passwordHash) { error.textContent = 'Nom de compte ou mot de passe incorrect.'; return; }
-          activeUser = account; localStorage.setItem(SESSION_KEY, account.id); error.textContent = ''; document.getElementById('login-password').value = ''; showApp();
+          await signInOnline(identifier, password);
+          if (epoch === authContextEpoch) { error.textContent = ''; document.getElementById('login-password').value = ''; }
         } catch (cause) {
-          console.error('Échec de la vérification locale du compte.', cause);
-          error.textContent = 'La vérification sécurisée est bloquée dans cet onglet. Rechargez l’application ou ouvrez-la dans un navigateur compatible.';
-        }
+          if (epoch !== authContextEpoch) return;
+          console.error('Échec de la connexion en ligne.', cause);
+          error.textContent = 'Connexion ou vérification des autorisations impossible. Aucun outil n’a été ouvert; vérifiez vos informations et réessayez.';
+        } finally { button.disabled = false; }
       });
-      document.getElementById('logout-button').addEventListener('click', () => { activeUser = null; localStorage.removeItem(SESSION_KEY); showLogin(); });
-      function renderAccounts() {
-        const list = document.getElementById('account-list');
-        list.innerHTML = users.map(user => `<div class="account-row"><div><strong>${escapeHTML(user.name)}</strong><small>${user.admin ? 'Administrateur' : 'Compte personnel'}</small></div><div class="account-row-actions"><button type="button" class="text-button edit-account" data-id="${escapeHTML(user.id)}">Modifier</button>${user.admin ? '' : `<button type="button" class="text-button delete-account" data-id="${escapeHTML(user.id)}">Supprimer</button>`}</div></div>`).join('');
-      }
-      function resetAccountForm() {
-        document.getElementById('account-form').reset(); document.getElementById('account-id').value = '';
-        document.getElementById('account-form-heading').textContent = 'Créer un compte'; document.getElementById('save-account').textContent = 'Créer le compte';
-        document.getElementById('account-password').required = true; document.getElementById('password-hint').textContent = '(12 caractères minimum)';
-        document.getElementById('cancel-account-edit').hidden = true;
-      }
-      document.getElementById('manage-accounts').addEventListener('click', () => { renderAccounts(); resetAccountForm(); document.getElementById('account-dialog').showModal(); });
-      document.getElementById('close-accounts').addEventListener('click', () => document.getElementById('account-dialog').close());
-      document.getElementById('cancel-account-edit').addEventListener('click', resetAccountForm);
-      document.getElementById('account-list').addEventListener('click', event => {
-        const edit = event.target.closest('.edit-account');
-        if (edit) {
-          const account = users.find(user => user.id === edit.dataset.id); if (!account) return;
-          document.getElementById('account-id').value = account.id; document.getElementById('account-name').value = account.name;
-          document.getElementById('account-password').value = ''; document.getElementById('account-password').required = false;
-          document.getElementById('account-form-heading').textContent = `Modifier ${account.name}`; document.getElementById('save-account').textContent = 'Enregistrer';
-          document.getElementById('password-hint').textContent = '(laisser vide pour conserver)'; document.getElementById('cancel-account-edit').hidden = false;
-        }
-        const remove = event.target.closest('.delete-account');
-        if (remove) {
-          const account = users.find(user => user.id === remove.dataset.id); if (!account || !window.confirm(`Supprimer le compte « ${account.name} » et ses données sur cet appareil ?`)) return;
-          localStorage.removeItem(`le-fil-data-v1:${account.id}`); users = users.filter(user => user.id !== account.id); if (localStorage.getItem(SESSION_KEY) === account.id) localStorage.removeItem(SESSION_KEY); saveUsers(); renderAccounts(); showToast('Le compte a été supprimé.');
-        }
+      document.getElementById('show-access-request').addEventListener('click', () => {
+        if (!supabaseClient || location.protocol === 'file:') return;
+        authContextEpoch++;
+        document.getElementById('access-request-error').textContent = '';
+        const requestButton = document.getElementById('send-access-request');
+        requestButton.disabled = false; requestButton.textContent = 'Envoyer ma demande';
+        setAuthPanel('access-request-form');
+        document.getElementById('access-request-title').focus();
       });
-      document.getElementById('account-form').addEventListener('submit', async event => {
-        event.preventDefault(); const id = document.getElementById('account-id').value; const name = document.getElementById('account-name').value.trim(); const password = document.getElementById('account-password').value;
-        if (users.some(user => user.id !== id && normalizeName(user.name) === normalizeName(name))) { showToast('Ce nom de compte est déjà utilisé.'); return; }
-        if (!id && password.length < 12) { showToast('Choisissez un mot de passe de 12 caractères minimum.'); return; }
-        const account = id ? users.find(user => user.id === id) : { id:`user-${crypto.randomUUID()}`, name, admin:false, salt:'', passwordHash:'' };
-        if (!account) return; account.name = name;
-        if (password) { account.salt = makeSalt(); account.passwordHash = await hashPassword(password, decodeSalt(account.salt)); }
-        if (!id) users.push(account); saveUsers(); renderAccounts(); resetAccountForm(); showToast(id ? 'Le compte a été modifié.' : 'Le compte a été créé.');
+      document.getElementById('back-to-login').addEventListener('click', () => { authContextEpoch++; setAuthPanel('login-form'); document.getElementById('login-email').focus(); });
+      document.getElementById('claim-username-form').addEventListener('submit', async event => {
+        event.preventDefault();
+        if (!supabaseClient || !activeUser || syncMode !== 'cloud') return;
+        const button = document.getElementById('claim-username-button');
+        const errorNode = document.getElementById('claim-username-error');
+        const username = document.getElementById('claim-username').value.trim();
+        const ownerId = activeUser.id;
+        const epoch = authContextEpoch;
+        button.disabled = true; errorNode.textContent = '';
+        try {
+          const { data, error } = await supabaseClient.auth.getSession();
+          if (!isCurrentCloudContext(ownerId, epoch)) return;
+          if (error || !data.session?.access_token) throw error || new Error('session_missing');
+          await usernameAuthAction('claim-username', username, '', data.session.access_token);
+          if (!isCurrentCloudContext(ownerId, epoch)) return;
+          const { data:userData, error:userError } = await supabaseClient.auth.getUser();
+          if (!isCurrentCloudContext(ownerId, epoch)) return;
+          if (userError || !userData.user || userData.user.id !== ownerId) throw userError || new Error('session_user_changed');
+          document.getElementById('claim-username').value = '';
+          await openCloudWorkspace(userData.user);
+        } catch (cause) {
+          if (!isCurrentCloudContext(ownerId, epoch)) return;
+          console.error('Enregistrement de l’identifiant impossible.', cause);
+          errorNode.textContent = String(cause.message || '').includes('username_auth_unavailable') ? 'Le service de choix d’identifiant n’est pas encore disponible.' : 'Cet identifiant est indisponible ou la session doit être confirmée. Réessayez.';
+        } finally { if (isCurrentCloudContext(ownerId, epoch)) button.disabled = false; }
+      });
+      document.getElementById('claim-username-sign-out').addEventListener('click', async () => {
+        authContextEpoch++; activeUser = null; syncMode = 'local'; cloudAccessApproved = false; cloudIsAdmin = false; cloudAccessStatus = null;
+        try { await supabaseClient?.auth.signOut(); } catch (cause) { console.error('Déconnexion impossible.', cause); }
+        showLogin();
+      });
+      document.getElementById('access-request-form').addEventListener('submit', async event => {
+        event.preventDefault();
+        if (!supabaseClient || location.protocol === 'file:') return;
+        const button = document.getElementById('send-access-request');
+        const errorNode = document.getElementById('access-request-error');
+        const displayName = document.getElementById('request-display-name').value.trim();
+        const email = document.getElementById('request-email').value.trim();
+        const password = document.getElementById('request-password').value;
+        const epoch = ++authContextEpoch;
+        button.disabled = true; button.textContent = 'Envoi…'; errorNode.textContent = '';
+        try {
+          const { data, error } = await supabaseClient.auth.signUp({ email, password, options:{ data:{ display_name:displayName } } });
+          if (epoch !== authContextEpoch) return;
+          if (error) throw error;
+          document.getElementById('request-password').value = '';
+          if (data.session?.user) await openCloudWorkspace(data.session.user);
+          else showAccessStatus('pending', { requestSent:true, canRefresh:false });
+        } catch (cause) {
+          if (epoch !== authContextEpoch) return;
+          console.error('Envoi de la demande d’accès impossible.', cause);
+          errorNode.textContent = 'La demande n’a pas pu être envoyée. Vérifiez les informations ou connectez-vous si vous avez déjà un compte.';
+        } finally { if (epoch === authContextEpoch) { button.disabled = false; button.textContent = 'Envoyer ma demande'; } }
+      });
+      document.getElementById('check-access-status').addEventListener('click', async () => {
+        const button = document.getElementById('check-access-status');
+        const errorNode = document.getElementById('access-status-error');
+        if (!activeUser || !supabaseClient) { showLogin(); return; }
+        const ownerId = activeUser.id;
+        const epoch = authContextEpoch;
+        button.disabled = true; button.textContent = 'Vérification…'; errorNode.textContent = '';
+        try {
+          const { data, error } = await supabaseClient.auth.getUser();
+          if (!isCurrentCloudContext(ownerId, epoch)) return;
+          if (error || !data.user) throw error || new Error('session_missing');
+          await openCloudWorkspace(data.user);
+        } catch (cause) {
+          if (!isCurrentCloudContext(ownerId, epoch)) return;
+          console.error('Vérification de l’accès impossible.', cause);
+          errorNode.textContent = 'Le statut ne peut pas être vérifié pour le moment. Réessayez plus tard.';
+        } finally { if (isCurrentCloudContext(ownerId, epoch)) { button.disabled = false; button.textContent = 'Vérifier le statut'; } }
+      });
+      document.getElementById('access-status-sign-out').addEventListener('click', async () => {
+        authContextEpoch++; activeUser = null; cloudAccessApproved = false; cloudIsAdmin = false; cloudAccessStatus = null; state = makeInitialState();
+        try { if (supabaseClient) await supabaseClient.auth.signOut(); }
+        catch (cause) { console.error('Déconnexion impossible.', cause); }
+        syncMode = 'local'; showLogin();
+      });
+      document.getElementById('reset-password-button').addEventListener('click', async () => {
+        const identifier = document.getElementById('login-email').value.trim();
+        const error = document.getElementById('login-error');
+        if (!supabaseClient || !identifier) { error.textContent = 'Saisissez d’abord votre adresse e-mail ou votre nom d’utilisateur.'; return; }
+        try {
+          if (identifier.includes('@')) {
+            const { error: resetError } = await supabaseClient.auth.resetPasswordForEmail(identifier, { redirectTo:location.href });
+            if (resetError) throw resetError;
+          } else await usernameAuthAction('reset-password', identifier);
+          error.textContent = 'Si cet identifiant correspond à un compte, un e-mail de récupération a été envoyé.';
+        } catch (cause) { console.error('Envoi du lien de récupération impossible.', cause); error.textContent = 'Impossible d’envoyer le lien. Vérifiez l’adresse e-mail puis réessayez.'; }
+      });
+      document.getElementById('password-recovery-form').addEventListener('submit', async event => {
+        event.preventDefault();
+        const button = document.getElementById('save-new-password');
+        const errorNode = document.getElementById('password-recovery-error');
+        button.disabled = true; errorNode.textContent = '';
+        try {
+          const password = document.getElementById('new-password').value;
+          const { data, error } = await supabaseClient.auth.updateUser({ password });
+          if (error) throw error;
+          document.getElementById('password-recovery-dialog').close();
+          document.getElementById('new-password').value = '';
+          history.replaceState(null, '', `${location.pathname}${location.search}`);
+          if (data.user) await openCloudWorkspace(data.user);
+        } catch (cause) { console.error('Mise à jour du mot de passe impossible.', cause); errorNode.textContent = 'Mot de passe refusé. Vérifiez les règles du compte puis réessayez.'; }
+        finally { button.disabled = false; }
+      });
+      document.getElementById('local-mode-button').addEventListener('click', openLocalAccessDialog);
+      document.getElementById('close-local-access').addEventListener('click', () => document.getElementById('local-access-dialog').close());
+      document.getElementById('local-access-form').addEventListener('submit', async event => {
+        event.preventDefault();
+        if (location.protocol !== 'file:') return;
+        const enteredName = normalizeName(document.getElementById('local-profile-name').value);
+        const matches = readLocalUsers().filter(user => hasLegacyCredentials(user) && normalizeName(String(user.name || 'Compte local')) === enteredName);
+        const errorNode = document.getElementById('local-access-error');
+        const button = document.getElementById('open-local-profile');
+        if (matches.length !== 1) { errorNode.textContent = matches.length ? 'Ce nom correspond à plusieurs profils. Demandez à l’administrateur de les distinguer avant de continuer.' : 'Aucun profil local ne correspond exactement à ce nom.'; return; }
+        const profile = matches[0];
+        const id = profile.id;
+        button.disabled = true; errorNode.textContent = '';
+        try {
+          if (!await verifyLegacyPassword(id, document.getElementById('local-profile-password').value)) {
+            errorNode.textContent = 'Le mot de passe de ce profil local est incorrect.'; return;
+          }
+          activeUser = { id:profile.id, localId:profile.id, name:String(profile.name || 'Compte local'), admin:Boolean(profile.admin), mode:'local' };
+          localStorage.setItem(SESSION_KEY, profile.id);
+          syncMode = 'local'; cloudBlocked = false; cloudVersion = 0; state = loadState();
+          document.getElementById('local-access-dialog').close(); showApp();
+        } catch (cause) { errorNode.textContent = cause.message || 'La vérification de ce profil local est indisponible.'; }
+        finally { button.disabled = false; }
+      });
+      document.getElementById('new-local-space').addEventListener('click', () => {
+        if (location.protocol !== 'file:') return;
+        const profile = getLocalOnlyProfile();
+        activeUser = { id:profile.id, localId:profile.id, name:profile.name, admin:false, mode:'local' };
+        syncMode = 'local'; cloudBlocked = false; cloudVersion = 0; state = loadState();
+        document.getElementById('local-access-dialog').close(); showApp();
+      });
+      document.getElementById('admin-view').addEventListener('click', event => {
+        const button = event.target.closest('[data-access-change]');
+        if (!button || !cloudAccessApproved || !cloudIsAdmin) return;
+        const row = adminAccessRows.find(item => item.user_id === button.dataset.accessUser);
+        if (row) askAccessStatusChange(row, button.dataset.accessChange);
+      });
+      document.getElementById('refresh-access-list').addEventListener('click', refreshAdminAccessList);
+      document.getElementById('apply-access-admin-confirm').addEventListener('click', applyAccessStatusChange);
+      const closeAccessAdminDialog = () => { document.getElementById('access-admin-confirm-dialog').close(); pendingAccessAction = null; };
+      document.getElementById('close-access-admin-confirm').addEventListener('click', closeAccessAdminDialog);
+      document.getElementById('cancel-access-admin-confirm').addEventListener('click', closeAccessAdminDialog);
+      document.getElementById('access-admin-confirm-dialog').addEventListener('cancel', () => { pendingAccessAction = null; });
+      document.getElementById('local-source-select').addEventListener('change', updateImportPasswordField);
+      document.getElementById('logout-button').addEventListener('click', async () => {
+        authContextEpoch++;
+        if (syncMode === 'cloud' && supabaseClient) {
+          try { await flushCloudSave(); }
+          catch (cause) { console.error('Enregistrement avant déconnexion impossible; la copie reste sur cet appareil.', cause); }
+          await supabaseClient.auth.signOut();
+        }
+        activeUser = null; syncMode = 'local'; cloudBlocked = false; cloudAccessApproved = false; cloudIsAdmin = false; state = makeInitialState(); adminAccessRows = []; showLogin();
+      });
+      document.getElementById('import-local-button').addEventListener('click', () => openImportDialog(true));
+      document.getElementById('skip-import').addEventListener('click', () => {
+        if (activeUser) localStorage.setItem(cloudDismissKey(activeUser.id), '1');
+        document.getElementById('import-local-password').value = '';
+        document.getElementById('import-dialog').close(); showApp();
+      });
+      document.getElementById('close-import').addEventListener('click', () => {
+        if (activeUser) localStorage.setItem(cloudDismissKey(activeUser.id), '1');
+        document.getElementById('import-local-password').value = '';
+        document.getElementById('import-dialog').close(); showApp();
+      });
+      document.getElementById('password-recovery-dialog').addEventListener('cancel', event => {
+        event.preventDefault();
+        document.getElementById('password-recovery-dialog').close();
+        supabaseClient?.auth.signOut().finally(() => showLogin());
+      });
+      document.getElementById('merge-pending-copy').addEventListener('click', () => recoverPendingCopy(true));
+      document.getElementById('keep-online-copy').addEventListener('click', () => recoverPendingCopy(false));
+      document.getElementById('pending-dialog').addEventListener('cancel', event => {
+        event.preventDefault();
+        recoverPendingCopy(false);
+      });
+      document.getElementById('confirm-import').addEventListener('click', async () => {
+        const button = document.getElementById('confirm-import');
+        const errorNode = document.getElementById('import-error');
+        const source = pendingImportState ? { name:pendingImportName || 'Fichier JSON', requiresPassword:false } : readLocalDataSources().find(item => item.id === document.getElementById('local-source-select').value);
+        if (!source || !activeUser || !supabaseClient || !cloudAccessApproved || syncMode !== 'cloud') { errorNode.textContent = 'Les données locales sélectionnées sont introuvables ou l’accès a changé.'; return; }
+        const ownerId = activeUser.id;
+        const epoch = authContextEpoch;
+        button.disabled = true; errorNode.textContent = '';
+        try {
+          await flushCloudSave();
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+          if (source.requiresPassword) {
+            const passwordVerified = await verifyLegacyPassword(source.id, document.getElementById('import-local-password').value);
+            if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+            if (!passwordVerified) { errorNode.textContent = 'Le mot de passe de ce profil local est incorrect.'; return; }
+          }
+          const sourceState = pendingImportState || localProfileState(source);
+          const transferState = transferableState(sourceState);
+          const localState = source.recoveryKey ? sourceState : transferState;
+          if (bytesIn(transferState) > MAX_IMPORT_FILE_BYTES) throw new Error('import_too_large');
+          const transferFingerprint = pendingImportFingerprint || await fingerprintState(transferState);
+          const mergedState = await mergeImportedState(localState, state, pendingImportName || source.name, transferFingerprint);
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+          const { data:sessionData, error:sessionError } = await supabaseClient.auth.getUser();
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+          if (sessionError) throw sessionError;
+          if (!sessionData.user || sessionData.user.id !== ownerId) throw new Error('auth_context_mismatch');
+          const { data, error } = await supabaseClient.rpc('save_organisation_state', { p_state:mergedState, p_expected_version:cloudVersion, p_expected_user_id:ownerId });
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+          if (error) throw error;
+          cloudVersion = Number(data); state = mergedState;
+          localStorage.setItem(`${CLOUD_CACHE_PREFIX}${ownerId}`, JSON.stringify(state));
+          localStorage.setItem(cloudDismissKey(ownerId), '1');
+          document.getElementById('import-dialog').close(); showApp();
+          document.getElementById('import-local-password').value = '';
+          document.getElementById('import-profile-file-input').value = '';
+          pendingImportState = null; pendingImportName = ''; pendingImportFingerprint = null;
+          showToast('Les données ont été ajoutées à l’espace en ligne. La copie locale est conservée.');
+        } catch (cause) {
+          if (!isCurrentCloudContext(ownerId, epoch)) return;
+          console.error('Échec de l’import local.', cause);
+          errorNode.textContent = String(cause.message || '').includes('state_conflict') ? 'Les données en ligne ont changé pendant l’import. Rechargez, puis recommencez.' : String(cause.message || '').includes('too_large') ? 'Le volume dépasserait la limite; rien n’a été modifié et la source reste conservée.' : 'Import impossible. Vérifiez la connexion et la configuration; les données locales sont conservées.';
+        } finally { if (isCurrentCloudContext(ownerId, epoch)) button.disabled = false; }
       });
       setSidebarOpen(!window.matchMedia('(max-width:700px)').matches, false);
       window.matchMedia('(max-width:700px)').addEventListener('change', event => setSidebarOpen(!event.matches, false));
-      ensureAdmin().then(() => {
-        const rememberedAccount = users.find(user => user.id === localStorage.getItem(SESSION_KEY));
-        if (rememberedAccount) { activeUser = rememberedAccount; showApp(); }
-        else { localStorage.removeItem(SESSION_KEY); showLogin(); }
-      }).catch(error => { console.error(error); showLogin(); document.getElementById('login-error').textContent = 'Le stockage sécurisé des comptes est indisponible dans ce navigateur.'; });
+      async function initializeAccess() {
+        // Preserve the link type before Supabase consumes the URL fragment.
+        const authLinkParams = new URLSearchParams(location.hash.replace(/^#/, '') || location.search.replace(/^\?/, ''));
+        const authLinkType = authLinkParams.get('type');
+        const onlineButton = document.getElementById('login-button');
+        const resetButton = document.getElementById('reset-password-button');
+        const requestButton = document.getElementById('show-access-request');
+        const onlineStatus = document.getElementById('online-status');
+        const localFile = location.protocol === 'file:';
+        document.getElementById('local-mode-section').hidden = !localFile;
+        if (localFile) {
+          requestButton.hidden = true;
+          onlineStatus.textContent = 'Le fichier local reste utilisable sur cet appareil. Ouvrez la version en ligne pour retrouver vos données synchronisées.';
+          onlineButton.disabled = true; resetButton.disabled = true; showLogin(); return;
+        }
+        if (!hasCloudConfiguration()) {
+          requestButton.hidden = true;
+          onlineStatus.textContent = 'La connexion en ligne doit être configurée avant de synchroniser vos données.';
+          onlineButton.disabled = true; resetButton.disabled = true; showLogin(); return;
+        }
+        onlineStatus.textContent = 'Connexion au service en ligne…';
+        try {
+          const sdk = await loadSupabaseSdk();
+          const showPasswordSetup = () => {
+            document.getElementById('auth-screen').hidden = true;
+            document.querySelector('.app-shell').hidden = true;
+            document.querySelector('.mobile-nav').hidden = true;
+            const dialog = document.getElementById('password-recovery-dialog');
+            if (!dialog.open) dialog.showModal();
+          };
+          supabaseClient = sdk.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, { auth:{ autoRefreshToken:true, persistSession:true, detectSessionInUrl:true } });
+          supabaseClient.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_OUT') {
+              authContextEpoch++; activeUser = null; syncMode = 'local'; cloudAccessApproved = false; cloudIsAdmin = false; state = makeInitialState();
+              showLogin(); return;
+            }
+            if (session?.user?.id && activeUser?.id && session.user.id !== activeUser.id) {
+              const changedUser = session.user;
+              // Lock the previous account synchronously, then revalidate outside
+              // Supabase's auth callback so its internal lock is not held across
+              // any asynchronous Auth or PostgREST calls.
+              showLogin();
+              queueMicrotask(() => openCloudWorkspace(changedUser).catch(cause => {
+                console.error('Vérification de l’accès impossible après changement de compte.', cause);
+                document.getElementById('login-error').textContent = 'La vérification de l’accès a échoué. Aucun outil n’a été ouvert; réessayez.';
+                showLogin();
+              }));
+              return;
+            }
+            if (event === 'PASSWORD_RECOVERY') {
+              showPasswordSetup();
+            }
+          });
+          const { data, error } = await supabaseClient.auth.getSession();
+          if (error) throw error;
+          onlineButton.disabled = false; resetButton.disabled = false;
+          onlineStatus.textContent = 'Retrouvez vos données sur vos appareils après connexion.';
+          if (data.session?.user) {
+            if (authLinkType === 'recovery' || authLinkType === 'invite') {
+              showPasswordSetup();
+            } else try { await openCloudWorkspace(data.session.user); }
+            catch (cause) { console.error('Chargement des données en ligne impossible.', cause); document.getElementById('login-error').textContent = 'Connexion reconnue, mais chargement des données impossible. Vérifiez la configuration Supabase.'; showLogin(); }
+          } else showLogin();
+        } catch (cause) {
+          console.error('Initialisation de Supabase impossible.', cause);
+          requestButton.hidden = true;
+          onlineStatus.textContent = 'Connexion en ligne indisponible. Aucun outil n’a été ouvert; réessayez plus tard.';
+          onlineButton.disabled = true; resetButton.disabled = true; showLogin();
+        }
+      }
+      document.getElementById('import-dialog').addEventListener('cancel', event => {
+        event.preventDefault();
+        if (activeUser) localStorage.setItem(cloudDismissKey(activeUser.id), '1');
+        document.getElementById('import-dialog').close(); showApp();
+      });
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) verifyActiveCloudAccess(); });
+      document.getElementById('import-local-button').hidden = true;
+      initializeAccess();
     })();
   </script>
 </body>
 </html>
+

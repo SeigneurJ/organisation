@@ -1,0 +1,2 @@
+[functions.username-auth]
+verify_jwt = false

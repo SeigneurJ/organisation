@@ -267,7 +267,35 @@
     .account-card-actions button { min-height:40px; }
     .account-empty { padding:18px 12px; color:var(--muted); text-align:center; }
     .account-actions { display:flex; align-items:center; gap:10px; }
-    .user-chip { border:1px solid var(--line); background:var(--surface); padding:7px 10px; border-radius:20px; font-size:11px; color:var(--sage-dark); }
+    .account-menu-wrap { position:relative; flex:0 1 auto; min-width:0; }
+    .account-menu-toggle { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:44px; max-width:min(220px,45vw); padding:8px 12px; border:1px solid var(--line); border-radius:9px; background:var(--surface); color:var(--ink); font-size:12px; font-weight:600; cursor:pointer; transition:background .16s ease,border-color .16s ease,box-shadow .16s ease; }
+    .account-menu-toggle:hover { background:#f7f8f8; border-color:#cfd3d2; }
+    .account-menu-toggle[aria-expanded="true"] { background:#f1f4f3; border-color:#c7d8d1; }
+    .account-menu-toggle:focus-visible { outline:3px solid rgba(16,163,127,.34); outline-offset:3px; }
+    .account-menu-username { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .account-menu-chevron { width:8px; height:8px; flex:0 0 auto; margin-top:-4px; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:rotate(45deg); transition:transform .16s ease,margin .16s ease; }
+    .account-menu-toggle[aria-expanded="true"] .account-menu-chevron { margin-top:4px; transform:rotate(225deg); }
+    .account-menu { position:absolute; top:calc(100% + 8px); right:0; z-index:30; display:grid; gap:3px; width:max-content; min-width:220px; max-width:min(280px,calc(100vw - 24px)); padding:6px; border:1px solid var(--line); border-radius:11px; background:var(--surface); box-shadow:0 14px 34px rgba(20,22,24,.15); transform-origin:top right; animation:account-menu-in .14s ease-out both; }
+    @keyframes account-menu-in { from { opacity:0; transform:translateY(-4px) scale(.98); } to { opacity:1; transform:translateY(0) scale(1); } }
+    .account-menu-item { display:flex; align-items:center; width:100%; min-height:44px; padding:9px 11px; border:0; border-radius:7px; background:transparent; color:var(--ink); text-align:left; font-size:13px; cursor:pointer; }
+    .account-menu-item:hover,.account-menu-item:focus-visible { background:#f1f4f3; }
+    .account-menu-divider { height:1px; margin:3px 5px; border:0; background:var(--line); }
+    .account-menu-item.logout { color:#9f3528; }
+    .account-menu-item.logout:hover,.account-menu-item.logout:focus-visible { background:#fbefec; }
+    .account-management-dialog { width:min(510px,calc(100vw - 28px)); max-height:calc(100dvh - 24px); overflow-y:auto; overscroll-behavior:contain; }
+    .account-management-form { padding:24px; }
+    .account-management-intro { margin:-10px 0 20px; color:var(--muted); font-size:13px; }
+    .account-management-details { display:grid; gap:7px; margin:0 0 18px; padding:13px 14px; border:1px solid var(--line); border-radius:9px; background:#fafafa; }
+    .account-management-details dt { color:var(--muted); font-size:11px; }
+    .account-management-details dd { min-width:0; margin:0; overflow-wrap:anywhere; font-weight:600; }
+    .account-management-group { margin-top:18px; padding-top:17px; border-top:1px solid var(--line); }
+    .account-management-group h3 { margin:0 0 12px; font-size:14px; font-weight:650; }
+    .account-management-help { margin:-4px 0 12px; color:var(--muted); font-size:11px; line-height:1.45; }
+    .account-management-error { min-height:0; margin:8px 0 0; color:#a33428; font-size:12px; line-height:1.45; }
+    .account-management-error:empty { display:none; }
+    .account-management-success { min-height:20px; margin:10px 0 0; color:#087a5b; font-size:12px; }
+    .account-management-field-error { display:block; min-height:0; margin:5px 0 0; color:#a33428; font-size:11px; }
+    .account-management-field-error:empty { display:none; }
     .sync-status { color:var(--muted); font-size:10px; }
     .account-actions { flex-wrap:wrap; }
     .profile-export-control { display:flex; align-items:center; gap:7px; }
@@ -464,7 +492,7 @@
     .auth-card { border-color:#e5e5e6; border-radius:14px; background:#fff; box-shadow:0 8px 35px rgba(0,0,0,.06); }
     .auth-card h1 { font-size:36px; }
     .auth-note { background:#f5f5f6; border-radius:8px; }
-    .user-chip { border-color:#e1e1e2; border-radius:8px; color:#37383b; background:#fff; }
+    .account-menu-toggle { border-color:#e1e1e2; border-radius:8px; color:#37383b; background:#fff; }
     .account-row { border-color:#e6e6e7; border-radius:9px; }
     .account-form-title { font:600 17px var(--sans); }
     @media (max-width:930px) {
@@ -486,6 +514,10 @@
       .account-card-actions { justify-content:stretch; }
       .account-card-actions > button { flex:1 1 100%; }
       .account-actions { gap:8px; }
+      .account-menu-toggle { max-width:min(190px,48vw); }
+      .account-menu { min-width:min(220px,calc(100vw - 24px)); }
+      .account-management-form { padding:19px; }
+      .account-management-dialog .form-row { grid-template-columns:minmax(0,1fr); }
       .profile-export-control { flex-basis:100%; justify-content:flex-end; flex-wrap:wrap; }
       .profile-privacy { flex-basis:100%; text-align:right; }
       .import-conflicts-access { flex-basis:100%; text-align:right; }
@@ -630,7 +662,7 @@
       <div class="topline">
         <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Ouvrir le menu" aria-controls="main-sidebar" aria-expanded="false"><span class="hamburger" aria-hidden="true"><i></i><i></i><i></i></span></button>
         <div class="today-stamp"><span class="sun-mark" aria-hidden="true">☼</span><span class="date-label" id="date-label"></span></div>
-        <div class="account-actions"><span class="sync-status" id="sync-status" role="status"></span><span class="user-chip" id="user-chip">Jérémie</span><div class="profile-export-control"><button class="text-button" id="export-local-profile-button" type="button" hidden>Exporter le profil local</button><p class="profile-privacy">Fichier JSON non chiffr&eacute; contenant des donn&eacute;es personnelles; &agrave; conserver dans un endroit priv&eacute;.</p></div><button class="text-button import-conflicts-access" type="button" data-view="import-conflicts" hidden>Copies importées à examiner</button><button class="text-button" id="import-local-button" type="button" hidden>Importer des données locales</button><button class="text-button" id="logout-button" type="button">Quitter</button></div>
+        <div class="account-actions"><span class="sync-status" id="sync-status" role="status"></span><div class="account-menu-wrap"><button class="account-menu-toggle" id="account-menu-toggle" type="button" aria-controls="account-menu" aria-haspopup="menu" aria-expanded="false"><span class="account-menu-username" id="account-menu-username"></span><span class="account-menu-chevron" aria-hidden="true"></span></button><div class="account-menu" id="account-menu" role="menu" aria-label="Menu du compte" hidden><button class="account-menu-item" id="manage-account-button" type="button" role="menuitem">Gérer mon compte</button><hr class="account-menu-divider"><button class="account-menu-item logout" id="logout-button" type="button" role="menuitem">Se déconnecter</button></div></div><div class="profile-export-control"><button class="text-button" id="export-local-profile-button" type="button" hidden>Exporter le profil local</button><p class="profile-privacy">Fichier JSON non chiffr&eacute; contenant des donn&eacute;es personnelles; &agrave; conserver dans un endroit priv&eacute;.</p></div><button class="text-button import-conflicts-access" type="button" data-view="import-conflicts" hidden>Copies importées à examiner</button><button class="text-button" id="import-local-button" type="button" hidden>Importer des données locales</button></div>
       </div>
       <aside id="app-update-notice" hidden role="status" aria-live="polite">
         <p id="app-update-message"></p>
@@ -726,6 +758,28 @@
     <button class="nav-item" data-view="stopwatch"><span class="nav-icon" aria-hidden="true">◴</span><span>Chronomètre</span></button>
     <button class="nav-item admin-only" data-view="admin" hidden aria-label="Comptes à valider"><span class="nav-icon" aria-hidden="true">✓</span><span>Comptes</span><span class="nav-count" id="mobile-admin-pending-count">0</span></button>
   </nav>
+
+  <dialog id="account-management-dialog" class="account-management-dialog" aria-labelledby="account-management-title" aria-describedby="account-management-intro">
+    <div class="dialog-form account-management-form">
+      <div class="dialog-heading"><div><p class="eyebrow">Votre espace</p><h2 id="account-management-title">Gérer mon compte</h2></div><button class="close-button" id="account-management-close" type="button" aria-label="Fermer">×</button></div>
+      <p class="account-management-intro" id="account-management-intro">Consultez vos informations et mettez à jour votre identifiant ou votre mot de passe.</p>
+      <dl class="account-management-details"><div><dt>Profil</dt><dd id="account-management-identity"></dd></div><div><dt>Adresse e-mail</dt><dd id="account-management-email"></dd></div></dl>
+      <p class="account-management-error" id="account-management-error" role="alert" aria-live="assertive"></p>
+      <p class="account-management-success" id="account-management-success" role="status" aria-live="polite"></p>
+      <form id="account-username-form" class="account-management-group">
+        <h3>Identifiant</h3>
+        <div class="field"><label for="account-management-username">Pseudo de connexion</label><input id="account-management-username" name="username" type="text" required minlength="3" maxlength="32" pattern="^[A-Za-z][A-Za-z0-9._-]{2,31}$" autocomplete="username" autocapitalize="none" spellcheck="false" aria-describedby="account-management-username-help account-username-error"><span class="account-management-help" id="account-management-username-help">3 à 32 caractères; commencez par une lettre non accentuée, puis utilisez des lettres non accentuées, chiffres, point, tiret bas ou tiret.</span><span class="account-management-field-error" id="account-username-error" aria-live="polite"></span></div>
+        <div class="dialog-actions"><button class="primary-button" id="account-username-save" type="submit">Enregistrer le pseudo</button></div>
+      </form>
+      <form id="account-password-form" class="account-management-group">
+        <h3>Mot de passe</h3>
+        <div class="field"><label for="account-current-password">Mot de passe actuel</label><input id="account-current-password" name="current-password" type="password" required autocomplete="current-password" aria-describedby="account-current-password-error"><span class="account-management-field-error" id="account-current-password-error" aria-live="polite"></span></div>
+        <div class="field"><label for="account-new-password">Nouveau mot de passe</label><input id="account-new-password" name="new-password" type="password" required minlength="8" autocomplete="new-password" aria-describedby="account-new-password-error"><span class="account-management-field-error" id="account-new-password-error" aria-live="polite"></span></div>
+        <div class="field"><label for="account-confirm-password">Confirmer le nouveau mot de passe</label><input id="account-confirm-password" name="confirm-password" type="password" required minlength="8" autocomplete="new-password" aria-describedby="account-confirm-password-error"><span class="account-management-field-error" id="account-confirm-password-error" aria-live="polite"></span></div>
+        <div class="dialog-actions"><button class="secondary-button" id="account-password-save" type="submit">Mettre à jour le mot de passe</button></div>
+      </form>
+    </div>
+  </dialog>
 
   <dialog id="widget-dialog" class="widget-add-dialog" aria-labelledby="widget-dialog-title">
     <div class="dialog-form"><div class="dialog-heading"><div><p class="eyebrow">Composez votre journée</p><h2 id="widget-dialog-title">Ajouter un encart</h2></div><button class="close-button" type="button" aria-label="Fermer" id="close-widget-dialog">×</button></div>
@@ -852,7 +906,7 @@
       const IMPORT_DISMISSED_PREFIX = 'organisation-import-dismissed-v1:';
       const MAX_IMPORT_FILE_BYTES = 512 * 1024;
       const MAX_CLOUD_STATE_BYTES = 768 * 1024;
-      const APP_BUILD_ID = 202610230002;
+      const APP_BUILD_ID = 202610230003;
       const APP_UPDATE_CHECK_INTERVAL_MS = 10 * 60 * 1000;
       const APP_UPDATE_CHECK_COOLDOWN_MS = 45 * 1000;
       const priorityLabels = { high: 'Prioritaire', medium: 'Important', low: 'À mon rythme' };
@@ -1085,6 +1139,10 @@
         if (fullList) fullList.innerHTML = state.habits.map(habitMarkup).join('') || '<p class="empty-state">Aucun rituel pour le moment. Ajoutez-en un quand vous le souhaitez.</p>';
         if (document.getElementById('full-habit-copy')) setHabitProgress('full-habit');
       }
+      function renderAccountUsername() {
+        const label = document.getElementById('account-menu-username');
+        if (label) label.textContent = activeUser?.username || activeUser?.name || 'Mon espace';
+      }
       function renderProgress() {
         const todayTasks = state.tasks.filter(task => !task.due || task.due <= todayISO());
         const done = todayTasks.filter(task => task.done).length;
@@ -1098,7 +1156,7 @@
         ['nav-task-count','mobile-task-count'].forEach(id => document.getElementById(id).textContent = remaining);
         const greeting = state.tasks.length === 0 ? 'Ajoutez les encarts qui vous seront utiles, quand vous le souhaitez.' : remaining === 0 ? 'Vous avez fait votre part. Le reste peut attendre.' : `Il vous reste ${remaining} petite${remaining > 1 ? 's' : ''} chose${remaining > 1 ? 's' : ''} à votre rythme.`;
         const daySummary = document.getElementById('day-summary'); if (daySummary) daySummary.textContent = greeting;
-        document.getElementById('user-chip').textContent = activeUser?.name || '';
+        renderAccountUsername();
         document.getElementById('import-local-button').hidden = syncMode !== 'cloud' || !readLocalDataSources().length;
       }
       function renderNote() {
@@ -1158,7 +1216,7 @@
         renderCalculator(); renderStopwatch(); renderTimer(); render();
       }
       function clearTransientCredentials() {
-        ['login-password','request-password','import-local-password','local-profile-password','new-password'].forEach(id => {
+        ['login-password','request-password','import-local-password','local-profile-password','new-password','account-current-password','account-new-password','account-confirm-password'].forEach(id => {
           const input = document.getElementById(id);
           if (input) input.value = '';
         });
@@ -1945,7 +2003,7 @@
         clearInterval(stopwatchInterval); stopwatchInterval = null; clearInterval(timerInterval); timerInterval = null;
         state = makeInitialState(); Object.assign(calculator, makeInitialCalculator()); Object.assign(stopwatch, makeInitialStopwatch()); Object.assign(timer, makeInitialTimer());
         clearWorkspacePresentation();
-        ['import-dialog','pending-dialog','task-dialog','habit-dialog','widget-dialog','access-admin-confirm-dialog','password-recovery-dialog'].forEach(id => { const dialog=document.getElementById(id); if (dialog.open) dialog.close(); });
+        ['import-dialog','pending-dialog','task-dialog','habit-dialog','widget-dialog','access-admin-confirm-dialog','password-recovery-dialog','account-management-dialog'].forEach(id => { const dialog=document.getElementById(id); if (dialog.open) dialog.close(); });
         clearTransientCredentials();
         pendingAccessAction = null;
         document.querySelector('.app-shell').hidden = true;
@@ -2136,7 +2194,8 @@
         clearInterval(stopwatchInterval); stopwatchInterval = null; clearInterval(timerInterval); timerInterval = null;
         Object.assign(calculator, makeInitialCalculator()); Object.assign(stopwatch, makeInitialStopwatch()); Object.assign(timer, makeInitialTimer());
         clearWorkspacePresentation();
-        ['import-dialog','pending-dialog','task-dialog','habit-dialog','widget-dialog','access-admin-confirm-dialog','password-recovery-dialog'].forEach(id => { const dialog=document.getElementById(id); if (dialog.open) dialog.close(); });
+        setAccountMenuOpen(false);
+        ['import-dialog','pending-dialog','task-dialog','habit-dialog','widget-dialog','access-admin-confirm-dialog','password-recovery-dialog','account-management-dialog'].forEach(id => { const dialog=document.getElementById(id); if (dialog.open) dialog.close(); });
         clearTransientCredentials();
         pendingAccessAction = null;
         setAdminNavigation(false);
@@ -2152,7 +2211,7 @@
         document.getElementById('auth-screen').hidden = true;
         document.querySelector('.app-shell').hidden = false;
         document.querySelector('.mobile-nav').hidden = false;
-        document.getElementById('user-chip').textContent = activeUser?.name || 'Mon espace';
+        renderAccountUsername();
         updateTransferControls();
         renderImportConflicts();
         setAdminNavigation(syncMode === 'cloud' && cloudAccessApproved && cloudIsAdmin);
@@ -2331,6 +2390,8 @@
         clearInterval(cloudAccessRefreshTimer); cloudAccessRefreshTimer = null; setAdminNavigation(false);
         const access = await resolveCloudAccess(user, epoch);
         if (!access || !isCurrentCloudContext(user.id, epoch)) return;
+        activeUser.username = access.username;
+        renderAccountUsername();
         cloudAccessStatus = access.status;
         cloudIsAdmin = access.isAdmin;
         if (!access.username) {
@@ -2351,6 +2412,8 @@
         const confirmedAccess = await resolveCloudAccess(user, epoch);
         if (!confirmedAccess || !isCurrentCloudContext(user.id, epoch)) return;
         if (confirmedAccess.status !== 'approved') { cloudAccessStatus = confirmedAccess.status; showAccessStatus(confirmedAccess.status); return; }
+        activeUser.username = confirmedAccess.username || activeUser.username;
+        renderAccountUsername();
         cloudIsAdmin = confirmedAccess.isAdmin;
         cloudVersion = Number(data?.version || 0);
         state = data ? loadState(activeUser, data.state, false) : makeInitialState();
@@ -2694,7 +2757,156 @@
       document.getElementById('cancel-access-admin-confirm').addEventListener('click', closeAccessAdminDialog);
       document.getElementById('access-admin-confirm-dialog').addEventListener('cancel', () => { pendingAccessAction = null; });
       document.getElementById('local-source-select').addEventListener('change', updateImportPasswordField);
+      const accountMenuToggle = document.getElementById('account-menu-toggle');
+      const accountMenu = document.getElementById('account-menu');
+      const accountDialog = document.getElementById('account-management-dialog');
+      const accountMenuItems = () => [...accountMenu.querySelectorAll('[role="menuitem"]')].filter(item => !item.disabled && !item.hidden);
+      function setAccountMenuOpen(open, restoreFocus=false) {
+        accountMenu.hidden = !open;
+        accountMenuToggle.setAttribute('aria-expanded', String(open));
+        if (open) accountMenuItems()[0]?.focus();
+        else if (restoreFocus) accountMenuToggle.focus();
+      }
+      function handleAccountMenuKeydown(event) {
+        const items = accountMenuItems();
+        const index = items.indexOf(document.activeElement);
+        if (event.key === 'Escape') { event.preventDefault(); setAccountMenuOpen(false, true); }
+        else if (event.key === 'Tab') setAccountMenuOpen(false, true);
+        else if (['ArrowDown','ArrowUp','Home','End'].includes(event.key) && items.length) {
+          event.preventDefault();
+          const target = event.key === 'Home' ? 0 : event.key === 'End' ? items.length - 1 : (index + (event.key === 'ArrowDown' ? 1 : items.length - 1)) % items.length;
+          items[target].focus();
+        }
+      }
+      function clearAccountManagementMessages() {
+        ['account-management-error','account-management-success','account-username-error','account-current-password-error','account-new-password-error','account-confirm-password-error'].forEach(id => {
+          const node = document.getElementById(id); if (node) node.textContent = '';
+        });
+      }
+      function clearAccountPasswordFields() {
+        ['account-current-password','account-new-password','account-confirm-password'].forEach(id => { document.getElementById(id).value = ''; });
+      }
+      function openAccountManagement() {
+        if (!activeUser) return;
+        const cloudAccount = syncMode === 'cloud' && cloudAccessApproved && Boolean(activeUser.username);
+        setAccountMenuOpen(false);
+        clearAccountManagementMessages(); clearAccountPasswordFields();
+        document.getElementById('account-management-identity').textContent = cloudAccount ? activeUser.username : (activeUser.name || 'Mon espace');
+        document.getElementById('account-management-email').textContent = cloudAccount ? (activeUser.email || 'Adresse indisponible') : 'Profil enregistré sur cet appareil';
+        document.getElementById('account-management-username').value = cloudAccount ? activeUser.username : '';
+        document.getElementById('account-username-form').hidden = !cloudAccount;
+        document.getElementById('account-password-form').hidden = !cloudAccount;
+        document.getElementById('account-management-intro').textContent = cloudAccount
+          ? 'Consultez vos informations et modifiez votre pseudo ou votre mot de passe.'
+          : 'Ce profil est conservé sur cet appareil. Sa gestion ne nécessite pas de connexion en ligne.';
+        accountDialog.showModal();
+        (cloudAccount ? document.getElementById('account-management-username') : document.getElementById('account-management-close')).focus();
+      }
+      accountMenuToggle.addEventListener('click', () => setAccountMenuOpen(accountMenu.hidden));
+      accountMenu.addEventListener('keydown', handleAccountMenuKeydown);
+      document.addEventListener('pointerdown', event => {
+        if (!event.target?.closest?.('.account-menu-wrap')) setAccountMenuOpen(false);
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && !accountMenu.hidden && !accountDialog.open) setAccountMenuOpen(false, true);
+      });
+      document.getElementById('manage-account-button').addEventListener('click', openAccountManagement);
+      accountDialog.addEventListener('close', () => {
+        clearAccountPasswordFields(); clearAccountManagementMessages();
+        if (!activeUser || !document.getElementById('auth-screen').hidden) return;
+        accountMenuToggle.focus();
+      });
+      document.getElementById('account-management-close').addEventListener('click', () => accountDialog.close());
+      async function submitAccountUsername(event) {
+        event.preventDefault();
+        const button = document.getElementById('account-username-save');
+        const input = document.getElementById('account-management-username');
+        const fieldError = document.getElementById('account-username-error');
+        const summaryError = document.getElementById('account-management-error');
+        const success = document.getElementById('account-management-success');
+        clearAccountManagementMessages();
+        if (syncMode !== 'cloud' || !cloudAccessApproved || !activeUser?.username || !supabaseClient) {
+          summaryError.textContent = 'La modification du pseudo est disponible uniquement pour un compte en ligne approuvé.'; return;
+        }
+        const ownerId = activeUser.id;
+        const epoch = authContextEpoch;
+        const username = input.value.trim();
+        button.disabled = true;
+        try {
+          const { data:sessionData, error:sessionError } = await supabaseClient.auth.getSession();
+          if (sessionError) throw new Error('session_unavailable');
+          if (!isCurrentCloudContext(ownerId, epoch) || sessionData.session?.user?.id !== ownerId) throw new Error('session_changed');
+          const result = await usernameAuthAction('update-username', username, '', sessionData.session.access_token);
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+          if (typeof result.username !== 'string' || !result.username) throw new Error('username_update_failed');
+          activeUser.username = result.username;
+          input.value = result.username;
+          document.getElementById('account-management-identity').textContent = result.username;
+          renderAccountUsername();
+          success.textContent = 'Votre pseudo a été mis à jour.';
+        } catch (cause) {
+          if (!isCurrentCloudContext(ownerId, epoch)) return;
+          const message = String(cause?.message || '');
+          fieldError.textContent = message.startsWith('Cet identifiant') ? message : '';
+          summaryError.textContent = message.startsWith('Session') || message.includes('session')
+            ? 'Votre session a changé ou expiré. Reconnectez-vous puis réessayez.'
+            : fieldError.textContent ? '' : 'Le pseudo n’a pas pu être mis à jour. Vérifiez sa disponibilité puis réessayez.';
+        } finally { if (isCurrentCloudContext(ownerId, epoch)) button.disabled = false; }
+      }
+      document.getElementById('account-username-form').addEventListener('submit', submitAccountUsername);
+      async function submitAccountPassword(event) {
+        event.preventDefault();
+        const button = document.getElementById('account-password-save');
+        const currentInput = document.getElementById('account-current-password');
+        const newInput = document.getElementById('account-new-password');
+        const confirmInput = document.getElementById('account-confirm-password');
+        const currentError = document.getElementById('account-current-password-error');
+        const newError = document.getElementById('account-new-password-error');
+        const confirmError = document.getElementById('account-confirm-password-error');
+        const summaryError = document.getElementById('account-management-error');
+        const success = document.getElementById('account-management-success');
+        clearAccountManagementMessages();
+        if (syncMode !== 'cloud' || !cloudAccessApproved || !activeUser?.username || !supabaseClient) {
+          summaryError.textContent = 'La modification du mot de passe est disponible uniquement pour un compte en ligne approuvé.'; return;
+        }
+        if (newInput.value !== confirmInput.value) {
+          confirmError.textContent = 'Les deux nouveaux mots de passe ne correspondent pas.'; clearAccountPasswordFields(); confirmInput.focus(); return;
+        }
+        const ownerId = activeUser.id;
+        const epoch = authContextEpoch;
+        const username = activeUser.username;
+        const currentPassword = currentInput.value;
+        const newPassword = newInput.value;
+        let passwordStage = 'verify';
+        button.disabled = true;
+        try {
+          const { data:sessionData, error:sessionError } = await supabaseClient.auth.getSession();
+          if (sessionError) throw new Error('session_unavailable');
+          if (!isCurrentCloudContext(ownerId, epoch) || sessionData.session?.user?.id !== ownerId) throw new Error('session_changed');
+          await usernameAuthAction('verify-password', username, currentPassword, sessionData.session.access_token);
+          if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+          passwordStage = 'update';
+          const { data, error } = await supabaseClient.auth.updateUser({ password:newPassword, current_password:currentPassword });
+          if (error) throw new Error(error.code === 'reauthentication_needed' || /reauthentication/i.test(error.message || '') ? 'reauthentication_needed' : 'password_update_failed');
+          if (!isCurrentCloudContext(ownerId, epoch) || data.user?.id !== ownerId) throw new Error('session_changed');
+          success.textContent = 'Votre mot de passe a été mis à jour.';
+        } catch (cause) {
+          if (!isCurrentCloudContext(ownerId, epoch)) return;
+          const message = String(cause?.message || '');
+          if (message.includes('mot de passe actuel est incorrect')) currentError.textContent = message;
+          else if (message.startsWith('Trop de tentatives')) currentError.textContent = message;
+          else if (message === 'reauthentication_needed') summaryError.textContent = 'Supabase demande une authentification récente. Déconnectez-vous, reconnectez-vous puis réessayez.';
+          else if (message.startsWith('Session') || message.includes('session')) summaryError.textContent = 'Votre session a changé ou expiré. Reconnectez-vous puis réessayez.';
+          else if (passwordStage === 'verify') summaryError.textContent = 'La vérification du mot de passe actuel n’a pas abouti. Vérifiez votre session ou réessayez plus tard.';
+          else newError.textContent = 'Le nouveau mot de passe n’a pas été accepté. Vérifiez les règles du compte puis réessayez.';
+        } finally {
+          clearAccountPasswordFields();
+          if (isCurrentCloudContext(ownerId, epoch)) button.disabled = false;
+        }
+      }
+      document.getElementById('account-password-form').addEventListener('submit', submitAccountPassword);
       document.getElementById('logout-button').addEventListener('click', async () => {
+        setAccountMenuOpen(false);
         authContextEpoch++;
         if (syncMode === 'cloud' && supabaseClient) {
           try { await flushCloudSave(); }

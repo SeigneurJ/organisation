@@ -201,15 +201,15 @@ async function handleRequest(request) {
   catch { return jsonResponse({ error:'Requête invalide.' }, 400, origin); }
   const action = body?.action;
   const username = normalizeUsername(body?.username);
-  if (!['sign-in','reset-password','claim-username'].includes(action) || !USERNAME_PATTERN.test(username)) {
+  if (!['sign-in','reset-password','claim-username','update-username','verify-password'].includes(action) || !USERNAME_PATTERN.test(username)) {
     return jsonResponse({ error:'Requête invalide.' }, 400, origin);
   }
-  if (action === 'sign-in' && (typeof body?.password !== 'string' || body.password.length < 1 || body.password.length > 256)) {
+  if (['sign-in','verify-password'].includes(action) && (typeof body?.password !== 'string' || body.password.length < 1 || body.password.length > 256)) {
     return jsonResponse({ error:'Requête invalide.' }, 400, origin);
   }
 
   let confirmedUser = null;
-  if (action === 'claim-username') {
+  if (action === 'claim-username' || action === 'update-username' || action === 'verify-password') {
     try { confirmedUser = await getConfirmedAuthUser(config, request.headers.get('authorization')); }
     catch { return jsonResponse({ error:'Session invalide. Reconnectez-vous.' }, 401, origin); }
     if (!confirmedUser) return jsonResponse({ error:'Session confirmée requise. Reconnectez-vous.' }, 401, origin);
@@ -227,6 +227,49 @@ async function handleRequest(request) {
     } catch {
       return jsonResponse({ error:'Cet identifiant ne peut pas être utilisé. Essayez-en un autre.' }, 409, origin);
     }
+  }
+
+  if (action === 'update-username') {
+    try {
+      const result = await serviceRpc(config, 'organisation_update_username_for_account', {
+        p_user_id:confirmedUser.id,
+        p_username:body.username.trim().normalize('NFC')
+      });
+      const updated = typeof result === 'string' ? result : result?.username;
+      if (typeof updated !== 'string') throw new Error('username_update_failed');
+      return jsonResponse({ username:updated }, 200, origin);
+    } catch {
+      // Do not disclose whether an account exists or another user owns a name.
+      return jsonResponse({ error:'Cet identifiant ne peut pas être utilisé. Vérifiez sa disponibilité et réessayez.' }, 409, origin);
+    }
+  }
+
+  if (action === 'verify-password') {
+    let account;
+    try { account = await resolveUsername(config, username); }
+    catch { return jsonResponse({ error:GENERIC_SERVICE_ERROR }, 503, origin); }
+    if (!account || account.userId !== confirmedUser.id) {
+      return jsonResponse({ error:'La vérification du mot de passe a échoué.' }, 401, origin);
+    }
+
+    let authResponse;
+    try { authResponse = await authPasswordGrant(config, account.email, body.password); }
+    catch { return jsonResponse({ error:GENERIC_SERVICE_ERROR }, 503, origin); }
+    if (!authResponse.ok) {
+      try {
+        const rate = await consumeRateLimit(config, username, clientIp(request));
+        if (!rate.allowed) return jsonResponse({ error:'Trop de tentatives. Réessayez plus tard.' }, 429, origin);
+      } catch { /* Supabase Auth's own rate limits remain in force. */ }
+      return jsonResponse({ error:'Le mot de passe actuel est incorrect.' }, 401, origin);
+    }
+
+    let verifiedSession;
+    try { verifiedSession = await authResponse.json(); }
+    catch { return jsonResponse({ error:'La vérification du mot de passe a échoué.' }, 401, origin); }
+    if (verifiedSession.user?.id !== confirmedUser.id) {
+      return jsonResponse({ error:'La vérification du mot de passe a échoué.' }, 401, origin);
+    }
+    return jsonResponse({ verified:true }, 200, origin);
   }
 
   let account;

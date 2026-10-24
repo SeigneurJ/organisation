@@ -1039,7 +1039,7 @@
       const IMPORT_DISMISSED_PREFIX = 'organisation-import-dismissed-v1:';
       const MAX_IMPORT_FILE_BYTES = 512 * 1024;
       const MAX_CLOUD_STATE_BYTES = 768 * 1024;
-      const APP_BUILD_ID = 202610240004;
+      const APP_BUILD_ID = 202610240005;
       const APP_UPDATE_CHECK_INTERVAL_MS = 10 * 60 * 1000;
       const APP_UPDATE_CHECK_COOLDOWN_MS = 45 * 1000;
       const priorityLabels = { high: 'Prioritaire', medium: 'Important', low: 'À mon rythme' };
@@ -1421,6 +1421,7 @@
       let cloudIsAdmin = false;
       let cloudAccessStatus = null;
       let cloudAccessRefreshTimer = null;
+      let cloudAccessVerificationInFlight = null;
       let pendingAccessAction = null;
       let adminAccessRows = [];
       let authContextEpoch = 0;
@@ -2778,23 +2779,34 @@
         clearInterval(cloudAccessRefreshTimer);
         cloudAccessRefreshTimer = setInterval(verifyActiveCloudAccess, 30000);
       }
-      async function verifyActiveCloudAccess() {
-        if (!activeUser || syncMode !== 'cloud' || !cloudAccessApproved || document.hidden) return;
+      function verifyActiveCloudAccess() {
+        if (!activeUser || syncMode !== 'cloud' || !cloudAccessApproved || document.hidden) return Promise.resolve();
         const ownerId = activeUser.id;
         const epoch = authContextEpoch;
-        try {
-          const access = await resolveCloudAccess({ id:ownerId, email:activeUser.email, user_metadata:{ display_name:activeUser.name } }, epoch);
-          if (!access || !isCurrentCloudContext(ownerId, epoch)) return;
-          cloudAccessStatus = access.status;
-          if (access.status !== 'approved') { showAccessStatus(access.status); return; }
-          const wasAdmin = cloudIsAdmin;
-          cloudIsAdmin = access.isAdmin;
-          setAdminNavigation(cloudIsAdmin);
-          if (wasAdmin && !cloudIsAdmin && document.getElementById('admin-view').classList.contains('active')) changeView('today');
-        } catch (cause) {
-          console.error('Vérification de l’accès impossible.', cause);
-          showAccessStatus('unavailable');
-        }
+        const existing = cloudAccessVerificationInFlight;
+        if (existing?.ownerId === ownerId && existing.epoch === epoch) return existing.promise;
+        const flight = { ownerId, epoch, promise:null };
+        const operation = (async () => {
+          try {
+            const access = await resolveCloudAccess({ id:ownerId, email:activeUser.email, user_metadata:{ display_name:activeUser.name } }, epoch);
+            if (!access || !isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+            cloudAccessStatus = access.status;
+            if (access.status !== 'approved') { showAccessStatus(access.status); return; }
+            const wasAdmin = cloudIsAdmin;
+            cloudIsAdmin = access.isAdmin;
+            setAdminNavigation(cloudIsAdmin);
+            if (wasAdmin && !cloudIsAdmin && document.getElementById('admin-view').classList.contains('active')) changeView('today');
+          } catch (cause) {
+            if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return;
+            console.error('Vérification de l’accès impossible.', cause);
+            showAccessStatus('unavailable');
+          }
+        })();
+        flight.promise = operation.finally(() => {
+          if (cloudAccessVerificationInFlight === flight) cloudAccessVerificationInFlight = null;
+        });
+        cloudAccessVerificationInFlight = flight;
+        return flight.promise;
       }
       async function resolveCloudAccess(user, contextEpoch=authContextEpoch) {
         const ownerId = user.id;

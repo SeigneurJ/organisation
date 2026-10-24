@@ -714,7 +714,98 @@
   .account-menu-toggle { max-width: min(145px,48vw); gap: 5px; padding-right: 8px; padding-left: 8px; }
 }
 
-    </style>
+      .today-date-stack { min-width:0; display:grid; gap:2px; }
+    .local-clock { color:var(--muted); font-size:12px; font-variant-numeric:tabular-nums; }
+    .focus-widget { position:sticky; z-index:3; top:8px; display:grid; gap:8px; max-height:min(220px,30vh); overflow:auto; overscroll-behavior:contain; margin:0 0 14px; padding:15px 18px; border-radius:var(--radius); background:var(--sage-dark); color:#f9f7ef; box-shadow:0 8px 24px rgba(40,58,43,.14); }
+    .focus-widget__top { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .focus-widget .eyebrow { margin:0; color:#cad6c6; font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+    .focus-widget__tag { color:#e2e9dd; border:1px solid rgba(255,255,255,.28); border-radius:3px; padding:3px 7px; font-size:10px; }
+    .focus-widget h2 { margin:0; color:#fff; font:22px/1.15 var(--serif); }
+    .focus-widget [data-focus-summary] { margin:0; color:#d6dfd1; font-size:13px; overflow-wrap:anywhere; }
+    .focus-widget__progress { display:flex; align-items:center; gap:10px; color:#dce5d7; font-size:11px; }
+    .focus-widget__track { width:min(120px,35vw); height:5px; overflow:hidden; border-radius:5px; background:rgba(255,255,255,.22); }
+    .focus-widget__track span { display:block; width:0; height:100%; background:#d9c386; transition:width .25s ease; }
+    .dashboard-widget { position:relative; z-index:0; isolation:isolate; min-width:0; padding:16px 16px 14px; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow); }
+    .dashboard-widget[data-widget-type="tasks"], .dashboard-widget[data-widget-type="habits"] { padding:0; border:0; background:transparent; box-shadow:none; }
+    .dashboard-widget[data-widget-type="tasks"] .panel, .dashboard-widget[data-widget-type="habits"] .panel { padding-top:58px; }
+    .dashboard-widget__heading { margin:0 130px 8px 0; color:var(--ink); font:20px/1.2 var(--serif); overflow-wrap:anywhere; }
+    .dashboard-widget__body { min-width:0; color:var(--muted); overflow-wrap:anywhere; }
+    .dashboard-widget__body > .panel { margin:0; }
+    .dashboard-widget label[for^="today-note-"] { display:block; margin-bottom:5px; color:var(--muted); font-size:12px; }
+    .dashboard-widget textarea.widget-note { display:block; width:100%; min-width:0; min-height:84px; resize:vertical; margin-top:6px; padding:10px 11px; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--ink); font:inherit; line-height:1.45; }
+    .markdown-note-editor { display:grid; gap:7px; min-width:0; color:var(--ink); }
+    .markdown-note-editor__title-output { display:block; margin:2px 0 0; color:var(--ink); font:600 16px/1.3 var(--serif); overflow-wrap:anywhere; }
+    .markdown-note-editor__title-label { display:block; margin:0; color:var(--muted); font-size:11px; font-weight:650; }
+    .markdown-note-editor__title { width:100%; min-width:0; min-height:38px; padding:7px 9px; border:1px solid var(--line); border-radius:7px; background:var(--surface); color:var(--ink); font:600 14px/1.35 var(--sans); }
+    .markdown-note-editor__title::placeholder { color:var(--muted); font-weight:400; }
+    .markdown-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:4px; min-width:0; padding:4px; border:1px solid var(--line); border-radius:8px; background:var(--paper); }
+    .markdown-tool { display:inline-flex; align-items:center; justify-content:center; min-width:40px; min-height:40px; padding:5px 8px; border:1px solid transparent; border-radius:6px; background:transparent; color:var(--ink); font:600 12px/1.2 var(--sans); cursor:pointer; touch-action:manipulation; transition:background-color .16s ease,border-color .16s ease; }
+    .markdown-tool:hover,.markdown-tool[aria-pressed="true"] { background:var(--sage-wash); border-color:var(--sage); }
+    .markdown-tool:focus-visible,.markdown-note-editor__body:focus-visible,.markdown-note-editor__title:focus-visible { outline:3px solid rgba(93,117,94,.5); outline-offset:2px; }
+    .markdown-note-editor__body { display:block; width:100%; min-width:0; min-height:96px; resize:vertical; margin:0!important; padding:10px 11px!important; border:1px solid var(--line)!important; border-radius:8px; background:var(--surface)!important; color:var(--ink); font:14px/1.55 var(--sans)!important; overflow-wrap:anywhere; }
+    .markdown-rich-editor { min-height:128px; overflow-wrap:anywhere; white-space:normal; }
+    .markdown-rich-editor:empty::before { content:"Quelques mots pour cette journée…"; color:var(--muted); pointer-events:none; }
+    .markdown-rich-editor p,.markdown-rich-editor h1,.markdown-rich-editor h2,.markdown-rich-editor h3,.markdown-rich-editor blockquote { margin:.35em 0; }
+    .markdown-rich-editor blockquote { padding-inline-start:.8em; border-inline-start:3px solid var(--sage); color:var(--muted); }
+    .markdown-rich-editor ul { margin:.35em 0; padding-inline-start:1.4em; }
+    .markdown-rich-editor pre { max-width:100%; overflow:auto; padding:8px; border-radius:6px; background:var(--paper); white-space:pre-wrap; }
+    .markdown-rich-editor code { padding:.05em .25em; border-radius:4px; background:var(--paper); font:.92em ui-monospace,Consolas,monospace; }
+    .markdown-preview { min-width:0; max-height:260px; overflow:auto; padding:11px 13px; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--ink); overflow-wrap:anywhere; }
+    .markdown-preview h1,.markdown-preview h2,.markdown-preview h3 { margin:.2em 0 .5em; font-family:var(--serif); line-height:1.2; }
+    .markdown-preview p { margin:.45em 0; }
+    .markdown-preview ul { margin:.35em 0; padding-inline-start:1.4em; }
+    .markdown-preview blockquote { margin:.5em 0; padding:.2em .8em; border-inline-start:3px solid var(--sage); color:var(--muted); }
+    .markdown-preview code { padding:.08em .3em; border-radius:4px; background:var(--paper); font:.92em ui-monospace,Consolas,monospace; overflow-wrap:anywhere; }
+    .markdown-preview pre { max-width:100%; overflow:auto; padding:9px; border-radius:6px; background:var(--paper); }
+    .markdown-preview pre code { padding:0; background:transparent; }
+    .markdown-note-status { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
+    @media(max-width:390px) { .markdown-note-editor { gap:6px; } .markdown-toolbar { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:3px; padding:3px; } .markdown-tool { width:100%; min-width:0; min-height:44px; padding:5px 6px; } .markdown-tool--preview { grid-column:span 2; } }
+    @media(prefers-reduced-motion:reduce) { .markdown-tool { transition:none; scroll-behavior:auto; } }
+    .dashboard-widget .widget-tools { display:flex; flex-wrap:wrap; gap:4px; }
+    .dashboard-widget .widget-tool { min-width:44px; min-height:44px; padding:0 8px; border:1px solid var(--line); border-radius:7px; background:var(--surface); color:var(--ink); cursor:pointer; }
+    .dashboard-widget .widget-tool:disabled { opacity:.45; cursor:not-allowed; }
+    .dashboard-widget .widget-tool--remove { color:var(--clay); }
+    .dashboard-widget .task-row .task-edit-button { min-width:64px; white-space:nowrap; }
+    .dashboard-widget .task-row { grid-template-columns:20px minmax(0,1fr) auto 64px 34px; }
+    .dashboard-widget.is-moving { outline:2px dashed var(--sage); outline-offset:3px; }
+    .widget-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:14px; }
+    .widget-actions label { font-weight:650; }
+    .widget-actions select { min-height:44px; max-width:100%; padding:8px 30px 8px 10px; border:1px solid var(--line); border-radius:7px; background:var(--surface); color:var(--ink); }
+    .widget-actions button { min-height:44px; }
+    .retired-notes { margin-top:18px; padding:14px; border:1px solid var(--line); border-radius:10px; background:var(--surface); }
+    .retired-notes h2 { margin:0 0 8px; font:18px var(--serif); }
+    .retired-notes ul { display:grid; gap:8px; margin:0; padding-left:20px; }
+    .retired-notes li { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .retired-notes button { min-height:44px; }
+    @media (max-width:700px) {
+      main { padding-bottom:calc(84px + env(safe-area-inset-bottom)); }
+      .mobile-nav { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); position:fixed; z-index:10; bottom:0; left:0; right:0; padding:6px max(10px,env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left)); border-top:1px solid var(--line); background:rgba(255,253,248,.97); backdrop-filter:blur(10px); }
+      .mobile-nav .nav-item { display:flex; min-width:0; min-height:48px; align-items:center; justify-content:center; flex-direction:column; gap:2px; padding:3px; border:0; border-radius:8px; background:transparent; color:var(--muted); font-size:10px; line-height:1.15; cursor:pointer; }
+      .mobile-nav .nav-item[aria-current="page"] { background:var(--sage-wash); color:var(--sage-dark); font-weight:700; }
+      .mobile-nav .nav-icon { font-size:16px; line-height:1; }
+      .dashboard-grid { grid-template-columns:minmax(0,1fr); gap:10px; }
+      .focus-widget { top:4px; max-height:min(180px,26vh); gap:6px; padding:11px 13px; margin-bottom:10px; }
+      .focus-widget h2 { font-size:19px; }
+      .focus-widget [data-focus-summary] { font-size:12px; }
+      .focus-widget__tag { display:none; }
+      .dashboard-widget { padding:15px 13px 12px; }
+      .widget-actions { align-items:stretch; }
+      .widget-actions label { flex-basis:100%; }
+      .widget-actions select { flex:1; min-width:0; }
+    }
+    @media (max-width:360px) {
+      .focus-widget { max-height:24vh; padding:9px 11px; gap:5px; }
+      .focus-widget h2 { font-size:17px; }
+      .focus-widget [data-focus-summary] { font-size:11px; }
+      .dashboard-widget__heading { margin-right:106px; font-size:18px; }
+      .dashboard-widget .widget-tools { right:5px; top:5px; }
+    }
+    @media (max-height:560px) and (max-width:700px) {
+      .focus-widget { max-height:22vh; }
+      .focus-widget__tag { display:none; }
+    }
+    @media (prefers-reduced-motion:reduce) { .focus-widget__track span { transition:none; } }
+  </style>
 </head>
 <body>
   <section class="auth-screen" id="auth-screen" aria-label="Accès à Organisation">
@@ -798,7 +889,7 @@
     <main>
       <div class="topline">
         <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Ouvrir le menu" aria-controls="main-sidebar" aria-expanded="false"><span class="hamburger" aria-hidden="true"><i></i><i></i><i></i></span></button>
-        <div class="today-stamp"><span class="sun-mark" aria-hidden="true">☼</span><span class="date-label" id="date-label"></span></div>
+        <div class="today-stamp"><span class="sun-mark" aria-hidden="true">☼</span><div class="today-date-stack"><span class="date-label" id="date-label"></span><time id="local-clock" class="local-clock" aria-label="Heure locale"></time></div></div>
         <div class="account-actions"><span class="sync-status" id="sync-status" role="status"></span><div class="account-menu-wrap"><button class="account-menu-toggle" id="account-menu-toggle" type="button" aria-controls="account-menu" aria-haspopup="menu" aria-expanded="false"><span class="account-menu-username" id="account-menu-username"></span><span class="account-menu-chevron" aria-hidden="true"></span></button><div class="account-menu" id="account-menu" role="menu" aria-label="Menu du compte" hidden><button class="account-menu-item" id="manage-account-button" type="button" role="menuitem">Gérer mon compte</button><button class="account-menu-item" id="account-backups-button" type="button" data-view="import-conflicts" role="menuitem" hidden>Mes sauvegardes</button><hr class="account-menu-divider"><button class="account-menu-item logout" id="logout-button" type="button" role="menuitem">Se déconnecter</button></div></div><div class="profile-export-control"><button class="text-button" id="export-local-profile-button" type="button" hidden>Exporter le profil local</button><p class="profile-privacy">Fichier JSON non chiffr&eacute; contenant des donn&eacute;es personnelles; &agrave; conserver dans un endroit priv&eacute;.</p></div></div>
       </div>
       <aside id="app-update-notice" hidden role="status" aria-live="polite">
@@ -809,9 +900,16 @@
       <section class="section-view active" id="today-view" aria-labelledby="today-title">
         <header class="page-heading">
           <div><p class="eyebrow">Aujourd’hui</p><h1 id="today-title">Une chose<br>après l’autre.</h1><p class="heading-sub" id="day-summary">Composez votre espace comme vous le souhaitez.</p></div>
-          <button class="primary-button" id="add-widget-trigger" type="button"><span class="plus" aria-hidden="true">+</span> Ajouter un encart</button>
         </header>
-        <div class="dashboard-grid" id="dashboard-grid" aria-label="Vos encarts du jour"></div>
+        <section class="focus-widget" data-focus-widget aria-labelledby="today-focus-title">
+          <div class="focus-widget__top"><p class="eyebrow">Priorité du jour</p><span class="focus-widget__tag">En un coup d’œil</span></div>
+          <h2 id="today-focus-title">Votre journée, en bref</h2>
+          <p data-focus-summary aria-live="polite">Aucune tâche prévue aujourd’hui.</p>
+          <div class="focus-widget__progress" aria-label="Progression des tâches du jour"><span class="focus-widget__track" aria-hidden="true"><span data-focus-progress></span></span><span data-focus-count>0 sur 0 terminées</span></div>
+        </section>
+        <section class="dashboard-grid" id="dashboard-grid" data-widget-list aria-label="Vos encarts du jour"></section>
+        <div class="widget-actions"><label for="widget-type-select">Ajouter un encart</label><select id="widget-type-select" data-widget-type><option value="tasks">Tâches du jour</option><option value="habits">Habitudes</option><option value="notes">Quelques mots</option></select><button type="button" class="primary-button" data-widget-add>Ajouter</button><p class="sr-only" data-widget-status aria-live="polite"></p></div>
+        <section class="retired-notes" data-retired-note-widgets hidden aria-labelledby="retired-notes-title"><h2 id="retired-notes-title">Notes retirées</h2><ul data-retired-note-list></ul></section>
       </section>
 
       <section class="section-view section-layout" id="tasks-view" aria-labelledby="all-tasks-title">
@@ -879,13 +977,9 @@
   <button class="sidebar-overlay" id="sidebar-overlay" type="button" aria-label="Fermer le menu" hidden></button>
 
   <nav class="mobile-nav" aria-label="Navigation mobile" hidden>
-    <button class="nav-item active" data-view="today" aria-current="page"><span class="nav-icon" aria-hidden="true">◷</span><span>Aujourd’hui</span></button>
-    <button class="nav-item" data-view="tasks"><span class="nav-icon" aria-hidden="true">☷</span><span>Tâches</span><span class="nav-count" id="mobile-task-count">0</span></button>
-    <button class="nav-item" data-view="habits"><span class="nav-icon" aria-hidden="true">◌</span><span>Habitudes</span></button>
-    <button class="nav-item" data-view="calculator"><span class="nav-icon" aria-hidden="true">＋</span><span>Calculatrice</span></button>
-    <button class="nav-item" data-view="timer"><span class="nav-icon" aria-hidden="true">◷</span><span>Minuteur</span></button>
-    <button class="nav-item" data-view="calendar"><span class="nav-icon" aria-hidden="true">▦</span><span>Calendrier</span></button>
-    <button class="nav-item admin-only" data-view="admin" hidden aria-label="Comptes à valider"><span class="nav-icon" aria-hidden="true">✓</span><span>Comptes</span><span class="nav-count" id="mobile-admin-pending-count">0</span></button>
+    <button class="nav-item" type="button" data-view-link="calculator" aria-current="false"><span class="nav-icon" aria-hidden="true">⌗</span><span>Calculatrice</span></button>
+    <button class="nav-item" type="button" data-view-link="timer" aria-current="false"><span class="nav-icon" aria-hidden="true">◷</span><span>Minuteur</span></button>
+    <button class="nav-item" type="button" data-view-link="calendar" aria-current="false"><span class="nav-icon" aria-hidden="true">▦</span><span>Calendrier</span></button>
   </nav>
 
   <dialog id="account-management-dialog" class="account-management-dialog" aria-labelledby="account-management-title" aria-describedby="account-management-intro">
@@ -1019,6 +1113,194 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
+/* Aperçu Markdown fermé : le parseur échappe tout texte utilisateur et n'émet que ces balises fixes. */
+(() => {
+  'use strict';
+  const MAX=20000;
+  const escapeHtml=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function safeHref(raw){if(typeof raw!=='string'||raw.length>2048||/[\u0000-\u0020"'<>]/.test(raw)||! /^(https?:\/\/|mailto:)/i.test(raw))return null;try{const url=new URL(raw);if(!['http:','https:','mailto:'].includes(url.protocol.toLowerCase())||(['http:','https:'].includes(url.protocol)&&(!url.hostname||url.username||url.password)))return null;return url.href;}catch{return null;}}
+  function inline(source,depth=0){const text=String(source),pattern=/(\\[\\`*_{}\[\]()#+.!|>~-]|!?\[[^\]\n]{0,2000}\]\([^\s)\n]{1,2048}\)|`[^`\n]{0,4000}`|\*\*[^*\n]{1,4000}\*\*|\*[^*\n]{1,4000}\*)/g;let out='',cursor=0,m;while((m=pattern.exec(text))){out+=escapeHtml(text.slice(cursor,m.index));const token=m[0],escaped=token.match(/^\\([\\`*_{}\[\]()#+.!|>~-])$/),image=token.match(/^!\[([^\]]*)\]\(([^)]+)\)$/),link=!escaped&&!image&&token.match(/^\[([^\]]*)\]\(([^)]+)\)$/);if(escaped)out+=escapeHtml(escaped[1]);else if(image)out+=escapeHtml(token);else if(link){const href=safeHref(link[2]);out+=href?`<a href="${escapeHtml(href)}" data-md-source-href="${escapeHtml(link[2])}" target="_blank" rel="noopener noreferrer">${depth<1?inline(link[1],depth+1):escapeHtml(link[1])}</a>`:escapeHtml(token);}else if(token.startsWith('`'))out+=`<code>${escapeHtml(token.slice(1,-1))}</code>`;else if(token.startsWith('**'))out+=`<strong>${inline(token.slice(2,-2),depth+1)}</strong>`;else out+=`<em>${inline(token.slice(1,-1),depth+1)}</em>`;cursor=pattern.lastIndex;}return out+escapeHtml(text.slice(cursor));}
+  function renderSafeMarkdown(source){source=String(source??'');if(source.length>MAX)throw new RangeError('Note trop longue pour l’aperçu.');const lines=source.replace(/\r\n?/g,'\n').split('\n'),blocks=[];function listAt(start,indent){const rows=[];let cursor=start;while(cursor<lines.length){const match=lines[cursor].match(/^( *)([-*+])\s+(.*)$/);if(!match||match[1].length>24)break;const level=match[1].length;if(level<indent)break;if(level>indent){if(!rows.length)break;const nested=listAt(cursor,level);if(nested.next===cursor)break;rows.at(-1).nested.push(nested.html);cursor=nested.next;continue;}rows.push({text:match[3],nested:[]});cursor++;}return {html:`<ul data-md-indent="${indent}">${rows.map(row=>`<li>${inline(row.text)}${row.nested.join('')}</li>`).join('')}</ul>`,next:cursor};}for(let i=0;i<lines.length;){const line=lines[i];if(!line.trim()){i++;continue;}const fence=line.match(/^ {0,3}```([a-zA-Z0-9_-]{0,24})?\s*$/);if(fence){const code=[];i++;while(i<lines.length&&!/^ {0,3}```\s*$/.test(lines[i]))code.push(lines[i++]);if(i<lines.length)i++;blocks.push(`<pre><code data-md-language="${escapeHtml(fence[1]||'')}">${escapeHtml(code.join('\n'))}</code></pre>`);continue;}const h=line.match(/^ {0,3}(#{1,3})\s+(.+)$/);if(h){const n=h[1].length;blocks.push(`<h${n}>${inline(h[2])}</h${n}>`);i++;continue;}if(/^ {0,3}>/.test(line)){const q=[];while(i<lines.length&&/^ {0,3}>/.test(lines[i]))q.push(lines[i++].replace(/^ {0,3}>\s?/,''));blocks.push(`<blockquote><p>${q.map(inline).join('<br>')}</p></blockquote>`);continue;}const list=line.match(/^( *)[-*+]\s+/);if(list&&list[1].length<=3){const parsed=listAt(i,list[1].length);blocks.push(parsed.html);i=parsed.next;continue;}const p=[line];i++;while(i<lines.length&&lines[i].trim()&&!/^ {0,3}(?:#{1,3}\s|```|>|[-*+]\s+)/.test(lines[i]))p.push(lines[i++]);blocks.push(`<p>${p.map(inline).join('<br>')}</p>`);}const template=document.createElement('template');template.innerHTML=blocks.join('\n');return template.content;}
+  const bindings=new Map(),selectionBookmarks=new Map(),sourceState=new Map(),richEditRevisions=new WeakMap(),syncedSources=new WeakSet();
+  let activeRich=null,listeners=false;
+  const editorOf=node=>node?.closest?.('[data-markdown-note-editor]')||null;
+  const bodyOf=editor=>editor?.querySelector('textarea[data-widget-note-id][data-note-date]')||null;
+  const richOf=editor=>editor?.querySelector('[data-rich-note]')||null;
+  const idOf=editor=>editor?.dataset.widgetNoteId||bodyOf(editor)?.dataset.widgetNoteId||'';
+  function rangePath(root,node){const path=[];while(node&&node!==root){const parent=node.parentNode;if(!parent)return null;path.unshift(Array.prototype.indexOf.call(parent.childNodes,node));node=parent;}return node===root?path:null;}
+  function nodeAtPath(root,path){let node=root;for(const index of path||[]){node=node?.childNodes?.[index];if(!node)return null;}return node;}
+  function captureRich(rich){if(!rich)return;activeRich=rich;const selection=window.getSelection();if(!selection?.rangeCount)return;const range=selection.getRangeAt(0);if(rich.contains(range.startContainer)&&rich.contains(range.endContainer))selectionBookmarks.set(idOf(editorOf(rich)),{anchorPath:rangePath(rich,selection.anchorNode),anchorOffset:selection.anchorOffset,focusPath:rangePath(rich,selection.focusNode),focusOffset:selection.focusOffset});}
+  function restoreRange(rich,saved=selectionBookmarks.get(idOf(editorOf(rich)))){if(!rich||!saved?.anchorPath||!saved?.focusPath)return false;const anchor=nodeAtPath(rich,saved.anchorPath),focus=nodeAtPath(rich,saved.focusPath);if(!anchor||!focus)return false;const selection=window.getSelection();const anchorOffset=Math.min(saved.anchorOffset,anchor.length??anchor.childNodes.length),focusOffset=Math.min(saved.focusOffset,focus.length??focus.childNodes.length);try{selection.removeAllRanges();if(selection.setBaseAndExtent)selection.setBaseAndExtent(anchor,anchorOffset,focus,focusOffset);else{const range=document.createRange();range.setStart(anchor,anchorOffset);range.setEnd(focus,focusOffset);selection.addRange(range);}return true;}catch{return false;}}
+  function captureFocus(root){const field=document.activeElement,editor=editorOf(field);if(!editor||!root.contains(editor))return null;const result={id:idOf(editor),kind:field.matches('[data-note-title-input]')?'title':field.matches('textarea[data-widget-note-id]')?'source':'visual'};if(result.kind==='visual'){captureRich(field);result.range=selectionBookmarks.get(result.id);}else{result.start=field.selectionStart;result.end=field.selectionEnd;}return result;}
+  function restoreFocus(root,snapshot){if(!snapshot)return false;const editor=[...root.querySelectorAll('[data-markdown-note-editor]')].find(x=>idOf(x)===snapshot.id);if(!editor)return false;const field=editor.querySelector(snapshot.kind==='title'?'[data-note-title-input]':snapshot.kind==='source'?'textarea[data-widget-note-id][data-note-date]':'[data-rich-note]');if(!field)return false;field.focus();if(snapshot.kind==='visual'){selectionBookmarks.set(snapshot.id,snapshot.range);restoreRange(field,snapshot.range);}else if(Number.isInteger(snapshot.start)&&Number.isInteger(snapshot.end))field.setSelectionRange(snapshot.start,snapshot.end);return true;}
+  function escapeMarkdownText(value){return String(value).replace(/([\\`*_{}\[\]()])/g,match=>'\\'+match).replace(/!(?=\[)/g,match=>'\\'+match).replace(/(^|\n)([#>]|[-+])(?=\s)/g,(_match,prefix,marker)=>prefix+'\\'+marker);}
+  function inlineMarkdown(node){if(node.nodeType===Node.TEXT_NODE)return escapeMarkdownText(node.nodeValue);if(node.nodeType!==Node.ELEMENT_NODE)return '';const tag=node.tagName.toLowerCase(),children=Array.from(node.childNodes,inlineMarkdown).join('');if(tag==='br')return '\n';if(tag==='strong'||tag==='b'||tag==='span'&&/^(?:bold|[6-9]00|[1-9]\d{3})$/i.test(node.style?.fontWeight||''))return `**${children}**`;if(tag==='em'||tag==='i'||tag==='span'&&node.style?.fontStyle==='italic')return `*${children}*`;if(tag==='code')return `\`${node.textContent.replace(/`/g,'\\`')}\``;if(tag==='a'){const href=safeHref(node.getAttribute('data-md-source-href')||node.getAttribute('href'));return href?`[${children}](${href})`:children;}return children;}
+  function listMarkdown(list,depth=0){const rawIndent=list.getAttribute('data-md-indent'),savedIndent=rawIndent!==null&&/^\d+$/.test(rawIndent)&&Number(rawIndent)<=24?Number(rawIndent):depth*2;return Array.from(list.children).filter(item=>item.tagName.toLowerCase()==='li').map(item=>{const nested=Array.from(item.children).filter(child=>['ul','ol'].includes(child.tagName.toLowerCase()));const content=Array.from(item.childNodes).filter(child=>child.nodeType!==Node.ELEMENT_NODE||!['ul','ol'].includes(child.tagName.toLowerCase())).map(inlineMarkdown).join('');return `${' '.repeat(savedIndent)}- ${content}${nested.length?`\n${nested.map(child=>listMarkdown(child,depth+1)).join('\n')}`:''}`;}).join('\n');}
+  function blockMarkdown(node){if(node.nodeType===Node.TEXT_NODE)return escapeMarkdownText(node.nodeValue);if(node.nodeType!==Node.ELEMENT_NODE)return '';const tag=node.tagName.toLowerCase();if(tag==='ul'||tag==='ol')return listMarkdown(node);if(tag==='blockquote')return inlineMarkdown(node).split('\n').map(line=>`> ${line}`).join('\n');if(tag==='pre'){const code=node.children?.find(child=>child.tagName.toLowerCase()==='code'),language=code?.getAttribute('data-md-language')||'',safeLanguage=/^[a-zA-Z0-9_-]{0,24}$/.test(language)?language:'';return `\`\`\`${safeLanguage}\n${node.textContent.replace(/\n+$/,'')}\n\`\`\``;}const content=inlineMarkdown(node);if(/^h[1-3]$/.test(tag))return `${'#'.repeat(Number(tag[1]))} ${content}`;if(['p','div','li'].includes(tag))return content;return content;}
+  function serializeRich(rich){return Array.from(rich.childNodes,blockMarkdown).join('\n').replace(/\n{3,}/g,'\n\n');}
+  function populateVisual(editor,binding){const source=bodyOf(editor),rich=richOf(editor);if(!source||!rich)return;rich.replaceChildren(binding.renderSafeMarkdown(source.value,{widgetId:idOf(editor),date:source.dataset.noteDate}));rich.dataset.renderedMarkdown=source.value;}
+  function wrappedSource(area,token){const start=area.selectionStart,end=area.selectionEnd,selected=area.value.slice(start,end);if(area.value.length+token.length*2>MAX)return;area.setRangeText(`${token}${selected}${token}`,start,end,'select');if(selected)area.setSelectionRange(start+token.length,end+token.length);else area.setSelectionRange(start+token.length,start+token.length);area.dispatchEvent(new Event('input',{bubbles:true}));}
+  function prefixedSource(area,token){const value=area.value,start=area.selectionStart,end=area.selectionEnd,from=value.lastIndexOf('\n',Math.max(0,start-1))+1,to0=value.indexOf('\n',end),to=to0<0?value.length:to0,lines=value.slice(from,to).split('\n'),replacement=lines.map(line=>token+line).join('\n');if(value.length-from-(to-from)+replacement.length>MAX)return;area.setRangeText(replacement,from,to,'preserve');area.setSelectionRange(start+token.length,end+token.length);area.dispatchEvent(new Event('input',{bubbles:true}));}
+  function applySourceAction(area,name){if(name==='bold')wrappedSource(area,'**');else if(name==='italic')wrappedSource(area,'*');else if(name==='code')wrappedSource(area,'`');else if(name==='list')prefixedSource(area,'- ');else if(name==='quote')prefixedSource(area,'> ');else if(name==='heading'){const from=area.value.lastIndexOf('\n',Math.max(0,area.selectionStart-1))+1;if(!/^#{1,3}\s/.test(area.value.slice(from))&&area.value.length+2<=MAX){area.setRangeText('# ',from,from,'preserve');area.setSelectionRange(area.selectionStart+2,area.selectionEnd+2);area.dispatchEvent(new Event('input',{bubbles:true}));}}}
+  function applyAction(editor,name){const source=bodyOf(editor),rich=richOf(editor);if(!source||!rich)return;if(!source.hidden){applySourceAction(source,name);source.focus();return;}rich.focus();restoreRange(rich);const commands={bold:['bold'],italic:['italic'],code:['formatBlock','pre'],heading:['formatBlock','h2'],list:['insertUnorderedList'],quote:['formatBlock','blockquote']},command=commands[name];if(!command)return;const revision=richEditRevisions.get(rich)||0;try{document.execCommand(command[0],false,command[1]);}catch{return;}captureRich(rich);if((richEditRevisions.get(rich)||0)===revision)rich.dispatchEvent(new Event('input',{bubbles:true}));}
+  function bindingFor(editor){for(const [root,binding] of bindings)if(root===editor||root.contains(editor))return binding;return null;}
+  function syncRich(editor){const source=bodyOf(editor),rich=richOf(editor);if(!source||!rich)return;const value=serializeRich(rich);if(value.length>MAX){populateVisual(editor,bindingFor(editor));const status=editor.querySelector('[data-md-status]');if(status)status.textContent=`La note est limitée à ${MAX} caractères; la dernière saisie n’a pas été gardée.`;return;}source.value=value;rich.dataset.renderedMarkdown=value;syncedSources.add(source);source.dispatchEvent(new Event('input',{bubbles:true}));}
+  function toggleSource(editor){const source=bodyOf(editor),rich=richOf(editor),button=editor.querySelector('[data-md-source-toggle]'),id=idOf(editor);if(!source||!rich||!button)return;if(source.hidden){captureRich(rich);sourceState.set(id,true);source.hidden=false;rich.hidden=true;button.textContent='Éditeur';button.setAttribute('aria-pressed','true');source.focus();source.setSelectionRange(source.value.length,source.value.length);}else{const savedRange=selectionBookmarks.get(id);populateVisual(editor,bindingFor(editor));sourceState.set(id,false);source.hidden=true;rich.hidden=false;button.textContent='Markdown';button.setAttribute('aria-pressed','false');rich.focus();restoreRange(rich,savedRange);}}
+  function setup(){if(listeners)return;
+    document.addEventListener('focusin',event=>{if(event.target.matches?.('[data-rich-note]')){activeRich=event.target;captureRich(activeRich);}});
+    document.addEventListener('keyup',event=>{if(event.target.matches?.('[data-rich-note]'))captureRich(event.target);});
+    document.addEventListener('mouseup',()=>{if(activeRich&&document.activeElement===activeRich)captureRich(activeRich);});
+    document.addEventListener('selectionchange',()=>{if(activeRich&&document.activeElement===activeRich)captureRich(activeRich);});
+    document.addEventListener('pointerdown',event=>{if(event.target.closest?.('.markdown-toolbar button'))event.preventDefault();});
+    document.addEventListener('paste',event=>{if(!event.target.matches?.('[data-rich-note]'))return;event.preventDefault();const text=event.clipboardData?.getData('text/plain')||'';document.execCommand('insertText',false,text);});
+    document.addEventListener('drop',event=>{if(!event.target.matches?.('[data-rich-note]'))return;event.preventDefault();const text=event.dataTransfer?.getData('text/plain')||'';document.execCommand('insertText',false,text);});
+    document.addEventListener('input',event=>{const editor=editorOf(event.target);if(!editor)return;const binding=bindingFor(editor);if(!binding)return;
+      if(event.target.matches?.('[data-note-title-input]')){const id=idOf(editor),value=String(event.target.value).slice(0,120);if(value!==event.target.value)event.target.value=value;binding.onNoteTitleInput(id,value);const title=editor.querySelector('[data-md-title-output]'),shown=value||`Note ${[...editor.parentElement.querySelectorAll('[data-markdown-note-editor]')].indexOf(editor)+1}`;if(title)title.textContent=shown;bodyOf(editor)?.setAttribute('aria-label',`Source Markdown de la note : ${shown}`);richOf(editor)?.setAttribute('aria-label',`Éditeur visuel de la note : ${shown}`);}
+      else if(event.target.matches?.('[data-rich-note]')){captureRich(event.target);richEditRevisions.set(event.target,(richEditRevisions.get(event.target)||0)+1);syncRich(editor);}
+      else if(event.target.matches?.('textarea[data-widget-note-id][data-note-date]')){if(syncedSources.has(event.target)){syncedSources.delete(event.target);return;}const rich=richOf(editor);if(rich&&!rich.hidden)populateVisual(editor,binding);}
+    });
+    document.addEventListener('click',event=>{const editor=editorOf(event.target);if(!editor||!bindingFor(editor))return;const action=event.target.closest?.('[data-md-action]');if(action){applyAction(editor,action.dataset.mdAction);const status=editor.querySelector('[data-md-status]');if(status)status.textContent=`${action.getAttribute('aria-label')} appliqué.`;return;}if(event.target.closest?.('[data-md-source-toggle]'))toggleSource(editor);});
+    document.addEventListener('keydown',event=>{const rich=event.target.matches?.('[data-rich-note]'),source=event.target.matches?.('textarea[data-widget-note-id][data-note-date]');if(!(rich||source)||!(event.ctrlKey||event.metaKey)||event.altKey)return;const action=event.key.toLowerCase()==='b'?'bold':event.key.toLowerCase()==='i'?'italic':null;if(action){event.preventDefault();if(rich)applyAction(editorOf(event.target),action);else applySourceAction(event.target,action);}});
+    listeners=true;
+  }
+  function mount(root,options){bindings.set(root,{...options});setup();for(const editor of root.querySelectorAll('[data-markdown-note-editor]')){const id=idOf(editor),source=bodyOf(editor),rich=richOf(editor),button=editor.querySelector('[data-md-source-toggle]'),input=editor.querySelector('[data-note-title-input]'),value=String(options.getNoteTitle?.(id)||'').slice(0,120);if(input&&document.activeElement!==input)input.value=value;const title=editor.querySelector('[data-md-title-output]'),shown=value||`Note ${[...root.querySelectorAll('[data-markdown-note-editor]')].indexOf(editor)+1}`;if(title)title.textContent=shown;source?.setAttribute('aria-label',`Source Markdown de la note : ${shown}`);rich?.setAttribute('aria-label',`Éditeur visuel de la note : ${shown}`);const showingSource=sourceState.get(id)===true;if(source&&rich){source.hidden=!showingSource;rich.hidden=showingSource;if(button){button.textContent=showingSource?'Éditeur':'Markdown';button.setAttribute('aria-pressed',String(showingSource));}if(rich.dataset.renderedMarkdown!==source.value&&!showingSource)populateVisual(editor,bindings.get(root));}}return {captureFocus:()=>captureFocus(root),restoreFocus:snapshot=>restoreFocus(root,snapshot)};}
+  window.OrganisationMarkdownNoteUI={mount,renderSafeMarkdown,captureFocus,restoreFocus};
+})();
+
+/* UI pur: branchez getWidgets/onWidgetsChange sur le modèle existant.
+   Données attendues: [{id:string,type:'focus'|'tasks'|'habits'|'notes'}].
+   Cette couche ne fait aucune persistance ni requête réseau. */
+(() => {
+  'use strict';
+  const DEFAULT_TYPES = ['tasks', 'habits', 'notes'];
+  const LABELS = { tasks:'Tâches du jour', habits:'Habitudes', notes:'Notes' };
+  const uniqueId = () => `widget-${globalThis.crypto?.randomUUID?.() || `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`}`;
+  const localDateISO = (date = new Date()) => `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+  const announce = (node, text) => { if (node) node.textContent = text; };
+
+  function mountTodayWidgets({ getWidgets, onWidgetsChange, renderBody, getTaskSummary = () => ({total:0,done:0,next:''}), getNoteContent = () => '', onNoteInput = () => {}, getNoteTitle = () => '', onNoteTitleInput = () => {}, renderSafeMarkdown = null, listRetiredNoteWidgets = () => [], restoreWidget = () => {}, list = document.querySelector('[data-widget-list]'), select = document.querySelector('[data-widget-type]'), addButton = document.querySelector('[data-widget-add]'), status = document.querySelector('[data-widget-status]'), retiredSection = document.querySelector('[data-retired-note-widgets]'), retiredList = document.querySelector('[data-retired-note-list]') }) {
+    if (!list || !select || !addButton || typeof getWidgets !== 'function' || typeof onWidgetsChange !== 'function') throw new Error('Today widgets: éléments requis ou callbacks absents.');
+    let draggedId = null;
+    let domIdCounter = 0;
+    const domIds = new Map();
+    const domIdFor = id => { if (!domIds.has(id)) { const suffix=Array.from(String(id),char=>char.codePointAt(0).toString(16)).join('-'); domIds.set(id, `today-note-${++domIdCounter}-${suffix}`); } return domIds.get(id); };
+    const stableWidgets = () => {
+      const seen = new Set();
+      const items = (getWidgets() || []).filter(item => { if(!item||item.type==='focus'||!DEFAULT_TYPES.includes(item.type)||typeof item.id!=='string'||!item.id||seen.has(item.id))return false;seen.add(item.id);return true; });
+      const focus = (getWidgets() || []).find(item => item?.type === 'focus');
+      return [{ id: focus?.id || 'widget-focus', type:'focus' }, ...items];
+    };
+    const commit = next => {
+      const items = [{ id: stableWidgets()[0].id, type:'focus' }, ...next.filter(item => item.type !== 'focus')];
+      onWidgetsChange(items);
+      render();
+    };
+    const move = (id, delta) => {
+      const items = stableWidgets(); const from = items.findIndex(item => item.id === id);
+      const to = from + delta;
+      if (from <= 0 || to <= 0 || to >= items.length) return;
+      [items[from], items[to]] = [items[to], items[from]];
+      commit(items.slice(1));
+      Array.from(list.querySelectorAll('[data-widget-id]')).find(card=>card.dataset.widgetId===id)?.querySelector(`[data-move="${delta < 0 ? 'up' : 'down'}"]`)?.focus();
+      announce(status, `${LABELS[items[to].type]} déplacé${items[to].type === 'notes' ? 'e' : ''} ${delta < 0 ? 'vers le haut' : 'vers le bas'}.`);
+    };
+    function render() {
+      const items = stableWidgets();
+      const editorFocus = window.OrganisationMarkdownNoteUI?.captureFocus?.(list);
+      const active = document.activeElement?.matches?.('[data-widget-note-id]') ? { id:document.activeElement.dataset.widgetNoteId, date:document.activeElement.dataset.noteDate, start:document.activeElement.selectionStart, end:document.activeElement.selectionEnd, value:document.activeElement.value } : null;
+      list.replaceChildren();
+      items.slice(1).forEach((item, index) => {
+        const card = document.createElement('article'); card.className = 'dashboard-widget'; card.dataset.widgetId = item.id; card.dataset.widgetType = item.type; card.draggable = true;
+        const heading = item.type === 'notes' ? document.createElement('h3') : null;
+        if (heading) { heading.className = 'dashboard-widget__heading'; heading.textContent = LABELS[item.type]; }
+        const tools = document.createElement('div'); tools.className = 'widget-tools'; tools.setAttribute('role','group'); tools.setAttribute('aria-label',`Actions pour ${LABELS[item.type]}`);
+        const up = document.createElement('button'); up.className = 'widget-tool'; up.type='button'; up.dataset.move='up'; up.textContent='↑'; up.setAttribute('aria-label',`Déplacer ${LABELS[item.type]} vers le haut`); up.disabled=index===0; up.addEventListener('click',()=>move(item.id,-1));
+        const down = document.createElement('button'); down.className='widget-tool'; down.type='button'; down.dataset.move='down'; down.textContent='↓'; down.setAttribute('aria-label',`Déplacer ${LABELS[item.type]} vers le bas`); down.disabled=index===items.length-2; down.addEventListener('click',()=>move(item.id,1));
+        const remove = document.createElement('button'); remove.className='widget-tool widget-tool--remove'; remove.type='button'; remove.textContent='Retirer'; remove.setAttribute('aria-label',`Retirer ${LABELS[item.type]}`); remove.addEventListener('click',()=>{ commit(stableWidgets().filter(candidate=>candidate.id!==item.id)); announce(status,`${LABELS[item.type]} retiré.`); });
+        tools.append(up,down,remove);
+        const body = document.createElement('div'); body.className='dashboard-widget__body';
+        if (item.type === 'notes') {
+          const inputId = domIdFor(item.id);
+          const titleId = `${inputId}-title`;
+          const editor = document.createElement('div'); editor.className='markdown-note-editor'; editor.dataset.markdownNoteEditor=''; editor.dataset.widgetNoteId=item.id;
+          const titleOutput=document.createElement('span');titleOutput.className='markdown-note-editor__title-output';titleOutput.dataset.mdTitleOutput='';
+          titleOutput.textContent=String(getNoteTitle(item.id)||'').slice(0,120)||`Note ${items.slice(1).filter(x=>x.type==='notes').findIndex(x=>x.id===item.id)+1}`;
+          const label = document.createElement('label'); label.className='markdown-note-editor__title-label'; label.htmlFor=titleId; label.textContent='Titre de la note';
+          const titleInput=document.createElement('input');titleInput.type='text';titleInput.id=titleId;titleInput.className='markdown-note-editor__title';titleInput.maxLength=120;titleInput.dataset.noteTitleInput='';titleInput.setAttribute('aria-label','Titre de la note');titleInput.placeholder='Titre (facultatif)';titleInput.value=String(getNoteTitle(item.id)||'').slice(0,120);
+          const area = document.createElement('textarea');
+          area.id = inputId; area.className = 'widget-note markdown-note-editor__body'; area.rows = 3; area.maxLength = 20000;
+          area.setAttribute('aria-label', `Source Markdown de la note : ${titleOutput.textContent}`); area.placeholder = 'Quelques mots pour cette journée…'; area.hidden=true;
+          const noteDate=localDateISO();
+          area.dataset.widgetNoteId=item.id; area.dataset.noteDate=noteDate;
+          area.value = String(getNoteContent(item.id,noteDate) ?? '');
+          area.addEventListener('input', () => { onNoteInput(item.id,noteDate,area.value); });
+          const toolbar=document.createElement('div');toolbar.className='markdown-toolbar';toolbar.setAttribute('role','toolbar');toolbar.setAttribute('aria-label','Mise en forme de la note');
+          const controls=[['heading','Titre','H'],['bold','Gras','G'],['italic','Italique','I'],['list','Liste à puces','• Liste'],['quote','Citation','“ ”'],['code','Code','</>']];
+          controls.forEach(([action,name,text])=>{const button=document.createElement('button');button.type='button';button.className='markdown-tool';button.dataset.mdAction=action;button.setAttribute('aria-label',name);button.title=name;button.textContent=text;toolbar.append(button);});
+          const rich=document.createElement('div');rich.className='markdown-note-editor__body markdown-rich-editor';rich.contentEditable='true';rich.dataset.richNote='';rich.setAttribute('role','textbox');rich.setAttribute('aria-multiline','true');rich.setAttribute('aria-label',`Éditeur visuel de la note : ${titleOutput.textContent}`);rich.setAttribute('aria-describedby',`${inputId}-help`);rich.dataset.renderedMarkdown='';
+          const previewId=`${inputId}-source`;const previewToggle=document.createElement('button');previewToggle.type='button';previewToggle.className='markdown-tool markdown-tool--preview';previewToggle.dataset.mdSourceToggle='';previewToggle.setAttribute('aria-pressed','false');previewToggle.setAttribute('aria-controls',previewId);previewToggle.textContent='Markdown';toolbar.append(previewToggle);
+          const help=document.createElement('p');help.id=`${inputId}-help`;help.className='markdown-note-status';help.textContent='Éditeur visuel. Le texte source reste enregistré en Markdown.';
+          const noteStatus=document.createElement('p');noteStatus.className='markdown-note-status';noteStatus.dataset.mdStatus='';noteStatus.setAttribute('aria-live','polite');
+          editor.append(titleOutput,label,titleInput,toolbar,rich,area,help,noteStatus);body.append(editor);
+        } else {
+          const rendered = typeof renderBody === 'function' ? renderBody(item) : `${LABELS[item.type]} — contenu à raccorder.`;
+          if (rendered instanceof Node) body.append(rendered); else body.append(document.createTextNode(String(rendered ?? '')));
+        }
+        card.setAttribute('aria-label', LABELS[item.type]);
+        card.append(tools); if (heading) card.append(heading); card.append(body);
+        card.addEventListener('dragstart',event=>{draggedId=item.id;card.classList.add('is-moving');event.dataTransfer?.setData('text/plain',item.id);if(event.dataTransfer)event.dataTransfer.effectAllowed='move';});
+        card.addEventListener('dragend',()=>{draggedId=null;card.classList.remove('is-moving');});
+        card.addEventListener('dragover',event=>{if(draggedId&&draggedId!==item.id){event.preventDefault();event.dataTransfer&&(event.dataTransfer.dropEffect='move');}});
+        card.addEventListener('drop',event=>{event.preventDefault();const sourceId=draggedId||event.dataTransfer?.getData('text/plain');const current=stableWidgets();const from=current.findIndex(x=>x.id===sourceId),to=current.findIndex(x=>x.id===item.id);if(from<=0||to<=0||from===to)return;const [picked]=current.splice(from,1);current.splice(to,0,picked);commit(current.slice(1));announce(status,`${LABELS[picked.type]} déplacé.`);});
+        list.append(card);
+      });
+      const enabled = DEFAULT_TYPES.some(type=>type===select.value);
+      addButton.disabled=!enabled;
+      const empty = items.length===1;
+      if(empty){const msg=document.createElement('p');msg.className='dashboard-empty';msg.textContent='Votre espace est prêt. Ajoutez un encart pour le personnaliser.';list.append(msg);}
+      renderRetiredNotes();
+      const noteUI=window.OrganisationMarkdownNoteUI?.mount(list,{getNoteTitle,onNoteTitleInput,renderSafeMarkdown});
+      if(active){const input=Array.from(list.querySelectorAll('[data-widget-note-id]')).find(area=>area.dataset.widgetNoteId===active.id&&area.dataset.noteDate===active.date);if(input){input.focus();if(active.start!==null&&active.end!==null)input.setSelectionRange(active.start,active.end);}}
+      if(editorFocus&&!active)noteUI?.restoreFocus(editorFocus);
+    }
+    function renderRetiredNotes(){
+      if(!retiredSection||!retiredList)return;retiredList.replaceChildren();
+      const retired=listRetiredNoteWidgets()||[];retiredSection.hidden=retired.length===0;
+      retired.forEach((item,index)=>{if(!item||typeof item.id!=='string')return;const row=document.createElement('li');const label=document.createElement('span');label.textContent=String(item.title||getNoteTitle(item.id)||`Note retirée ${index+1}`).slice(0,120);const button=document.createElement('button');button.type='button';button.className='widget-tool';button.dataset.restoreNoteWidget=item.id;button.textContent='Restaurer';button.setAttribute('aria-label',`Restaurer ${label.textContent}`);button.addEventListener('click',()=>{restoreWidget(item.id);render();announce(status,'La note a été restaurée.');});row.append(label,button);retiredList.append(row);});
+    }
+    addButton.addEventListener('click',()=>{
+      const type=select.value;if(!DEFAULT_TYPES.includes(type)){announce(status,'Type d’encart non disponible.');return;}
+      const items=stableWidgets();const next=[...items.slice(1),{id:uniqueId(),type}];commit(next);announce(status,`${LABELS[type]} ajouté.`);
+      Array.from(list.querySelectorAll('[data-widget-id]')).find(card=>card.dataset.widgetId===next[next.length-1].id)?.querySelector('[data-move="up"]')?.focus();
+    });
+    const updateFocus = () => {
+      const summary=getTaskSummary()||{};const total=Math.max(0,Number(summary.total)||0),done=Math.min(total,Math.max(0,Number(summary.done)||0));
+      const pct=total?Math.round(done/total*100):0;const text=summary.next?`${summary.next} · ${Math.max(0,total-done)} tâche${total-done===1?'':'s'} restante${total-done===1?'':'s'}.`:total?`${total-done} tâche${total-done===1?'':'s'} à terminer aujourd’hui.`:'Aucune tâche prévue aujourd’hui.';
+      document.querySelector('[data-focus-summary]')?.replaceChildren(document.createTextNode(text));
+      const progress=document.querySelector('[data-focus-progress]');if(progress)progress.style.width=`${pct}%`;
+      const count=document.querySelector('[data-focus-count]');if(count)count.textContent=`${done} sur ${total} terminées`;
+    };
+    render();updateFocus();return { render, updateFocus };
+  }
+
+  function startLocalClock(clock = document.getElementById('local-clock'), onLocalDayChanged = () => {}) {
+    if (!clock) return () => {};
+    const formatter = new Intl.DateTimeFormat(undefined,{hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
+    let timer = null;let day = localDateISO();let stopped = false;
+    const update = () => {
+      const now=new Date();const nextDay=localDateISO(now);if(nextDay!==day){day=nextDay;onLocalDayChanged();}
+      clock.dateTime=formatter.format(now);clock.textContent=formatter.format(now);
+    };
+    const schedule = () => { if(stopped||document.hidden)return;window.clearTimeout(timer);const delay=60_000-(Date.now()%60_000)+20;timer=window.setTimeout(()=>{update();schedule();},delay); };
+    const onVisibility=()=>{if(document.hidden){window.clearTimeout(timer);timer=null;}else{update();schedule();}};
+    update();schedule();document.addEventListener('visibilitychange',onVisibility);
+    return()=>{stopped=true;window.clearTimeout(timer);document.removeEventListener('visibilitychange',onVisibility);};
+  }
+
+  window.OrganisationTodayUI = { mountTodayWidgets, startLocalClock };
+})();
+</script>
+<script>
 (() => {
       'use strict';
       // Supabase project URL and publishable key are public configuration values, never passwords or secret keys.
@@ -1039,7 +1321,7 @@
       const IMPORT_DISMISSED_PREFIX = 'organisation-import-dismissed-v1:';
       const MAX_IMPORT_FILE_BYTES = 512 * 1024;
       const MAX_CLOUD_STATE_BYTES = 768 * 1024;
-      const APP_BUILD_ID = 202610240005;
+      const APP_BUILD_ID = 202610240007;
       const APP_UPDATE_CHECK_INTERVAL_MS = 10 * 60 * 1000;
       const APP_UPDATE_CHECK_COOLDOWN_MS = 45 * 1000;
       const priorityLabels = { high: 'Prioritaire', medium: 'Important', low: 'À mon rythme' };
@@ -1075,6 +1357,62 @@
         return date.getFullYear() === year && date.getMonth() === month-1 && date.getDate() === day;
       }
       const widgetTypes = ['focus','tasks','habits','notes'];
+      function normalizeWidgetInstances(rawWidgets) {
+        const seenIds = new Set();
+        const normalized = [];
+        let focusAdded = false;
+        (Array.isArray(rawWidgets) ? rawWidgets : []).forEach((widget, index) => {
+          if (!widget || (!widgetTypes.includes(widget.type) && widget.type !== 'stopwatch')) return;
+          if (widget.type === 'focus' && focusAdded) return;
+          if (widget.type === 'focus') focusAdded = true;
+          const baseId = typeof widget.id === 'string' && widget.id.length > 0 && widget.id.length <= 160
+            ? widget.id : `widget-${widget.type}`;
+          let id = baseId;
+          if (seenIds.has(id)) {
+            const collisionIndex = normalized.findIndex(existing => existing.id === id);
+            const collision = normalized[collisionIndex];
+            if (widget.type === 'notes' && collision && collision.type !== 'notes') {
+              let replacement = `widget-${collision.type}-legacy-${collisionIndex + 1}`; let suffix = 2;
+              while (seenIds.has(replacement)) replacement = `widget-${collision.type}-legacy-${collisionIndex + 1}-${suffix++}`;
+              normalized[collisionIndex] = { id:replacement, type:collision.type };
+              seenIds.delete(baseId); seenIds.add(replacement);
+            } else {
+              let suffix = 2;
+              do { id = `${baseId.slice(0,120)}-legacy-${index + 1}-${suffix++}`; } while (seenIds.has(id));
+            }
+          }
+          seenIds.add(id);
+          normalized.push({ id, type:widget.type });
+        });
+        if (!normalized.some(widget => widget.type === 'focus')) {
+          let focusId = 'widget-focus'; let suffix = 1;
+          while (seenIds.has(focusId)) focusId = `widget-focus-pinned-${suffix++}`;
+          normalized.unshift({ id:focusId, type:'focus' });
+        }
+        const focusWidgets = normalized.filter(widget => widget.type === 'focus');
+        return [...focusWidgets, ...normalized.filter(widget => widget.type !== 'focus')];
+      }
+      function normalizeWidgetNotes(rawNotes) {
+        const normalized = Object.create(null);
+        if (!rawNotes || typeof rawNotes !== 'object' || Array.isArray(rawNotes)) return normalized;
+        for (const [widgetId, byDate] of Object.entries(rawNotes)) {
+          if (!widgetId || widgetId.length > 160 || !byDate || typeof byDate !== 'object' || Array.isArray(byDate)) continue;
+          const notes = Object.create(null);
+          for (const [date, value] of Object.entries(byDate)) {
+            if (isValidLocalDate(date) && typeof value === 'string' && value.length <= 20000) notes[date] = value;
+          }
+          normalized[widgetId] = notes;
+        }
+        return normalized;
+      }
+      function normalizeWidgetNoteTitles(rawTitles) {
+        const normalized = Object.create(null);
+        if (!rawTitles || typeof rawTitles !== 'object' || Array.isArray(rawTitles)) return normalized;
+        for (const [widgetId, title] of Object.entries(rawTitles)) {
+          if (widgetId && widgetId.length <= 160 && typeof title === 'string' && title.length <= 120) normalized[widgetId] = title;
+        }
+        return normalized;
+      }
       const MAX_CALENDAR_EVENTS = 1000;
       function normalizeCalendarEvent(raw) {
         if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
@@ -1408,7 +1746,7 @@
   global.createCalendarUI = createCalendarUI;
 })(typeof globalThis !== 'undefined' ? globalThis : window);
 
-      const makeInitialState = () => ({ tasks: [], habits: [], notes: {}, calendarEvents:[], widgets: [], calculator:makeInitialCalculator(), stopwatch:makeInitialStopwatch(), timer:makeInitialTimer(), importConflicts:[], importFingerprints:[] });
+      const makeInitialState = () => ({ tasks: [], habits: [], notes: {}, widgetNotes:{}, widgetNoteTitles:{}, calendarEvents:[], widgets:[{ id:'widget-focus', type:'focus' }], calculator:makeInitialCalculator(), stopwatch:makeInitialStopwatch(), timer:makeInitialTimer(), importConflicts:[], importFingerprints:[] });
       let activeUser = null;
       let syncMode = 'local';
       let supabaseClient = null;
@@ -1448,6 +1786,8 @@
       const timer = makeInitialTimer();
       let timerInterval = null;
       let calendarUI = null;
+      let todayWidgetsUI = null;
+      let stopLocalClock = null;
       let calendarBoundState = null;
       let calendarBoundEpoch = authContextEpoch;
 
@@ -1464,6 +1804,8 @@
             const migrated = { ...makeInitialState(), ...saved };
             migrated.importConflicts = Array.isArray(saved.importConflicts) ? saved.importConflicts : [];
             migrated.importFingerprints = Array.isArray(saved.importFingerprints) ? saved.importFingerprints.filter(value => typeof value === 'string' && /^[0-9a-f]{64}$/.test(value)) : [];
+            migrated.widgetNotes = normalizeWidgetNotes(saved.widgetNotes);
+            migrated.widgetNoteTitles = normalizeWidgetNoteTitles(saved.widgetNoteTitles);
             migrated.calendarEvents = normalizeCalendarEvents(saved.calendarEvents);
             // Remove only the exact sample records shipped by older versions; keep every user-created item.
             migrated.tasks = migrated.tasks.filter(task => !sampleTaskIds.has(task?.id)).map(task => {
@@ -1482,11 +1824,7 @@
               };
             });
             migrated.habits = migrated.habits.filter(habit => !sampleHabitIds.has(habit.id));
-            const seen = new Set();
-            migrated.widgets = (Array.isArray(migrated.widgets) ? migrated.widgets : []).filter(widget => {
-              if (!widget || (!widgetTypes.includes(widget.type) && widget.type !== 'stopwatch') || seen.has(widget.type)) return false;
-              seen.add(widget.type); return true;
-            }).map(widget => ({ id: `widget-${widget.type}`, type: widget.type }));
+            migrated.widgets = normalizeWidgetInstances(saved.widgets ?? migrated.widgets);
             const savedCalculator = saved.calculator || {};
             migrated.calculator = {
               entry: typeof savedCalculator.entry === 'string' && /^-?\d+(?:\.\d*)?$/.test(savedCalculator.entry) && savedCalculator.entry.length <= 32 ? savedCalculator.entry : '0',
@@ -1701,6 +2039,9 @@
       function escapeHTML(value) {
         return String(value).replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[char]);
       }
+      function widgetDomToken(id) {
+        return [...new TextEncoder().encode(String(id))].map(byte => byte.toString(16).padStart(2,'0')).join('') || 'empty';
+      }
       function formatDate(iso) {
         if (!iso) return '';
         if (!isValidLocalDate(iso)) return String(iso);
@@ -1746,10 +2087,14 @@
         return tasks.filter(task => currentFilter === 'all' || (currentFilter === 'todo' ? !task.done : task.done));
       }
       function renderTaskList(id, scope) {
-        const list = document.getElementById(id);
-        if (!list) return;
         const tasks = visibleTasks(scope);
-        list.innerHTML = tasks.length ? tasks.map(taskMarkup).join('') : `<li class="empty-state"><strong>${currentFilter === 'done' ? 'Rien ici pour le moment.' : 'Un peu d’espace pour respirer.'}</strong>${currentFilter === 'done' ? 'Les tâches terminées apparaîtront ici.' : 'Ajoutez une tâche quand vous serez prêt·e.'}</li>`;
+        const markup = tasks.length ? tasks.map(taskMarkup).join('') : `<li class="empty-state"><strong>${currentFilter === 'done' ? 'Rien ici pour le moment.' : 'Un peu d’espace pour respirer.'}</strong>${currentFilter === 'done' ? 'Les tâches terminées apparaîtront ici.' : 'Ajoutez une tâche quand vous serez prêt·e.'}</li>`;
+        if (scope === 'today') {
+          const lists = document.querySelectorAll('[data-task-list="today"]');
+          if (lists.length) { lists.forEach(list => { list.innerHTML = markup; }); return; }
+        }
+        const list = document.getElementById(id);
+        if (list) list.innerHTML = markup;
       }
       function habitMarkup(habit) {
         return `<div class="habit-row"><input class="habit-check" type="checkbox" data-id="${escapeHTML(habit.id)}" aria-label="${habit.done ? 'Décocher' : 'Valider'} : ${escapeHTML(habit.name)}" ${habit.done ? 'checked' : ''}><span><span class="habit-name">${escapeHTML(habit.name)}</span><span class="habit-detail">${escapeHTML(habit.detail || 'un rituel pour soi')}</span></span><span class="habit-mark" aria-hidden="true">${habit.done ? '●' : '○'}</span><button class="icon-button delete-habit" type="button" data-id="${escapeHTML(habit.id)}" aria-label="Supprimer : ${escapeHTML(habit.name)}" title="Supprimer">×</button></div>`;
@@ -1759,14 +2104,18 @@
         const total = state.habits.length;
         const percent = total ? Math.round(complete / total * 100) : 0;
         const copy = `${complete} rituel${complete > 1 ? 's' : ''} sur ${total}`;
-        const copyElement = document.getElementById(`${prefix}-copy`); if (copyElement) copyElement.textContent = copy;
-        const bar = document.getElementById(`${prefix}-bar`); if (bar) bar.style.width = `${percent}%`;
-        const value = document.getElementById(`${prefix}-value`); if (value) value.textContent = `${percent}%`;
+        const copies = prefix === 'habit-progress' ? document.querySelectorAll('[data-habit-progress-copy]') : [document.getElementById(`${prefix}-copy`)];
+        const bars = prefix === 'habit-progress' ? document.querySelectorAll('[data-habit-progress-bar]') : [document.getElementById(`${prefix}-bar`)];
+        const values = prefix === 'habit-progress' ? document.querySelectorAll('[data-habit-progress-value]') : [document.getElementById(`${prefix}-value`)];
+        copies.forEach(element => { if (element) element.textContent = copy; });
+        bars.forEach(element => { if (element) element.style.width = `${percent}%`; });
+        values.forEach(element => { if (element) element.textContent = `${percent}%`; });
       }
       function renderHabits() {
-        const todayList = document.getElementById('today-habit-list');
-        if (todayList) todayList.innerHTML = state.habits.slice(0,3).map(habitMarkup).join('') || '<p class="empty-state">Aucun rituel pour le moment.</p>';
-        if (document.getElementById('habit-progress-copy')) setHabitProgress('habit-progress');
+        const todayLists = document.querySelectorAll('[data-habit-list="today"]');
+        const todayMarkup = state.habits.slice(0,3).map(habitMarkup).join('') || '<p class="empty-state">Aucun rituel pour le moment.</p>';
+        todayLists.forEach(list => { list.innerHTML = todayMarkup; });
+        if (todayLists.length) setHabitProgress('habit-progress');
         const fullList = document.getElementById('full-habit-list');
         if (fullList) fullList.innerHTML = state.habits.map(habitMarkup).join('') || '<p class="empty-state">Aucun rituel pour le moment. Ajoutez-en un quand vous le souhaitez.</p>';
         if (document.getElementById('full-habit-copy')) setHabitProgress('full-habit');
@@ -1782,61 +2131,156 @@
         const bar = document.getElementById('day-progress-bar'); if (bar) bar.style.width = `${percent}%`;
         const label = document.getElementById('day-progress-label'); if (label) label.textContent = `${percent}%`;
         const focus = document.getElementById('focus-task-label'); if (focus) focus.textContent = todayTasks.length ? `${done} sur ${todayTasks.length} tâche${todayTasks.length > 1 ? 's' : ''} terminée${done > 1 ? 's' : ''}` : 'Une journée toute neuve';
-        const summary = document.getElementById('task-summary'); if (summary) summary.textContent = `${todayTasks.length} tâche${todayTasks.length > 1 ? 's' : ''}`;
+        document.querySelectorAll('[data-task-summary]').forEach(summary => { summary.textContent = `${todayTasks.length} tâche${todayTasks.length > 1 ? 's' : ''}`; });
         const allSummary = document.getElementById('all-task-summary'); if (allSummary) allSummary.textContent = `${state.tasks.length} tâche${state.tasks.length > 1 ? 's' : ''} au total`;
         const remaining = state.tasks.filter(task => !task.done).length;
-        ['nav-task-count','mobile-task-count'].forEach(id => document.getElementById(id).textContent = remaining);
+        ['nav-task-count','mobile-task-count'].forEach(id => { const count = document.getElementById(id); if (count) count.textContent = remaining; });
         const greeting = state.tasks.length === 0 ? 'Ajoutez les encarts qui vous seront utiles, quand vous le souhaitez.' : remaining === 0 ? 'Vous avez fait votre part. Le reste peut attendre.' : `Il vous reste ${remaining} petite${remaining > 1 ? 's' : ''} chose${remaining > 1 ? 's' : ''} à votre rythme.`;
         const daySummary = document.getElementById('day-summary'); if (daySummary) daySummary.textContent = greeting;
         renderAccountUsername();
         document.getElementById('import-local-button').hidden = !hasConfirmedCloudAdmin() || !readLocalDataSources().length;
         updateBackupAccessControls();
+        todayWidgetsUI?.updateFocus();
       }
       function renderNote() {
-        const note = document.getElementById('daily-note'); if (note) note.value = state.notes[todayISO()] || '';
-      }
-      function widgetMarkup(widget) {
-        const tools = `<div class="widget-tools"><button class="widget-grip" type="button" draggable="true" data-drag-widget="${escapeHTML(widget.id)}" aria-label="Déplacer cet encart" title="Glisser pour déplacer">⠿</button><button class="icon-button widget-remove" type="button" data-remove-widget="${escapeHTML(widget.id)}" aria-label="Retirer cet encart" title="Retirer l’encart">× Retirer</button></div>`;
-        let body = '';
-        if (widget.type === 'focus') body = `<article class="focus-panel" aria-labelledby="focus-heading"><div class="focus-top"><span class="eyebrow">Priorité du jour</span><span class="focus-tag">À garder en tête</span></div><div><h2 id="focus-heading">Chaque petit pas compte.</h2><p id="focus-copy">Choisissez une priorité, et laissez le reste attendre son tour.</p></div><div class="focus-bottom"><span id="focus-task-label">Votre journée commence ici</span><span class="focus-progress"><span class="progress-track"><span id="day-progress-bar" style="width:0%"></span></span><span id="day-progress-label">0%</span></span></div></article>`;
-        if (widget.type === 'tasks') body = `<section class="panel"><div class="panel-header"><h2 class="panel-title" id="tasks-heading">À faire aujourd’hui</h2><div class="widget-tools"><span class="panel-note" id="task-summary">0 tâche</span><button class="icon-button add-task-trigger" type="button" aria-label="Ajouter une tâche" title="Ajouter une tâche">+</button></div></div><div class="task-controls" role="group" aria-label="Filtrer les tâches"><button class="filter-button" data-filter="all" aria-pressed="true">Toutes</button><button class="filter-button" data-filter="todo" aria-pressed="false">À faire</button><button class="filter-button" data-filter="done" aria-pressed="false">Terminées</button></div><ul class="task-list" id="today-task-list"></ul></section>`;
-        if (widget.type === 'habits') body = `<section class="panel"><div class="panel-header"><h2 class="panel-title" id="habits-heading">Mes rituels</h2><div class="widget-tools"><button class="text-button" data-view-link="habits">Tout voir →</button><button class="icon-button" type="button" data-add-habit aria-label="Ajouter un rituel" title="Ajouter un rituel">+</button></div></div><div class="habit-list" id="today-habit-list"></div><div class="habit-progress"><span id="habit-progress-copy">0 rituel sur 0</span><span class="habit-bar"><span id="habit-progress-bar" style="width:0%"></span></span><strong id="habit-progress-value">0%</strong></div></section>`;
-        if (widget.type === 'notes') body = `<section class="panel note-panel"><div class="panel-header"><h2 class="panel-title" id="note-heading">Quelques mots</h2><span class="panel-note">votre carnet</span></div><label class="sr-only" for="daily-note">Note du jour</label><textarea id="daily-note" placeholder="Qu’aimeriez-vous retenir de cette journée ?" maxlength="500"></textarea><div class="note-status"><span id="note-status">Enregistré automatiquement</span></div></section>`;
-        return `<div class="dashboard-widget" data-widget-id="${escapeHTML(widget.id)}" draggable="false">${tools}${body}</div>`;
+        // Le module d’interface conserve le focus et la sélection pendant son rendu.
       }
       function renderWidgets() {
-        const grid = document.getElementById('dashboard-grid');
-        if (!grid) return;
-        const visibleWidgets = state.widgets.filter(widget => widget.type !== 'stopwatch');
-        grid.innerHTML = visibleWidgets.length ? visibleWidgets.map(widgetMarkup).join('') : '<div class="dashboard-empty"><strong>Votre espace est vide.</strong>Ajoutez les encarts qui vous seront utiles, puis glissez-les pour les organiser.</div>';
-        grid.querySelectorAll('[data-remove-widget]').forEach(button => button.addEventListener('click', event => {
-          event.preventDefault(); event.stopPropagation(); removeWidget(button.dataset.removeWidget);
-        }));
+        if (!todayWidgetsUI) return;
+        todayWidgetsUI.render();
+      }
+      function renderTodayWidgetBody(widget) {
+        const wrapper = document.createElement('div');
+        const token = widgetDomToken(widget.id);
+        if (widget.type === 'tasks') {
+          wrapper.innerHTML = `<section class="panel"><div class="panel-header"><h2 class="panel-title" id="tasks-heading-${token}">À faire aujourd’hui</h2><div class="widget-tools"><span class="panel-note" data-task-summary></span><button class="icon-button add-task-trigger" type="button" aria-label="Ajouter une tâche" title="Ajouter une tâche">+</button></div></div><div class="task-controls" role="group" aria-label="Filtrer les tâches"><button class="filter-button" type="button" data-filter="all" aria-pressed="true">Toutes</button><button class="filter-button" type="button" data-filter="todo" aria-pressed="false">À faire</button><button class="filter-button" type="button" data-filter="done" aria-pressed="false">Terminées</button></div><ul class="task-list" data-task-list="today" aria-labelledby="tasks-heading-${token}"></ul></section>`;
+          wrapper.querySelector('[data-task-list="today"]').innerHTML = visibleTasks('today').map(taskMarkup).join('') || '<li class="empty-state">Un peu d’espace pour respirer.</li>';
+          wrapper.querySelector('[data-task-summary]').textContent = `${state.tasks.filter(task => !task.due || task.due <= todayISO()).length} tâche${state.tasks.filter(task => !task.due || task.due <= todayISO()).length === 1 ? '' : 's'}`;
+          wrapper.querySelectorAll('.filter-button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === currentFilter)));
+        } else if (widget.type === 'habits') {
+          wrapper.innerHTML = `<section class="panel"><div class="panel-header"><h2 class="panel-title" id="habits-heading-${token}">Mes rituels</h2><div class="widget-tools"><button class="text-button" type="button" data-view-link="habits">Tout voir →</button><button class="icon-button" type="button" data-add-habit aria-label="Ajouter un rituel" title="Ajouter un rituel">+</button></div></div><div class="habit-list" data-habit-list="today"></div><div class="habit-progress"><span data-habit-progress-copy>0 rituel sur 0</span><span class="habit-bar"><span data-habit-progress-bar style="width:0%"></span></span><strong data-habit-progress-value>0%</strong></div></section>`;
+          wrapper.querySelector('[data-habit-list="today"]').innerHTML = state.habits.slice(0,3).map(habitMarkup).join('') || '<p class="empty-state">Aucun rituel pour le moment.</p>';
+          const done = state.habits.filter(habit => habit.done).length, total = state.habits.length, percent = total ? Math.round(done / total * 100) : 0;
+          wrapper.querySelector('[data-habit-progress-copy]').textContent = `${done} rituel${done === 1 ? '' : 's'} sur ${total}`;
+          wrapper.querySelector('[data-habit-progress-bar]').style.width = `${percent}%`;
+          wrapper.querySelector('[data-habit-progress-value]').textContent = `${percent}%`;
+        }
+        return wrapper;
+      }
+      function mountTodayWidgets() {
+        const ui = window.OrganisationTodayUI;
+        if (!ui || todayWidgetsUI) return;
+        todayWidgetsUI = ui.mountTodayWidgets({
+          getWidgets:() => state.widgets,
+          onWidgetsChange:next => {
+            const focusId = next.find(item => item.type === 'focus')?.id || 'widget-focus';
+            const hidden = state.widgets.filter(item => item.type === 'stopwatch' || item.type === 'focus' && item.id !== focusId);
+            let normalized = normalizeWidgetInstances([...next, ...hidden]);
+            const newNote = normalized.find(item => item.type === 'notes' && !state.widgets.some(old => old.id === item.id));
+            const notesExist = Object.keys(state.notes || {}).length || Object.keys(state.widgetNotes || {}).length || Object.keys(state.widgetNoteTitles || {}).length;
+            if (newNote && !notesExist && !normalized.some(item => item.type === 'notes' && item.id === 'widget-notes')) newNote.id = 'widget-notes';
+            state.widgets = normalizeWidgetInstances(normalized);
+            saveState();
+          },
+          renderBody:renderTodayWidgetBody,
+          getTaskSummary:() => {
+            const tasks = state.tasks.filter(task => !task.due || task.due <= todayISO());
+            const next = tasks.find(task => !task.done);
+            return { total:tasks.length, done:tasks.filter(task => task.done).length, next:next?.title || '' };
+          },
+          getNoteContent:(id,date) => id === 'widget-notes' ? (state.notes?.[date] || '') : (state.widgetNotes?.[id]?.[date] || ''),
+          getNoteTitle:id => state.widgetNoteTitles?.[id] || '',
+          onNoteTitleInput:(id,value) => {
+            if (typeof id !== 'string' || !state.widgets.some(item => item.id === id && item.type === 'notes')) return;
+            state.widgetNoteTitles ||= Object.create(null);
+            const title=String(value).slice(0,120);
+            if (title) state.widgetNoteTitles[id]=title; else delete state.widgetNoteTitles[id];
+            saveState();
+          },
+          renderSafeMarkdown:(source) => window.OrganisationMarkdownNoteUI.renderSafeMarkdown(source),
+          onNoteInput:(id,date,value) => {
+            if (!isValidLocalDate(date) || !state.widgets.some(item => item.id === id && item.type === 'notes')) return;
+            if (id === 'widget-notes') { state.notes = state.notes && typeof state.notes === 'object' ? state.notes : {}; state.notes[date] = value; }
+            else { state.widgetNotes ||= Object.create(null); state.widgetNotes[id] ||= Object.create(null); state.widgetNotes[id][date] = value; }
+            saveState();
+          },
+          listRetiredNoteWidgets,
+          restoreWidget,
+        });
+        stopLocalClock = ui.startLocalClock(document.getElementById('local-clock'), () => {
+          renderDate(); renderProgress(); renderHabits(); renderTaskList('today-task-list','today');
+          const activeNote = document.activeElement?.matches?.('[data-widget-note-id]');
+          if (!activeNote) todayWidgetsUI?.render();
+        });
+      }
+      function createWidgetInstanceId(type) {
+        const baseId = `widget-${type}`;
+        const idIsActive = candidate => state.widgets.some(widget => widget.id === candidate);
+        const legacyNoteExists = type === 'notes' && baseId === 'widget-notes' && Object.keys(state.notes || {}).length > 0;
+        if (!idIsActive(baseId) && !Object.prototype.hasOwnProperty.call(state.widgetNotes || {}, baseId) && !Object.prototype.hasOwnProperty.call(state.widgetNoteTitles || {}, baseId) && !legacyNoteExists) return baseId;
+        let id;
+        do { id = `${baseId}-${crypto.randomUUID()}`; } while (idIsActive(id) || Object.prototype.hasOwnProperty.call(state.widgetNotes || {}, id) || Object.prototype.hasOwnProperty.call(state.widgetNoteTitles || {}, id));
+        return id;
       }
       function addWidget(type) {
-        if (!widgetTypes.includes(type) || state.widgets.some(widget => widget.type === type)) { showToast('Cet encart est déjà dans votre espace.'); return; }
-        state.widgets.push({ id:`widget-${type}`, type });
-        saveState(); render(); document.getElementById('widget-dialog').close();
+        if (!widgetTypes.includes(type) || type === 'focus') { showToast('La priorité du jour est déjà présente.'); return false; }
+        const id = createWidgetInstanceId(type);
+        state.widgets.push({ id, type });
+        saveState(); render(); document.getElementById('widget-dialog')?.close();
         showToast('L’encart a été ajouté à votre espace.');
+        return id;
+      }
+      function listRetiredNoteWidgets() {
+        const activeIds = new Set(state.widgets.filter(widget => widget.type === 'notes').map(widget => widget.id));
+        const retiredIds = Object.keys(state.widgetNotes || {}).filter(id => !activeIds.has(id) && Object.keys(state.widgetNotes[id] || {}).length);
+        for (const id of Object.keys(state.widgetNoteTitles || {})) if (!activeIds.has(id) && !retiredIds.includes(id)) retiredIds.push(id);
+        if (!activeIds.has('widget-notes') && Object.keys(state.notes || {}).length && !retiredIds.includes('widget-notes')) retiredIds.push('widget-notes');
+        return retiredIds.map(id => state.widgetNoteTitles?.[id] ? ({ id, title:state.widgetNoteTitles[id] }) : ({ id }));
+      }
+      function restoreWidget(id) {
+        if (typeof id !== 'string' || state.widgets.some(widget => widget.id === id && widget.type === 'notes')) return false;
+        const hasWidgetNotes = Object.prototype.hasOwnProperty.call(state.widgetNotes || {}, id);
+        const hasLegacyNotes = id === 'widget-notes' && Object.keys(state.notes || {}).length > 0;
+        const hasTitle = Object.prototype.hasOwnProperty.call(state.widgetNoteTitles || {}, id);
+        if (!hasWidgetNotes && !hasLegacyNotes && !hasTitle) return false;
+        let restoredId = id;
+        const collision = state.widgets.find(widget => widget.id === restoredId);
+        if (collision) {
+          let replacement;
+          do { replacement = `widget-${collision.type}-${crypto.randomUUID()}`; } while (state.widgets.some(widget => widget.id === replacement));
+          collision.id = replacement;
+        }
+        state.widgets.push({ id:restoredId, type:'notes' });
+        state.widgets = normalizeWidgetInstances(state.widgets);
+        saveState(); document.getElementById('widget-dialog')?.close();
+        return true;
       }
       function refreshWidgetOptions() {
         document.querySelectorAll('[data-add-widget]').forEach(button => {
-          const added = state.widgets.some(widget => widget.type === button.dataset.addWidget);
+          const added = button.dataset.addWidget === 'focus';
           button.disabled = added;
           button.setAttribute('aria-disabled', String(added));
-          button.title = added ? 'Déjà ajouté' : '';
+          button.title = added ? 'La priorité du jour est toujours présente' : '';
         });
       }
       function removeWidget(id) {
-        state.widgets = state.widgets.filter(widget => widget.id !== id);
-        saveState(); render(); showToast('L’encart a été retiré. Son contenu reste enregistré.');
+        const widget = state.widgets.find(item => item.id === id);
+        if (!widget || widget.type === 'focus') { showToast('La priorité du jour reste toujours présente.'); return false; }
+        state.widgets = state.widgets.filter(item => item.id !== id);
+        saveState(); render();
+        showToast(widget.type === 'notes' ? 'L’encart a été retiré. Sa note reste disponible dans les notes retirées.' : 'L’encart a été retiré. Son contenu reste enregistré.');
+        return true;
       }
       function moveWidget(id, offset) {
-        const index = state.widgets.findIndex(widget => widget.id === id);
+        const fixed = state.widgets.filter(widget => widget.type === 'focus');
+        const movable = state.widgets.filter(widget => widget.type !== 'focus');
+        const index = movable.findIndex(widget => widget.id === id);
         const next = index + offset;
-        if (index < 0 || next < 0 || next >= state.widgets.length) return;
-        [state.widgets[index], state.widgets[next]] = [state.widgets[next], state.widgets[index]];
+        if (index < 0 || next < 0 || next >= movable.length) return false;
+        [movable[index], movable[next]] = [movable[next], movable[index]];
+        state.widgets = [...fixed, ...movable];
         saveState(); render();
+        return true;
       }
       function addHabit(formData) {
         const name = String(formData.get('name') || '').trim(); if (!name) return;
@@ -2006,6 +2450,11 @@
         document.querySelectorAll('.section-view').forEach(section => section.classList.toggle('active', section.id === `${view}-view`));
         document.querySelectorAll('.nav-item[data-view]').forEach(button => {
           const active = button.dataset.view === view;
+          button.classList.toggle('active', active);
+          if (active) button.setAttribute('aria-current','page'); else button.removeAttribute('aria-current');
+        });
+        document.querySelectorAll('.mobile-nav [data-view-link]').forEach(button => {
+          const active = button.dataset.viewLink === view;
           button.classList.toggle('active', active);
           if (active) button.setAttribute('aria-current','page'); else button.removeAttribute('aria-current');
         });
@@ -2246,45 +2695,19 @@
           }
           return;
         }
-        if (!event.target.matches('#daily-note')) return;
-        state.notes[todayISO()] = event.target.value; saveState();
-        const status = document.getElementById('note-status'); status.textContent = 'Enregistrement…';
-        clearTimeout(event.target.saveTimer); event.target.saveTimer = setTimeout(() => status.textContent = 'Enregistré automatiquement', 450);
       });
       document.getElementById('reset-button').addEventListener('click', () => {
         if (!window.confirm('Effacer vos tâches, habitudes, notes et encarts de cet espace ?')) return;
         state = makeInitialState(); Object.assign(calculator, state.calculator); Object.assign(timer, state.timer); clearInterval(timerInterval); timerInterval = null; currentFilter = 'all'; saveState(); renderCalculator(); renderTimer(); render(); setFilter('all'); showToast('Votre espace est vide.');
       });
-      document.getElementById('add-widget-trigger').addEventListener('click', () => { refreshWidgetOptions(); document.getElementById('widget-dialog').showModal(); });
+      document.getElementById('add-widget-trigger')?.addEventListener('click', () => { refreshWidgetOptions(); document.getElementById('widget-dialog').showModal(); });
       document.getElementById('close-widget-dialog').addEventListener('click', () => document.getElementById('widget-dialog').close());
       document.getElementById('cancel-widget-dialog').addEventListener('click', () => document.getElementById('widget-dialog').close());
       document.getElementById('widget-dialog').addEventListener('click', event => { if (event.target === event.currentTarget) event.currentTarget.close(); });
       document.querySelector('.widget-options').addEventListener('click', event => {
+        const restore = event.target.closest('[data-restore-note-widget]');
+        if (restore) { restoreWidget(restore.dataset.restoreNoteWidget); return; }
         const button = event.target.closest('[data-add-widget]'); if (button) addWidget(button.dataset.addWidget);
-      });
-      const dashboard = document.getElementById('dashboard-grid');
-      let draggedWidgetId = null;
-      dashboard.addEventListener('dragstart', event => {
-        const handle = event.target.closest('[data-drag-widget]'); if (!handle) { event.preventDefault(); return; }
-        draggedWidgetId = handle.dataset.dragWidget; event.dataTransfer.effectAllowed = 'move'; event.dataTransfer.setData('text/plain', draggedWidgetId);
-        handle.closest('.dashboard-widget')?.classList.add('dragging');
-      });
-      dashboard.addEventListener('dragend', () => { draggedWidgetId = null; dashboard.querySelectorAll('.dashboard-widget').forEach(card => card.classList.remove('dragging','drop-indicator')); });
-      dashboard.addEventListener('dragover', event => {
-        const card = event.target.closest('.dashboard-widget'); if (!card || !draggedWidgetId) return;
-        event.preventDefault(); card.classList.add('drop-indicator');
-      });
-      dashboard.addEventListener('dragleave', event => { const card = event.target.closest('.dashboard-widget'); if (card && !card.contains(event.relatedTarget)) card.classList.remove('drop-indicator'); });
-      dashboard.addEventListener('drop', event => {
-        const card = event.target.closest('.dashboard-widget'); if (!card || !draggedWidgetId) return;
-        event.preventDefault(); const targetId = card.dataset.widgetId;
-        const from = state.widgets.findIndex(widget => widget.id === draggedWidgetId), to = state.widgets.findIndex(widget => widget.id === targetId);
-        if (from < 0 || to < 0 || from === to) return;
-        const [item] = state.widgets.splice(from, 1); state.widgets.splice(to, 0, item); saveState(); render();
-      });
-      dashboard.addEventListener('keydown', event => {
-        const handle = event.target.closest('[data-drag-widget]'); if (!handle) return;
-        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') { event.preventDefault(); moveWidget(handle.dataset.dragWidget, event.key === 'ArrowUp' ? -1 : 1); }
       });
       const normalizeName = name => name.trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('fr');
       function readLocalUsers() { try { const value = JSON.parse(localStorage.getItem(USERS_KEY)); return Array.isArray(value) ? value : []; } catch { return []; } }
@@ -2327,7 +2750,7 @@
           const meaningful = key => {
             try {
               const value = JSON.parse(localStorage.getItem(key));
-              return Boolean(value && ((Array.isArray(value.tasks) && value.tasks.length) || (Array.isArray(value.habits) && value.habits.length) || (value.notes && Object.keys(value.notes).length) || (Array.isArray(value.widgets) && value.widgets.length) || (value.stopwatch && (value.stopwatch.elapsed || value.stopwatch.laps?.length)) || (value.timer && value.timer.durationMs !== 300000)));
+              return Boolean(value && ((Array.isArray(value.tasks) && value.tasks.length) || (Array.isArray(value.habits) && value.habits.length) || (value.notes && Object.keys(value.notes).length) || (value.widgetNotes && Object.keys(value.widgetNotes).length) || (value.widgetNoteTitles && Object.keys(value.widgetNoteTitles).length) || (Array.isArray(value.widgets) && value.widgets.length) || (value.stopwatch && (value.stopwatch.elapsed || value.stopwatch.laps?.length)) || (value.timer && value.timer.durationMs !== 300000)));
             } catch { return false; }
           };
           keys.filter(key => key.startsWith('le-fil-data-v1:') && meaningful(key)).forEach(key => {
@@ -2484,6 +2907,19 @@
           if (!(date in result.notes)) result.notes[date] = localValue;
           else if (!sameValue(localValue, result.notes[date])) await archive('note', date, localValue, result.notes[date]);
         }
+        result.widgetNotes = normalizeWidgetNotes(result.widgetNotes);
+        for (const [widgetId, localByDate] of Object.entries(localState.widgetNotes || {})) {
+          if (!result.widgetNotes[widgetId]) result.widgetNotes[widgetId] = Object.create(null);
+          for (const [date, localValue] of Object.entries(localByDate || {})) {
+            if (!Object.prototype.hasOwnProperty.call(result.widgetNotes[widgetId], date)) result.widgetNotes[widgetId][date] = localValue;
+            else if (!sameValue(localValue, result.widgetNotes[widgetId][date])) await archive('widget-note', JSON.stringify([widgetId,date]), structuredClone(localValue), structuredClone(result.widgetNotes[widgetId][date]));
+          }
+        }
+        result.widgetNoteTitles = normalizeWidgetNoteTitles(result.widgetNoteTitles);
+        for (const [widgetId, localTitle] of Object.entries(localState.widgetNoteTitles || {})) {
+          if (!Object.prototype.hasOwnProperty.call(result.widgetNoteTitles,widgetId)) result.widgetNoteTitles[widgetId]=localTitle;
+          else if (!sameValue(localTitle,result.widgetNoteTitles[widgetId])) await archive('widget-note-title',widgetId,localTitle,result.widgetNoteTitles[widgetId]);
+        }
         result.calendarEvents = normalizeCalendarEvents(result.calendarEvents);
         const cloudEventsById = new Map(result.calendarEvents.map((event,index) => [event.id,index]));
         for (const localEvent of normalizeCalendarEvents(localState.calendarEvents)) {
@@ -2495,12 +2931,13 @@
             if (!sameValue(localEvent, cloudEvent)) await archive('calendar-event', localEvent.id, structuredClone(localEvent), structuredClone(cloudEvent));
           }
         }
-        result.widgets = Array.isArray(result.widgets) ? result.widgets : [];
-        for (const localWidget of localState.widgets || []) {
-          const current = result.widgets.find(widget => widget.type === localWidget.type);
+        result.widgets = normalizeWidgetInstances(result.widgets);
+        for (const localWidget of normalizeWidgetInstances(localState.widgets)) {
+          const current = result.widgets.find(widget => widget.id === localWidget.id);
           if (!current) result.widgets.push(structuredClone(localWidget));
-          else if (!sameValue(localWidget, current)) await archive('widget', localWidget.type, structuredClone(localWidget), structuredClone(current));
+          else if (!sameValue(localWidget, current)) await archive('widget', localWidget.id, structuredClone(localWidget), structuredClone(current));
         }
+        result.widgets = normalizeWidgetInstances(result.widgets);
         for (const field of ['calculator','stopwatch','timer']) {
           if (!sameValue(localState[field], result[field]) && !sameValue(result[field], makeInitialState()[field])) {
             await archive(field, field, structuredClone(localState[field]), structuredClone(result[field]));
@@ -2528,7 +2965,7 @@
         return value;
       }
       function sanitizeTransferState(raw) {
-        assertAllowedKeys(raw, ['tasks','habits','notes','calendarEvents','widgets','calculator','stopwatch','timer']);
+        assertAllowedKeys(raw, ['tasks','habits','notes','widgetNotes','widgetNoteTitles','calendarEvents','widgets','calculator','stopwatch','timer']);
         for (const field of ['tasks','habits','widgets']) if (raw[field] !== undefined && !Array.isArray(raw[field])) throw new Error('import_invalid');
         if (raw.calendarEvents !== undefined && !Array.isArray(raw.calendarEvents)) throw new Error('import_invalid');
         if (raw.notes !== undefined && (!raw.notes || typeof raw.notes !== 'object' || Array.isArray(raw.notes))) throw new Error('import_invalid');
@@ -2567,13 +3004,34 @@
           if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error('import_invalid');
           notes[date] = boundedString(note, 20000, true);
         }
-        const widgets = (Array.isArray(raw.widgets) ? raw.widgets : []).map(item => {
+        const widgetNotes = Object.create(null);
+        if (raw.widgetNotes !== undefined) {
+          assertAllowedKeys(raw.widgetNotes, Object.keys(raw.widgetNotes || {}));
+          for (const [widgetId, byDate] of Object.entries(raw.widgetNotes || {})) {
+            boundedString(widgetId,160);
+            assertAllowedKeys(byDate, Object.keys(byDate || {}));
+            const notesByDate = Object.create(null);
+            for (const [date, note] of Object.entries(byDate)) {
+              if (!isValidLocalDate(date)) throw new Error('import_invalid');
+              notesByDate[date] = boundedString(note,20000,true);
+            }
+            widgetNotes[widgetId] = notesByDate;
+          }
+        }
+        const widgetNoteTitles = Object.create(null);
+        if (raw.widgetNoteTitles !== undefined) {
+          assertAllowedKeys(raw.widgetNoteTitles,Object.keys(raw.widgetNoteTitles||{}));
+          for (const [widgetId,title] of Object.entries(raw.widgetNoteTitles||{})) {
+            boundedString(widgetId,160); boundedString(title,120,true); widgetNoteTitles[widgetId]=title;
+          }
+        }
+        const widgets = normalizeWidgetInstances((Array.isArray(raw.widgets) ? raw.widgets : []).map(item => {
           assertAllowedKeys(item, ['id','type']);
           if (!widgetTypes.includes(item.type) && item.type !== 'stopwatch') throw new Error('import_invalid');
-          return { id:`widget-${item.type}`, type:item.type };
-        });
+          return { id:item.id === undefined ? undefined : boundedString(item.id,160), type:item.type };
+        }));
         const calendarEvents = sanitizeCalendarEvents(raw.calendarEvents || []);
-        if (new Set(tasks.map(item => item.id)).size !== tasks.length || new Set(habits.map(item => item.id)).size !== habits.length || new Set(widgets.map(item => item.type)).size !== widgets.length) throw new Error('import_invalid');
+        if (new Set(tasks.map(item => item.id)).size !== tasks.length || new Set(habits.map(item => item.id)).size !== habits.length || new Set(widgets.map(item => item.id)).size !== widgets.length) throw new Error('import_invalid');
         const base = makeInitialState();
         const calculator = raw.calculator || base.calculator;
         assertAllowedKeys(calculator, ['entry','stored','operator','waiting','expression','error']);
@@ -2593,8 +3051,8 @@
         if (!Number.isFinite(timer.durationMs) || timer.durationMs < 1000 || timer.durationMs > 59999000
           || !Number.isFinite(timer.remainingMs) || timer.remainingMs < 0 || timer.remainingMs > timer.durationMs
           || typeof timer.running !== 'boolean' || !(timer.deadline === null || Number.isFinite(timer.deadline)) || typeof timer.completed !== 'boolean') throw new Error('import_invalid');
-        const normalized = loadState({ id:'transfer-validation', admin:false }, { tasks, habits, notes, calendarEvents, widgets, calculator, stopwatch, timer }, false);
-        return { tasks:normalized.tasks, habits:normalized.habits, notes:normalized.notes, calendarEvents:normalized.calendarEvents, widgets:normalized.widgets, calculator:normalized.calculator, stopwatch:normalized.stopwatch, timer:normalized.timer };
+        const normalized = loadState({ id:'transfer-validation', admin:false }, { tasks, habits, notes, widgetNotes, widgetNoteTitles, calendarEvents, widgets, calculator, stopwatch, timer }, false);
+        return { tasks:normalized.tasks, habits:normalized.habits, notes:normalized.notes, widgetNotes:normalized.widgetNotes, widgetNoteTitles:normalized.widgetNoteTitles, calendarEvents:normalized.calendarEvents, widgets:normalized.widgets, calculator:normalized.calculator, stopwatch:normalized.stopwatch, timer:normalized.timer };
       }
       function transferableState(raw) {
         const stateData = raw || makeInitialState();
@@ -2606,6 +3064,8 @@
           })),
           habits:(stateData.habits || []).map(({id,name,detail,done}) => ({id,name,detail,done})),
           notes:stateData.notes || {},
+          widgetNotes:stateData.widgetNotes || {},
+          widgetNoteTitles:stateData.widgetNoteTitles || {},
           calendarEvents:stateData.calendarEvents || [],
           widgets:(stateData.widgets || []).map(({id,type}) => ({id,type})),
           calculator:stateData.calculator || makeInitialCalculator(),
@@ -2720,8 +3180,8 @@
           document.getElementById('other-account-list').replaceChildren();
           document.getElementById('pending-accounts-summary').textContent = '';
           document.getElementById('other-accounts-summary').textContent = '';
-          document.getElementById('nav-admin-pending-count').textContent = '0';
-          document.getElementById('mobile-admin-pending-count').textContent = '0';
+        const desktopPendingCount = document.getElementById('nav-admin-pending-count'); if (desktopPendingCount) desktopPendingCount.textContent = '0';
+        const mobilePendingCount = document.getElementById('mobile-admin-pending-count'); if (mobilePendingCount) mobilePendingCount.textContent = '0';
           document.getElementById('admin-access-error').textContent = '';
           if (importWasOpen && syncMode === 'cloud' && cloudAccessApproved && activeUser) showApp();
         }
@@ -2891,8 +3351,8 @@
           document.getElementById('other-account-list').innerHTML = other.map(row => renderAccessAccountCard(row, false)).join('') || '<p class="account-empty">Aucun autre compte.</p>';
           document.getElementById('pending-accounts-summary').textContent = `${pending.length} demande${pending.length === 1 ? '' : 's'}`;
           document.getElementById('other-accounts-summary').textContent = `${other.length} compte${other.length === 1 ? '' : 's'}`;
-          document.getElementById('nav-admin-pending-count').textContent = String(pending.length);
-          document.getElementById('mobile-admin-pending-count').textContent = String(pending.length);
+          const desktopPendingCount = document.getElementById('nav-admin-pending-count'); if (desktopPendingCount) desktopPendingCount.textContent = String(pending.length);
+          const mobilePendingCount = document.getElementById('mobile-admin-pending-count'); if (mobilePendingCount) mobilePendingCount.textContent = String(pending.length);
         } catch (cause) {
           console.error('Chargement des demandes d’accès impossible.', cause);
           errorNode.textContent = 'La liste des comptes ne peut pas être chargée. Actualisez la page puis réessayez.';
@@ -3134,9 +3594,16 @@
             collection.push(duplicate);
           } else {
             const selected = structuredClone(record.localValue);
-            if (!['note','widget','calendar-event','calculator','stopwatch','timer'].includes(dataKind)) throw new Error('conflict_kind_unsupported');
+            if (!['note','widget-note','widget-note-title','widget','calendar-event','calculator','stopwatch','timer'].includes(dataKind)) throw new Error('conflict_kind_unsupported');
+            let widgetNoteLocation = null;
+            if (dataKind === 'widget-note') {
+              try { const [widgetId,date] = JSON.parse(record.key); if (typeof widgetId === 'string' && isValidLocalDate(date)) widgetNoteLocation = { widgetId,date }; } catch { /* invalid archive key */ }
+              if (!widgetNoteLocation) throw new Error('conflict_kind_unsupported');
+            }
             const current = dataKind === 'note' ? working.notes[record.key]
-              : dataKind === 'widget' ? working.widgets.find(item => item.type === record.key)
+              : dataKind === 'widget-note' ? widgetNoteLocation.widgetId === 'widget-notes' ? working.notes[widgetNoteLocation.date] : working.widgetNotes?.[widgetNoteLocation.widgetId]?.[widgetNoteLocation.date]
+                : dataKind === 'widget-note-title' ? working.widgetNoteTitles?.[record.key] ?? null
+                : dataKind === 'widget' ? working.widgets.find(item => item.id === record.key)
                 : dataKind === 'calendar-event' ? working.calendarEvents.find(item => item.id === record.key) || null
                   : working[dataKind];
             const backupFingerprint = await fingerprintState({ kind:`restauration-${dataKind}`, key:record.key, current, selected });
@@ -3146,8 +3613,20 @@
             if (dataKind === 'note') {
               if (selected === null) delete working.notes[record.key];
               else working.notes[record.key] = selected;
+            } else if (dataKind === 'widget-note') {
+              const { widgetId,date } = widgetNoteLocation;
+              if (widgetId === 'widget-notes') {
+                if (selected === null) delete working.notes[date]; else working.notes[date] = selected;
+              } else {
+                working.widgetNotes ||= Object.create(null); working.widgetNotes[widgetId] ||= Object.create(null);
+                if (selected === null) delete working.widgetNotes[widgetId][date]; else working.widgetNotes[widgetId][date] = selected;
+              }
+            } else if (dataKind === 'widget-note-title') {
+              if (typeof record.key !== 'string' || !record.key || record.key.length > 160 || !(selected === null || typeof selected === 'string' && selected.length <= 120)) throw new Error('conflict_kind_unsupported');
+              working.widgetNoteTitles ||= Object.create(null);
+              if (selected === null || selected === '') delete working.widgetNoteTitles[record.key]; else working.widgetNoteTitles[record.key] = selected;
             } else if (dataKind === 'widget') {
-              working.widgets = working.widgets.filter(item => item.type !== record.key);
+              working.widgets = working.widgets.filter(item => item.id !== record.key);
               if (selected) working.widgets.push(selected);
             } else if (dataKind === 'calendar-event') {
               working.calendarEvents = working.calendarEvents.filter(item => item.id !== record.key);
@@ -4233,6 +4712,7 @@
       window.addEventListener('storage', archiveLegacyPendingStorageEvent);
       document.addEventListener('visibilitychange', () => { if (!document.hidden) verifyActiveCloudAccess(); });
       document.getElementById('import-local-button').hidden = true;
+      mountTodayWidgets();
       startAppUpdateChecks();
       initializeAccess();
     })();

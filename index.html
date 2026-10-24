@@ -989,13 +989,14 @@
       const CLOUD_CACHE_PREFIX = 'organisation-cloud-cache-v1:';
       const CLOUD_PENDING_PREFIX = 'organisation-cloud-pending-v1:';
       const CLOUD_PENDING_V2_PREFIX = 'organisation-cloud-pending-v2:';
+      const CLOUD_PENDING_META_PREFIX = 'organisation-cloud-pending-meta-v1:';
       const CLOUD_PENDING_ACK_PREFIX = 'organisation-cloud-pending-ack-v1:';
       const MAX_PENDING_ACK_MARKERS = 64;
       const CLOUD_RECOVERY_PREFIX = 'organisation-cloud-recovery-v1:';
       const IMPORT_DISMISSED_PREFIX = 'organisation-import-dismissed-v1:';
       const MAX_IMPORT_FILE_BYTES = 512 * 1024;
       const MAX_CLOUD_STATE_BYTES = 768 * 1024;
-      const APP_BUILD_ID = 202610240002;
+      const APP_BUILD_ID = 202610240003;
       const APP_UPDATE_CHECK_INTERVAL_MS = 10 * 60 * 1000;
       const APP_UPDATE_CHECK_COOLDOWN_MS = 45 * 1000;
       const priorityLabels = { high: 'Prioritaire', medium: 'Important', low: 'À mon rythme' };
@@ -1359,6 +1360,7 @@
       let pendingImportName = '';
       let pendingImportFingerprint = null;
       let pendingConflictRestore = null;
+      let importConflictsRenderToken = 0;
       let state = makeInitialState();
       let currentFilter = 'all';
       let editingTaskId = null;
@@ -1521,9 +1523,25 @@
           if (!isCurrentCloudContext(ownerId, epoch) || !cloudAccessApproved) return false;
           const key = `${CLOUD_PENDING_V2_PREFIX}${ownerId}:${pendingInstanceNonce}`;
           const existing = localStorage.getItem(key);
-          if (existing !== snapshotText) localStorage.setItem(key, snapshotText);
+          let writtenAt = null;
+          if (existing !== snapshotText) {
+            writtenAt = Date.now();
+            localStorage.setItem(key, snapshotText);
+          }
           if (localStorage.getItem(key) !== snapshotText) throw new Error('pending_snapshot_not_verified');
-          return { key, raw:snapshotText, digest };
+          const metadataKey = `${CLOUD_PENDING_META_PREFIX}${ownerId}:${pendingInstanceNonce}`;
+          try {
+            if (writtenAt !== null) {
+              const metadata = JSON.stringify({ schema:1, digest, writtenAt });
+              localStorage.setItem(metadataKey, metadata);
+              if (localStorage.getItem(metadataKey) !== metadata) throw new Error('pending_metadata_not_verified');
+            } else {
+              const existingMetadata = JSON.parse(localStorage.getItem(metadataKey) || 'null');
+              if (existingMetadata?.schema === 1 && existingMetadata.digest === digest
+                && Number.isSafeInteger(existingMetadata.writtenAt) && Number.isFinite(new Date(existingMetadata.writtenAt).getTime())) writtenAt = existingMetadata.writtenAt;
+            }
+          } catch { /* The verified snapshot remains the priority when optional metadata hits quota. */ }
+          return { key, raw:snapshotText, digest, writtenAt };
         });
         pendingSnapshotWrites.set(ownerId, operation);
         return operation;
@@ -2226,7 +2244,7 @@
         } catch (error) { console.warn('Lecture des données locales impossible.', error); }
         return sources;
       }
-      function readOwnRecoveryBackups(ownerId=activeUser?.id, epoch=authContextEpoch) {
+      async function readOwnRecoveryBackups(ownerId=activeUser?.id, epoch=authContextEpoch) {
         if (!canAccessOwnBackups(ownerId, epoch)) return [];
         const prefix = `${CLOUD_RECOVERY_PREFIX}${ownerId}:`;
         const keys = Array.from({ length:localStorage.length }, (_, index) => localStorage.key(index)).filter(key => key?.startsWith(prefix));
@@ -2236,13 +2254,34 @@
             const saved = JSON.parse(raw);
             if (!saved || !Array.isArray(saved.tasks) || !Array.isArray(saved.habits)) return null;
             const match = key.match(/:([a-z]+)-(\d{13})-[a-f0-9]+$/i);
-            return { key, raw, kind:'archive', reason:match?.[1] || 'secours', createdAt:match ? Number(match[2]) : null };
+            const archivedAt = match ? Number(match[2]) : null;
+            return { key, raw, kind:'archive', reason:match?.[1] || 'secours', archivedAt, dateLabel:archivedAt ? `Archivée le ${formatAccessDate(new Date(archivedAt).toISOString())}` : 'Date indisponible (ancienne copie sans horodatage fiable)' };
           } catch { return null; }
         }).filter(Boolean);
-        const pending = pendingSnapshotCandidates(ownerId).filter(candidate => {
-          try { const saved = JSON.parse(candidate.raw); return Boolean(saved && Array.isArray(saved.tasks) && Array.isArray(saved.habits)); }
-          catch { return false; }
-        }).map(candidate => ({ ...candidate, kind:'pending', reason:candidate.key.startsWith(`${CLOUD_PENDING_V2_PREFIX}${ownerId}:`) ? 'en attente cloud' : 'ancienne copie en attente', createdAt:null }));
+        const pending = (await Promise.all(pendingSnapshotCandidates(ownerId).map(async candidate => {
+          try {
+            const saved = JSON.parse(candidate.raw);
+            if (!saved || !Array.isArray(saved.tasks) || !Array.isArray(saved.habits)) return null;
+            const slotPrefix = `${CLOUD_PENDING_V2_PREFIX}${ownerId}:`;
+            let writtenAt = null;
+            if (candidate.key.startsWith(slotPrefix)) {
+              const slotId = candidate.key.slice(slotPrefix.length);
+              const metadataKey = `${CLOUD_PENDING_META_PREFIX}${ownerId}:${slotId}`;
+              try {
+                const metadataRaw = localStorage.getItem(metadataKey);
+                if (metadataRaw) {
+                  const metadata = JSON.parse(metadataRaw);
+                  const digest = await fingerprintPendingText(candidate.raw);
+                  if (metadata?.schema === 1 && metadata.digest === digest && Number.isSafeInteger(metadata.writtenAt) && metadata.writtenAt > 0 && Number.isFinite(new Date(metadata.writtenAt).getTime())
+                    && localStorage.getItem(candidate.key) === candidate.raw) writtenAt = metadata.writtenAt;
+                }
+              } catch { /* A missing or unreadable sidecar never hides the underlying backup. */ }
+            }
+            if (!canAccessOwnBackups(ownerId, epoch) || localStorage.getItem(candidate.key) !== candidate.raw) return null;
+            return { ...candidate, kind:'pending', reason:candidate.key.startsWith(slotPrefix) ? 'en attente cloud' : 'ancienne copie en attente', writtenAt, dateLabel:writtenAt ? `Enregistrée le ${formatAccessDate(new Date(writtenAt).toISOString())}` : 'Date indisponible (ancienne copie sans horodatage fiable)' };
+          } catch { return null; }
+        }))).filter(Boolean);
+        if (!canAccessOwnBackups(ownerId, epoch)) return [];
         return [...archives, ...pending];
       }
       function localProfileState(profile) {
@@ -2485,7 +2524,8 @@
         document.getElementById('profile-import-summary').textContent = `${stateData.tasks.length} tâche(s), ${stateData.habits.length} habitude(s), ${Object.keys(stateData.notes).length} note(s), ${(stateData.calendarEvents || []).length} événement(s), ${stateData.widgets.length} encart(s). Les copies en conflit seront conservées dans les archives.`;
         preview.hidden = false;
       }
-      function renderImportConflicts() {
+      async function renderImportConflicts() {
+        const renderToken = ++importConflictsRenderToken;
         const list = document.getElementById('import-conflicts-list');
         const localList = document.getElementById('local-recovery-backups-list');
         const summary = document.getElementById('import-conflicts-summary');
@@ -2499,7 +2539,14 @@
           return;
         }
         const records = Array.isArray(state.importConflicts) ? state.importConflicts : [];
-        const localBackups = readOwnRecoveryBackups(ownerId, epoch);
+        let localBackups;
+        try { localBackups = await readOwnRecoveryBackups(ownerId, epoch); }
+        catch {
+          if (renderToken !== importConflictsRenderToken || !canAccessOwnBackups(ownerId, epoch)) return;
+          localSummary.textContent = 'Impossible de lire les dates de ces copies pour le moment.';
+          return;
+        }
+        if (renderToken !== importConflictsRenderToken || !canAccessOwnBackups(ownerId, epoch)) return;
         const unresolved = records.filter(item => !item.resolved).length;
         summary.textContent = `${records.length} copie(s) archivée(s) dans le compte; ${unresolved} à examiner. Les archives ne sont pas supprimées.`;
         localSummary.textContent = localBackups.length
@@ -2508,7 +2555,7 @@
         for (const backup of localBackups.slice().reverse()) {
           const card = document.createElement('article'); card.className = 'import-conflict-card';
           const title = document.createElement('h3'); title.textContent = `Copie de secours · ${backup.reason}`; card.append(title);
-          const source = document.createElement('p'); source.className = 'panel-note'; source.textContent = backup.createdAt ? formatAccessDate(new Date(backup.createdAt).toISOString()) : 'Date indisponible'; card.append(source);
+          const source = document.createElement('p'); source.className = 'panel-note'; source.textContent = backup.dateLabel; card.append(source);
           const actions = document.createElement('div'); actions.className = 'import-conflict-actions';
           const exportButton = document.createElement('button'); exportButton.type = 'button'; exportButton.className = 'secondary-button'; exportButton.dataset.recoveryExport = backup.key; exportButton.textContent = 'Télécharger cette sauvegarde'; actions.append(exportButton);
           card.append(actions); localList.append(card);
@@ -2924,12 +2971,12 @@
           event.target.value = '';
         }
       });
-      document.getElementById('local-recovery-backups-list').addEventListener('click', event => {
+      document.getElementById('local-recovery-backups-list').addEventListener('click', async event => {
         const exportButton = event.target.closest('[data-recovery-export]');
         if (!exportButton) return;
         const ownerId = activeUser?.id; const epoch = authContextEpoch;
         const key = exportButton.dataset.recoveryExport;
-        if (!canAccessOwnBackups(ownerId, epoch) || !readOwnRecoveryBackups(ownerId, epoch).some(item => item.key === key)) return;
+        if (!canAccessOwnBackups(ownerId, epoch) || !(key.startsWith(`${CLOUD_RECOVERY_PREFIX}${ownerId}:`) || isOwnedPendingKey(ownerId, key))) return;
         const raw = localStorage.getItem(key);
         if (!raw || !canAccessOwnBackups(ownerId, epoch) || localStorage.getItem(key) !== raw || !(key.startsWith(`${CLOUD_RECOVERY_PREFIX}${ownerId}:`) || isOwnedPendingKey(ownerId, key))) return;
         try {
